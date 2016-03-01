@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# Vim Swap Files.
+*.swp
+
+# Project Files.
+*.3d
