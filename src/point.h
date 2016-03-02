@@ -1,15 +1,16 @@
 #ifndef POINT_H
 #define POINT_H
 
-class point {
+class Point {
   private:
     float x, y, z;
 
   public:
-    point(float, float, float);
+    Point(float, float, float);
     float getX();
     float getY();
     float getZ();
+    float* toArray();
 };
 
 #endif

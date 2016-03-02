@@ -1,11 +1,21 @@
 #include "point.h"
 
-point::point(float X, float Y, float Z) {
+Point::Point(float X, float Y, float Z) {
   x = X; y = Y; z = Z;
 }
 
-float point::getX() { return x; }
+float Point::getX() { return x; }
 
-float point::getY() { return y; }
+float Point::getY() { return y; }
 
-float point::getZ() { return z; }
+float Point::getZ() { return z; }
+
+float* Point::toArray() {
+  float* pointArray;
+
+  pointArray[0] = x;
+  pointArray[1] = y;
+  pointArray[2] = z;
+
+  return pointArray;
+}
