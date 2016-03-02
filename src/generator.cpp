@@ -2,12 +2,14 @@
 #include <fstream>  // Needed to write to files.
 #include <stdio.h>
 #include <string.h>
+#include "Vertex.h"
 
 using namespace std;
 
 /* Functions prototypes. */
 int plane(int, char **);
 int box(int, char **);
+int sphere(int, char **);
 void writeVerticesToFile(char **, int, FILE *);
 
 int main (int argc, char ** argv) {
@@ -19,6 +21,9 @@ int main (int argc, char ** argv) {
     }
     else if (strcmp(argv[1], "box") == 0) {
       box(argc - 2, &argv[2])   != 0 ? printf("Error!\n") : printf("Done\n");
+    }
+    else if (strcmp(argv[1], "sphere") == 0) {
+      sphere(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
     }
     else {
       printf("Invalid argument.\n");
@@ -37,15 +42,15 @@ int plane(int argc, char ** parameters) {
   // Check number of arguments.
   if (argc != 2) { return -1; }
   else {
-    // Get the square width.
+    // get the square width.
     float width     = stof(parameters[0]);
     float d         = width/2.0;
 
-    // Create/Open output file.
-    char * fileName = parameters[1];
-    FILE * file     = fopen(fileName, "w+");
+    // create/open output file.
+    char * filename = parameters[1];
+    FILE * file     = fopen(filename, "w+");
 
-    // Write to file.
+    // write to file.
     fprintf(file, "4\n");
     fprintf(file, "%f 0.0 %f\n", -d, -d);
     fprintf(file, "%f 0.0 %f\n", -d,  d);
@@ -96,6 +101,22 @@ int box(int argc, char ** parameters) {
     writeVerticesToFile(vertices, 36, file);
   }
 
+  return 0;
+}
+
+int sphere(int argc, char ** parameters) {
+  // Check number of arguments.
+  if (argc != 4) { return -1; }
+  else {
+    // Parse sphere radius, slices and stacks.
+    float radius = stof(parameters[0]);
+    int slices = stof(parameters[1]);
+    int stacks = stof(parameters[2]);
+
+    // Open/Create file and write number of vertices to the file.
+    FILE * file = fopen(parameters[3], "w+");
+
+  }
   return 0;
 }
 
