@@ -1,12 +1,12 @@
 #ifndef POINT_H
 #define POINT_H
 
-class Vertex {
+class point {
   private:
     float x, y, z;
 
   public:
-    Vertex(float, float, float);
+    point(float, float, float);
     float getX();
     float getY();
     float getZ();

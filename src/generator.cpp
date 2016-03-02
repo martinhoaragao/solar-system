@@ -2,7 +2,8 @@
 #include <fstream>  // Needed to write to files.
 #include <stdio.h>
 #include <string.h>
-#include "Vertex.h"
+#include <math.h>
+#include "point.h"
 
 using namespace std;
 
@@ -112,10 +113,16 @@ int sphere(int argc, char ** parameters) {
     float radius = stof(parameters[0]);
     int slices = stof(parameters[1]);
     int stacks = stof(parameters[2]);
+    float beta = 0.0;
+    float bInc = M_PI / stacks;
+    float currY = 1.0, yDec = 1.0f/stacks;
 
     // Open/Create file and write number of vertices to the file.
     FILE * file = fopen(parameters[3], "w+");
 
+    for (int i = 0; i < stacks; i++, beta += bInc, currY -= yDec) {
+      printf("%f %f %f\n", radius * sin(beta), radius * cos(beta), 0.0);
+    }
   }
   return 0;
 }
