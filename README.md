@@ -26,13 +26,13 @@ stating the number of vertices it contains.
 
 Example of a .3d file for a plane centered in the origin with width 2:
 
-    plane
-    -1.0, 0.0, 1.0
-    -1.0, 0.0, -1.0
-    1.0 , 0.0, 1.0
-    1.0 , 0.0, -1.0
-    1.0 , 0.0, 1.0
-    -1.0, 0.0, -1.0
+    4 // Number of different vertices
+    -1.0 0.0 1.0
+    -1.0 0.0 -1.0
+    1.0  0.0 1.0
+    1.0  0.0 -1.0
+    1.0  0.0 1.0
+    -1.0 0.0 -1.0
 
 
 Afterwards, the engine will receive a configuration file, written in XML. In this phase the XML
