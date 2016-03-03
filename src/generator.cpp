@@ -165,51 +165,66 @@ int sphere(int argc, char ** parameters) {
 
 /** Draw a cone centered in the origin. */
 int cone(int argc, char ** parameters) {
-  if (argc != 4) { return -1; }
+  // Check the number of arguments.
+  if (argc != 5) { return -1; }
   else {
-    // Parse base radius, height and slices.
+    // Parse base radius, height, slices and stacks.
     float radius  = stof(parameters[0]);
     float height  = stof(parameters[1]);
     int slices    = stoi(parameters[2]);
+    int stacks    = stoi(parameters[3]);
     float angle   = 0.0;
     float inc     = (2 * M_PI)/slices;
+    float h       = 0.0;
+    float hInc    = (height)/stacks;
+    float r       = ((height - h) * radius)/height;
 
     // Open/Create file.
-    FILE * file = fopen(parameters[3], "w+");
+    FILE * file = fopen(parameters[4], "w+");
     fprintf(file, "%d\n", slices + 1);
 
     // Draw base circunference.
-    point last = point(radius * sin(angle), height, radius * cos(angle));
-    angle     += inc;
+    for (int slice = 0; slice < slices; slice++, angle += inc) {
+      point p = point(r * sin(angle), h, r * cos(angle));
 
-    for (int i = 0; i < slices; i++, angle += inc) {
-      // Calculate new point and draw triangle.
-      point p = point(radius * sin(angle), height, radius * cos(angle));
-
-      // Draw the triangle.
       fprintf(file, "0.0 0.0 0.0\n");
-      fprintf(file, "%f 0.0 %f\n", last.getX(), last.getZ());
       fprintf(file, "%f 0.0 %f\n", p.getX(), p.getZ());
-
-      fprintf(file, "0.0 %f 0.0\n", height);
-      fprintf(file, "%f 0.0 %f\n", last.getX(), last.getZ());
-      fprintf(file, "%f 0.0 %f\n", p.getX(), p.getZ());
-
-      // Set last point to the newly calculated one to use it in the next step.
-      last = point(radius * sin(angle), height, radius * cos(angle));
+      fprintf(file, "%f 0.0 %f\n", r * sin(angle + inc), r * cos(angle + inc));
     }
 
-    angle = 0.0;
-    // Draw last triangle.
-    fprintf(file, "0.0, 0.0, 0.0\n");
-    fprintf(file, "%f 0.0 %f\n", last.getX(), last.getZ());
-    fprintf(file, "%f 0.0 %f\n", radius * sin(angle), radius * cos(angle));
-
-    fprintf(file, "0.0, %f, 0.0\n", height);
-    fprintf(file, "%f 0.0 %f\n", last.getX(), last.getZ());
-    fprintf(file, "%f 0.0 %f\n", radius * sin(angle), radius * cos(angle));
-
     // Create faces.
+    h += hInc;
+
+    for (int stack = 0; stack < stacks; stack++, h += hInc) {
+      r     = ((height - h) * radius) / height;
+      printf("%f -> %f\n", h, r);
+      angle = 0.0;
+
+      for (int slice = 0; slice < slices; slice++, angle += inc) {
+        point p = point(r * sin(angle), h, r * cos(angle));
+
+        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        fprintf(file, "%f %f %f\n",
+            (((height - (h - hInc)) * radius)/height) * sin(angle),
+            h - hInc,
+            (((height - (h - hInc)) * radius)/height) * cos(angle));
+        fprintf(file, "%f %f %f\n",
+            (((height - (h - hInc)) * radius)/height) * sin(angle + inc),
+            h - hInc,
+            (((height - (h - hInc)) * radius)/height) * cos(angle + inc));
+
+        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        fprintf(file, "%f %f %f\n",
+            r * sin(angle - inc),
+            h,
+            r * cos(angle - inc));
+        fprintf(file, "%f %f %f\n",
+            (((height - (h - hInc)) * radius)/height) * sin(angle),
+            h - hInc,
+            (((height - (h - hInc)) * radius)/height) * cos(angle));
+      }
+    }
+
 
   }
 
