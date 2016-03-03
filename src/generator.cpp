@@ -137,22 +137,22 @@ int sphere(int argc, char ** parameters) {
       for (int slice = 0; slice < slices; slice++, angleB += incB) {
         point p = point(r * sin(angleB), h, r * cos(angleB));
 
-        printf("%f %f %f\n", p.getX(), p.getY(), p.getZ());
-        printf("%f %f %f\n",
+        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        fprintf(file, "%f %f %f\n",
             (radius * cos(angleA + incA)) * sin(angleB),
             (radius * sin(angleA + incA)),
             (radius * cos(angleA + incA)) * cos(angleB));
-        printf("%f %f %f\n",
+        fprintf(file, "%f %f %f\n",
             (radius * cos(angleA + incA)) * sin(angleB + incB),
             (radius * sin(angleA + incA)),
             (radius * cos(angleA + incA)) * cos(angleB + incB));
 
-        printf("%f %f %f\n", p.getX(), p.getY(), p.getZ());
-        printf("%f %f %f\n",
+        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        fprintf(file, "%f %f %f\n",
             r * sin(angleB - incB),
             h,
             r * cos(angleB - incB));
-        printf("%f %f %f\n",
+        fprintf(file, "%f %f %f\n",
             (radius * cos(angleA + incA)) * sin(angleB),
             (radius * sin(angleA + incA)),
             (radius * cos(angleA + incA)) * cos(angleB));
