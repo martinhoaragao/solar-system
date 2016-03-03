@@ -152,6 +152,7 @@ int cone(int argc, char ** parameters) {
 
     // Open/Create file.
     FILE * file = fopen(parameters[3], "w+");
+    fprintf(file, "%d\n", slices + 1);
 
     // Draw base circunference.
     point last = point(radius * sin(angle), height, radius * cos(angle));
@@ -162,13 +163,13 @@ int cone(int argc, char ** parameters) {
       point p = point(radius * sin(angle), height, radius * cos(angle));
 
       // Draw the triangle.
-      printf("0.0 0.0 0.0\n");
-      printf("%f 0.0 %f\n", last.getX(), last.getZ());
-      printf("%f 0.0 %f\n", p.getX(), p.getZ());
+      fprintf(file, "0.0 0.0 0.0\n");
+      fprintf(file, "%f 0.0 %f\n", last.getX(), last.getZ());
+      fprintf(file, "%f 0.0 %f\n", p.getX(), p.getZ());
 
-      printf("0.0 %f 0.0\n", height);
-      printf("%f 0.0 %f\n", last.getX(), last.getZ());
-      printf("%f 0.0 %f\n", p.getX(), p.getZ());
+      fprintf(file, "0.0 %f 0.0\n", height);
+      fprintf(file, "%f 0.0 %f\n", last.getX(), last.getZ());
+      fprintf(file, "%f 0.0 %f\n", p.getX(), p.getZ());
 
       // Set last point to the newly calculated one to use it in the next step.
       last = point(radius * sin(angle), height, radius * cos(angle));
@@ -176,13 +177,13 @@ int cone(int argc, char ** parameters) {
 
     angle = 0.0;
     // Draw last triangle.
-    printf("0.0, 0.0, 0.0\n");
-    printf("%f 0.0 %f\n", last.getX(), last.getZ());
-    printf("%f 0.0 %f\n", radius * sin(angle), radius * cos(angle));
+    fprintf(file, "0.0, 0.0, 0.0\n");
+    fprintf(file, "%f 0.0 %f\n", last.getX(), last.getZ());
+    fprintf(file, "%f 0.0 %f\n", radius * sin(angle), radius * cos(angle));
 
-    printf("0.0, %f, 0.0\n", height);
-    printf("%f 0.0 %f\n", last.getX(), last.getZ());
-    printf("%f 0.0 %f\n", radius * sin(angle), radius * cos(angle));
+    fprintf(file, "0.0, %f, 0.0\n", height);
+    fprintf(file, "%f 0.0 %f\n", last.getX(), last.getZ());
+    fprintf(file, "%f 0.0 %f\n", radius * sin(angle), radius * cos(angle));
 
     // Create faces.
 
