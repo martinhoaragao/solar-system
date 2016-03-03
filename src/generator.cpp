@@ -11,6 +11,7 @@ using namespace std;
 int plane(int, char **);
 int box(int, char **);
 int sphere(int, char **);
+int cone(int, char **);
 void writeVerticesToFile(char **, int, FILE *);
 
 int main (int argc, char ** argv) {
@@ -25,6 +26,9 @@ int main (int argc, char ** argv) {
     }
     else if (strcmp(argv[1], "sphere") == 0) {
       sphere(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
+    }
+    else if (strcmp(argv[1], "cone") == 0) {
+      cone(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
     }
     else {
       printf("Invalid argument.\n");
@@ -120,10 +124,70 @@ int sphere(int argc, char ** parameters) {
     // Open/Create file and write number of vertices to the file.
     FILE * file = fopen(parameters[3], "w+");
 
-    for (int i = 0; i < stacks; i++, beta += bInc, currY -= yDec) {
-      printf("%f %f %f\n", radius * sin(beta), radius * cos(beta), 0.0);
+    for (int stack = 0; stack < stacks; ++stack) {
+      for (int slice = 0; slice < slices; ++slice) {
+        float y = 2.0 * stack / stacks - 1.0;
+        /* for better distribution, use y = -cos(PI * stack / STACKS) */
+        float r = sqrt(1 - (y*y));
+        float x = r * sin(2.0 * M_PI * slice / slices);
+        float z = r * cos(2.0 * M_PI * slice / slices);
+
+        printf("%f %f %f\n", x, y, z);
+      }
     }
   }
+  return 0;
+}
+
+/** Draw a cone centered in the origin. */
+int cone(int argc, char ** parameters) {
+  if (argc != 4) { return -1; }
+  else {
+    // Parse base radius, height and slices.
+    float radius  = stof(parameters[0]);
+    float height  = stof(parameters[1]);
+    int slices    = stoi(parameters[2]);
+    float angle   = 0.0;
+    float inc     = (2 * M_PI)/slices;
+
+    // Open/Create file.
+    FILE * file = fopen(parameters[3], "w+");
+
+    // Draw base circunference.
+    point last = point(radius * sin(angle), height, radius * cos(angle));
+    angle     += inc;
+
+    for (int i = 0; i < slices; i++, angle += inc) {
+      // Calculate new point and draw triangle.
+      point p = point(radius * sin(angle), height, radius * cos(angle));
+
+      // Draw the triangle.
+      printf("0.0 0.0 0.0\n");
+      printf("%f 0.0 %f\n", last.getX(), last.getZ());
+      printf("%f 0.0 %f\n", p.getX(), p.getZ());
+
+      printf("0.0 %f 0.0\n", height);
+      printf("%f 0.0 %f\n", last.getX(), last.getZ());
+      printf("%f 0.0 %f\n", p.getX(), p.getZ());
+
+      // Set last point to the newly calculated one to use it in the next step.
+      last = point(radius * sin(angle), height, radius * cos(angle));
+    }
+
+    angle = 0.0;
+    // Draw last triangle.
+    printf("0.0, 0.0, 0.0\n");
+    printf("%f 0.0 %f\n", last.getX(), last.getZ());
+    printf("%f 0.0 %f\n", radius * sin(angle), radius * cos(angle));
+
+    printf("0.0, %f, 0.0\n", height);
+    printf("%f 0.0 %f\n", last.getX(), last.getZ());
+    printf("%f 0.0 %f\n", radius * sin(angle), radius * cos(angle));
+
+    // Create faces.
+
+  }
+
   return 0;
 }
 
