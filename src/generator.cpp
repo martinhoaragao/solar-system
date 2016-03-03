@@ -114,28 +114,52 @@ int sphere(int argc, char ** parameters) {
   if (argc != 4) { return -1; }
   else {
     // Parse sphere radius, slices and stacks.
-    float radius = stof(parameters[0]);
-    int slices = stof(parameters[1]);
-    int stacks = stof(parameters[2]);
-    float beta = 0.0;
-    float bInc = M_PI / stacks;
-    float currY = 1.0, yDec = 1.0f/stacks;
+    float radius  = stof(parameters[0]);
+    int slices    = stof(parameters[1]);
+    int stacks    = stof(parameters[2]);
+    float beta    = 0.0;
+    float bInc    = M_PI / stacks;
+    float currY   = 1.0, yDec = 1.0f/stacks;
+    float angleA  = M_PI / 2;
+    float incA    = M_PI / stacks;
+    float angleB  = 0.0;
+    float incB    = (2 * M_PI)/ slices;
+    float r, h;
 
     // Open/Create file and write number of vertices to the file.
     FILE * file = fopen(parameters[3], "w+");
 
-    for (int stack = 0; stack < stacks; ++stack) {
-      for (int slice = 0; slice < slices; ++slice) {
-        float y = 2.0 * stack / stacks - 1.0;
-        /* for better distribution, use y = -cos(PI * stack / STACKS) */
-        float r = sqrt(1 - (y*y));
-        float x = r * sin(2.0 * M_PI * slice / slices);
-        float z = r * cos(2.0 * M_PI * slice / slices);
+    for (int stack = 0; stack < stacks; stack++, angleA += incA) {
+      r = radius * cos(angleA);
+      h = radius * sin(angleA);
+      angleB  = 0.0;
 
-        printf("%f %f %f\n", x, y, z);
+      for (int slice = 0; slice < slices; slice++, angleB += incB) {
+        point p = point(r * sin(angleB), h, r * cos(angleB));
+
+        printf("%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        printf("%f %f %f\n",
+            (radius * cos(angleA + incA)) * sin(angleB),
+            (radius * sin(angleA + incA)),
+            (radius * cos(angleA + incA)) * cos(angleB));
+        printf("%f %f %f\n",
+            (radius * cos(angleA + incA)) * sin(angleB + incB),
+            (radius * sin(angleA + incA)),
+            (radius * cos(angleA + incA)) * cos(angleB + incB));
+
+        printf("%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        printf("%f %f %f\n",
+            r * sin(angleB - incB),
+            h,
+            r * cos(angleB - incB));
+        printf("%f %f %f\n",
+            (radius * cos(angleA + incA)) * sin(angleB),
+            (radius * sin(angleA + incA)),
+            (radius * cos(angleA + incA)) * cos(angleB));
       }
     }
   }
+
   return 0;
 }
 
