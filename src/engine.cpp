@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string>
 #include <sstream>
-#include <vector>
+#include <queue>
 #include <fstream>
 #include <iostream>
 
@@ -11,24 +11,23 @@
 
 using namespace std;
 
-vector<string> extractFileNames (char* configFileName) {
-  vector<string> fileNames;
+queue<string> extractFileNames (char* configFileName) {
+  queue<string> fileNames;
   tinyxml2::XMLDocument doc;
 
   doc.LoadFile(configFileName);
   tinyxml2::XMLElement * elem = doc.FirstChildElement()->FirstChildElement();
 
   while(elem != NULL) {
-    fileNames.push_back(elem->Attribute("file"));
+    fileNames.push(elem->Attribute("file"));
 
     elem = elem->NextSiblingElement();
   }
-
   return fileNames;
 }
 
-vector<Point> extractPoints(string fileName) {
-  vector<Point> points;
+queue<Point>* extractPoints(string fileName) {
+  queue<Point>* points = new queue<Point>();
   ifstream pointsFile;
   string line;
   float x, y, z;
@@ -39,38 +38,40 @@ vector<Point> extractPoints(string fileName) {
     istringstream iss(line);
 
     iss >> x >> y >> z;
+    Point point = Point(x,y,z);
 
-    points.push_back(Point(x, y, z));
+    points->push(point);
   }
 
   pointsFile.close();
   return points;
 }
 
-void drawTriangle(vector<Point> points) {
+void drawTriangle(queue<Point>* points) {
   glBegin(GL_TRIANGLES);
   for(int i = 0; i < 3; i++){
-    Point point = points.back();
+    Point point = points->front();
     glVertex3f(point.getX(), point.getY(), point.getZ());
-    points.pop_back();
+    points->pop();
   }
   glEnd();
 }
 
-void drawTriangles(vector<Point> points) {
-  int numTriangles = points.size()/3;
+void drawTriangles(queue<Point>* points) {
+  int numTriangles = points->size()/3;
   for(int i = 0; i < numTriangles; i++) {
     drawTriangle(points);
   }
 }
 
 void drawTrianglesFromFile() {
-  vector<string> fileNames;
+  queue<string> fileNames;
   char configFileName[] = "config.xml";
   fileNames = extractFileNames(configFileName);
 
-  for(string fileName : fileNames) {
-    vector<Point> points = extractPoints(fileName);
+  while(fileNames.size() > 0) {
+    queue<Point>* points = extractPoints(fileNames.front());
+    fileNames.pop();
     drawTriangles(points);
   }
 }
@@ -81,9 +82,12 @@ void renderScene() {
 
   // set the camera
   glLoadIdentity();
-  gluLookAt(1.5,-1.5,1.5,
+  gluLookAt(1.0,-1.0,4.0,
           0.0,0.0,0.0,
         0.0,1.0,0.0);
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 
   drawTrianglesFromFile();
 
@@ -121,7 +125,6 @@ int main (int argc, char** argv) {
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
     glutCreateWindow("CG-first-step");
-
 
   // Required callback registry
     glutDisplayFunc(renderScene);
