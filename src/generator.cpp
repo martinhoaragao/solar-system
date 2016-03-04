@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "point.h"
+#include "Point.h"
 
 using namespace std;
 
@@ -12,6 +12,7 @@ int plane(int, char **);
 int box(int, char **);
 int sphere(int, char **);
 int cone(int, char **);
+int ring(int, char **);
 void writeVerticesToFile(char **, int, FILE *);
 
 int main (int argc, char ** argv) {
@@ -28,6 +29,9 @@ int main (int argc, char ** argv) {
       sphere(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
     }
     else if (strcmp(argv[1], "cone") == 0) {
+      cone(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
+    }
+    else if (strcmp(argv[1], "ring") == 0) {
       cone(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
     }
     else {
@@ -135,7 +139,7 @@ int sphere(int argc, char ** parameters) {
       angleB  = 0.0;
 
       for (int slice = 0; slice < slices; slice++, angleB += incB) {
-        point p = point(r * sin(angleB), h, r * cos(angleB));
+        Point p = Point(r * sin(angleB), h, r * cos(angleB));
 
         fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
         fprintf(file, "%f %f %f\n",
@@ -185,7 +189,7 @@ int cone(int argc, char ** parameters) {
 
     // Draw base circunference.
     for (int slice = 0; slice < slices; slice++, angle += inc) {
-      point p = point(r * sin(angle), h, r * cos(angle));
+      Point p = Point(r * sin(angle), h, r * cos(angle));
 
       fprintf(file, "0.0 0.0 0.0\n");
       fprintf(file, "%f 0.0 %f\n", p.getX(), p.getZ());
@@ -201,7 +205,7 @@ int cone(int argc, char ** parameters) {
       angle = 0.0;
 
       for (int slice = 0; slice < slices; slice++, angle += inc) {
-        point p = point(r * sin(angle), h, r * cos(angle));
+        Point p = Point(r * sin(angle), h, r * cos(angle));
 
         fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
         fprintf(file, "%f %f %f\n",
