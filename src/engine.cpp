@@ -1,4 +1,12 @@
-#include <GLUT/glut.h>
+// Include GLUT header based on operating system.
+#ifdef __APPLE__
+  #include <GLUT/glut.h>
+#elif _WIN32
+  #include <GL/glut.h>
+#endif
+
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <stdio.h>
 #include <string>
 #include <sstream>
@@ -10,6 +18,45 @@
 #include "point.h"
 
 using namespace std;
+
+// Global variables.
+float camX = 0.0,   camY = 0.0, camZ = 5.0;
+float alpha = 0.0,  beta = 0.0, r = 5.0;
+
+/* Move camera position when keyboard arrows are pressed. */
+void arrowPressed(int key, int x, int y) {
+  switch (key) {
+    case GLUT_KEY_RIGHT:
+      alpha += ((M_PI)/2.0)/36.0;
+      camX  = r * cos(beta) * cos(alpha);
+      camZ  = r * cos(beta) * sin(alpha);
+      break;
+    case GLUT_KEY_LEFT:
+      alpha -= ((M_PI)/2.0)/36.0;
+      camX  = r * cos(beta) * cos(alpha);
+      camZ  = r * cos(beta) * sin(alpha);
+      break;
+    case GLUT_KEY_UP:
+      if (beta <= (M_PI)/2.0) {
+        beta  += ((M_PI)/2.0)/36.0;
+        camX  = r * cos(beta) * cos(alpha);
+        camY  = r * sin(beta);
+        camZ  = r * cos(beta) * sin(alpha);
+      }
+      break;
+    case GLUT_KEY_DOWN:
+      if (beta >= (-M_PI)/2.0) {
+        beta  -= ((M_PI)/2.0)/36.0;
+        camX  = r * cos(beta) * cos(alpha);
+        camY  = r * sin(beta);
+        camZ  = r * cos(beta) * sin(alpha);
+      }
+      break;
+    default: break;
+  }
+
+  glutPostRedisplay();
+}
 
 queue<string> extractFileNames (char* configFileName) {
   queue<string> fileNames;
@@ -82,9 +129,9 @@ void renderScene() {
 
   // set the camera
   glLoadIdentity();
-  gluLookAt(1.0,-1.0,4.0,
-          0.0,0.0,0.0,
-        0.0,1.0,0.0);
+  gluLookAt(camX,camY,camZ,
+      0.0,0.0,0.0,
+      0.0,1.0,0.0);
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -120,22 +167,25 @@ void changeSize(int width, int height) {
 int main (int argc, char** argv) {
 
   // init GLUT and the window
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
-    glutInitWindowPosition(100,100);
-    glutInitWindowSize(800,800);
-    glutCreateWindow("CG-first-step");
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
+  glutInitWindowPosition(100,100);
+  glutInitWindowSize(800,800);
+  glutCreateWindow("CG-first-phase");
 
   // Required callback registry
-    glutDisplayFunc(renderScene);
-    glutReshapeFunc(changeSize);
+  glutDisplayFunc(renderScene);
+  glutReshapeFunc(changeSize);
 
   //  OpenGL settings
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+
+  // Keyboard callbacks.
+  glutSpecialFunc(arrowPressed);
 
   // enter GLUT's main cycle
-    glutMainLoop();
+  glutMainLoop();
 
-    return 1;
+  return 1;
 }
