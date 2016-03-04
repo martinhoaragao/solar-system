@@ -60,7 +60,6 @@ int plane(int argc, char ** parameters) {
     FILE * file     = fopen(filename, "w+");
 
     // write to file.
-    fprintf(file, "4\n");
     fprintf(file, "%f 0.0 %f\n", -d, -d);
     fprintf(file, "%f 0.0 %f\n", -d,  d);
     fprintf(file, "%f 0.0 %f\n",  d,  d);
@@ -104,7 +103,6 @@ int box(int argc, char ** parameters) {
 
     // Open/Create file and write number of vertices to the file.
     FILE * file = fopen(parameters[3], "w+");
-    fprintf(file, "%d\n", 8);
 
     // Write vertices to file.
     writeVerticesToFile(vertices, 36, file);
@@ -185,7 +183,6 @@ int cone(int argc, char ** parameters) {
 
     // Open/Create file.
     FILE * file = fopen(parameters[4], "w+");
-    fprintf(file, "%d\n", slices + 1);
 
     // Draw base circunference.
     for (int slice = 0; slice < slices; slice++, angle += inc) {
@@ -201,7 +198,6 @@ int cone(int argc, char ** parameters) {
 
     for (int stack = 0; stack < stacks; stack++, h += hInc) {
       r     = ((height - h) * radius) / height;
-      printf("%f -> %f\n", h, r);
       angle = 0.0;
 
       for (int slice = 0; slice < slices; slice++, angle += inc) {
