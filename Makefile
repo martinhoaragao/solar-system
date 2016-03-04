@@ -1,4 +1,4 @@
-all: generator engine
+all: clean point generator engine
 
 build: point generator engine
 
@@ -12,4 +12,4 @@ engine: src/engine.cpp
 	g++ -framework GLUT -framework OpenGL -framework Cocoa src/engine.cpp src/tinyxml2.cpp src/point.o -o engine.out -Wno-deprecated
 
 clean:
-	rm *.out
+	rm -f *.out
