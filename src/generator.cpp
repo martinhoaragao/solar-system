@@ -196,8 +196,8 @@ int cone(int argc, char ** parameters) {
       Point p = Point(r * sin(angle), h, r * cos(angle));
 
       fprintf(file, "0.0 0.0 0.0\n");
-      fprintf(file, "%f 0.0 %f\n", p.getX(), p.getZ());
       fprintf(file, "%f 0.0 %f\n", r * sin(angle + inc), r * cos(angle + inc));
+      fprintf(file, "%f 0.0 %f\n", p.getX(), p.getZ());
     }
 
     // Create faces.
