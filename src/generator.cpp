@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <deque>
 #include "Point.h"
 
 using namespace std;
@@ -12,12 +13,13 @@ int plane(int, char **);
 int box(int, char **);
 int sphere(int, char **);
 int cone(int, char **);
-int ring(int, char **);
+deque<Point>* circle(int, float, float, int);
+int torus(int, char **);
 void writeVerticesToFile(char **, int, FILE *);
 
 int main (int argc, char ** argv) {
   // Check for arguments.
-  // Only 'plane', 'box', 'sphere' and 'cone' are possible.
+  // Only 'plane', 'box', 'sphere', 'cone' and 'torus' are possible.
   if (argc > 1) {
     if (strcmp(argv[1], "plane") == 0) {
       plane(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
@@ -31,8 +33,8 @@ int main (int argc, char ** argv) {
     else if (strcmp(argv[1], "cone") == 0) {
       cone(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
     }
-    else if (strcmp(argv[1], "ring") == 0) {
-      cone(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
+    else if (strcmp(argv[1], "torus") == 0) {
+      torus(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
     }
     else {
       printf("Invalid argument.\n");
@@ -235,6 +237,122 @@ int cone(int argc, char ** parameters) {
 
   }
 
+  return 0;
+}
+
+float sliceAngle(int slice, int slices) {
+  return slice * ((2 * M_PI) / slices);
+}
+
+deque<Point>* circunference(int slices, float radius, float z) {
+  deque<Point>* circunference = new deque<Point>();
+  float x, y, angle;
+  Point origin = Point(0, 0, 0);
+
+  for(int i = 0; i < slices; i++) {
+    angle = sliceAngle(i, slices);
+    x = radius * sin(angle);
+    y = radius * cos(angle);
+    Point point = Point(x, y, z);
+    circunference->push_back(point);
+  }
+
+  return circunference;
+}
+
+deque<Point>* innerCircle(int slices, float circunferenceRadius, float z) {
+  deque<Point>* circle = new deque<Point>();
+
+  deque<Point>* centerCircunference = circunference(slices, circunferenceRadius, z);
+  while(centerCircunference->size() > 0) {
+    Point point = centerCircunference->front();
+    centerCircunference->pop_front();
+    circle->push_back(point);
+    circle->push_back(Point(0,0,0));
+    circle->push_back(point);
+  }
+  circle->push_back(circle->front());
+  circle->pop_front();
+
+  return circle;
+}
+
+/* Draw triangles connecting 2 lines */
+deque<Point>* triangulateLines(deque<Point>* innerCircunference, deque<Point>* outerCircunference, deque<Point>* lines) {
+  for(int i = 0; i < innerCircunference->size(); i++) {
+    int nextPoint = (i +1) % innerCircunference->size();
+
+    Point innerPoint1 = innerCircunference->at(i);
+    Point outerPoint1 = outerCircunference->at(i);
+    Point innerPoint2 = innerCircunference->at(nextPoint);
+    Point outerPoint2 = outerCircunference->at(nextPoint);
+
+    lines->push_back(outerPoint1);
+    lines->push_back(innerPoint1);
+    lines->push_back(innerPoint2);
+
+    lines->push_back(outerPoint1);
+    lines->push_back(innerPoint2);
+    lines->push_back(outerPoint2);
+  }
+
+  return lines;
+}
+
+deque<Point>* circle(int slices, float radius, float z, int stacks) {
+  float circunferenceRadius = radius/stacks;
+
+  deque<Point>* circle = innerCircle(slices, circunferenceRadius, z);
+
+  for(int i = 1; i < stacks; i ++) {
+    deque<Point>* innerCircunference = circunference(slices, i * circunferenceRadius, z);
+    deque<Point>* outerCircunference = circunference(slices, (i + 1) * circunferenceRadius, z);
+
+    circle = triangulateLines(innerCircunference, outerCircunference, circle);
+  }
+
+  return circle;
+}
+
+int torus(int argc, char ** parameters) {
+  deque<Point>* torus = new deque<Point>();
+  float stackHeight, stackThickness, stackRadius;
+  deque< deque<Point>* > borders;
+
+  if (argc != 5) { return -1; }
+  else {
+    // Parse base radius, height, slices and stacks.
+    float radius    = stof(parameters[0]);
+    float thickness = stof(parameters[1]);
+    int slices      = stoi(parameters[2]);
+    int stacks      = stoi(parameters[3]);
+
+  int ringSlices = stacks *2;
+  for(int ringSlice = 0; ringSlice < ringSlices; ringSlice ++) {
+    float angle = sliceAngle(ringSlice, ringSlices);
+    stackHeight = thickness * sin(angle);
+    stackThickness = thickness * cos(angle);
+    stackRadius = radius + stackThickness;
+    cout << stackRadius << endl;
+
+    borders.push_back(circunference(slices, stackRadius, stackHeight));
+  }
+
+  int cornersNumber = borders.size();
+  for(int i = 0; i < cornersNumber; i++) {
+    int nextLine = (i +1) % cornersNumber;
+    torus = triangulateLines(borders.at(i), borders.at(nextLine), torus);
+  }
+
+  // Open/Create file.
+  FILE * file = fopen(parameters[4], "w+");
+
+  for (int i = 0; i < torus->size(); i++) {
+    Point p = torus->at(i);
+
+    fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+  }
+  }
   return 0;
 }
 
