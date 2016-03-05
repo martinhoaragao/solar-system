@@ -56,7 +56,8 @@ int plane(int argc, char ** parameters) {
     float d         = width/2.0;
 
     // create/open output file.
-    char * filename = parameters[1];
+    char filename[100];
+    sprintf(filename, "%s.3d", parameters[1]);
     FILE * file     = fopen(filename, "w+");
 
     // write to file.
@@ -102,7 +103,9 @@ int box(int argc, char ** parameters) {
     };
 
     // Open/Create file and write number of vertices to the file.
-    FILE * file = fopen(parameters[3], "w+");
+    char filename[100];
+    sprintf(filename, "%s.3d", parameters[3]);
+    FILE * file = fopen(filename, "w+");
 
     // Write vertices to file.
     writeVerticesToFile(vertices, 36, file);
@@ -129,7 +132,9 @@ int sphere(int argc, char ** parameters) {
     float r, h;
 
     // Open/Create file and write number of vertices to the file.
-    FILE * file = fopen(parameters[3], "w+");
+    char filename[100];
+    sprintf(filename, "%s.3d", parameters[3]);
+    FILE * file = fopen(filename, "w+");
 
     for (int stack = 0; stack < stacks; stack++, angleA += incA) {
       r = radius * cos(angleA);
@@ -182,7 +187,9 @@ int cone(int argc, char ** parameters) {
     float r       = ((height - h) * radius)/height;
 
     // Open/Create file.
-    FILE * file = fopen(parameters[4], "w+");
+    char filename[100];
+    sprintf(filename, "%s.3d", parameters[4]);
+    FILE * file = fopen(filename, "w+");
 
     // Draw base circunference.
     for (int slice = 0; slice < slices; slice++, angle += inc) {
