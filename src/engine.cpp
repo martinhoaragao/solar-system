@@ -22,6 +22,8 @@ using namespace std;
 // Global variables.
 float camX = 0.0,   camY = 0.0, camZ = 5.0;
 float alpha = 0.0,  beta = 0.0, r = 5.0;
+int menuID;
+
 
 /* Move camera position when keyboard arrows are pressed. */
 void arrowPressed(int key, int x, int y) {
@@ -133,9 +135,6 @@ void renderScene() {
       0.0,0.0,0.0,
       0.0,1.0,0.0);
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-
   drawTrianglesFromFile();
 
   // End of frame
@@ -164,6 +163,30 @@ void changeSize(int width, int height) {
   glMatrixMode(GL_MODELVIEW);
 }
 
+// function to process keyboard events
+void keyboardNormal(unsigned char key, int x, int y) {
+  if (key == 'f' || key == 'F') glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+  else if (key == 'l' || key == 'L') glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+  else if (key == 'p' || key == 'P') glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
+  else if (key == 'b' || key == 'B') {
+    glColor3f(0,0,1);
+  }
+  else if (key == 'g' || key == 'G') {
+    glColor3f(0,1,0);
+  }
+  else if (key == 'r' || key == 'R') {
+    glColor3f(1,0,0);
+  }
+
+
+  glutPostRedisplay();
+}
+
+// function to process menu events
+void newMenu (int id_op){
+        keyboardNormal((unsigned char)id_op, 0, 0);
+}
+
 int main (int argc, char** argv) {
 
   // init GLUT and the window
@@ -177,10 +200,24 @@ int main (int argc, char** argv) {
   glutDisplayFunc(renderScene);
   glutReshapeFunc(changeSize);
 
+  // Menu callback
+  glutKeyboardFunc(keyboardNormal);
+
+  // Menu definition
+  menuID = glutCreateMenu(newMenu);
+  glutAddMenuEntry("Turn on GL_FILL polygon mode",'f');
+  glutAddMenuEntry("Turn on GL_LINE polygon mode",'l');
+  glutAddMenuEntry("Turn on GL_POINT polygon mode",'p');
+  glutAddMenuEntry("Change color to red",'r');
+  glutAddMenuEntry("Change color to green",'g');
+  glutAddMenuEntry("Change color to blue",'b');
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+
   //  OpenGL settings
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
-
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  
   // Keyboard callbacks.
   glutSpecialFunc(arrowPressed);
 
