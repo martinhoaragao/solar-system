@@ -94,7 +94,7 @@ int box(int argc, char ** parameters) {
     sprintf(G, "%f 0.0 %f", -x,  z);
     sprintf(H, "%f 0.0 %f",  x,  z);
     char * vertices[36] = {
-      E, G, H, F, E, H, // Base.
+      E, H, G, F, H, E, // Base.
       A, C, D, B, A, D, // Top.
       C, G, H, D, C, H, // Front.
       D, H, F, B, D, F, // Right.
