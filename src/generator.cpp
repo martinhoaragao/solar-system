@@ -287,13 +287,13 @@ deque<Point>* triangulateLines(deque<Point>* innerCircunference, deque<Point>* o
     Point innerPoint2 = innerCircunference->at(nextPoint);
     Point outerPoint2 = outerCircunference->at(nextPoint);
 
-    lines->push_back(outerPoint1);
     lines->push_back(innerPoint1);
     lines->push_back(innerPoint2);
-
     lines->push_back(outerPoint1);
+
     lines->push_back(innerPoint2);
     lines->push_back(outerPoint2);
+    lines->push_back(outerPoint1);
   }
 
   return lines;
