@@ -316,37 +316,34 @@ deque<Point>* circle(int slices, float radius, float z, int stacks) {
 
 int torus(int argc, char ** parameters) {
   deque<Point>* torus = new deque<Point>();
-  float stackHeight, stackThickness, stackRadius;
+  float sliceHeight, radiusDeviation, stackRadius;
   deque< deque<Point>* > borders;
 
   if (argc != 5) { return -1; }
   else {
-    // Parse base radius, height, slices and stacks.
-    float radius    = stof(parameters[0]);
-    float thickness = stof(parameters[1]);
-    int slices      = stoi(parameters[2]);
-    int stacks      = stoi(parameters[3]);
+    // Parse base radius, innerRadius, sides and rings.
+    float radius      = stof(parameters[0]);
+    float innerRadius = stof(parameters[1]);
+    int sides         = stoi(parameters[2]);
+    int rings         = stoi(parameters[3]);
 
-  int ringSlices = stacks *2;
-  for(int ringSlice = 0; ringSlice < ringSlices; ringSlice ++) {
-    float angle = sliceAngle(ringSlice, ringSlices);
-    stackHeight = thickness * sin(angle);
-    stackThickness = thickness * cos(angle);
-    stackRadius = radius + stackThickness;
-    cout << stackRadius << endl;
+  for(int side = 0; side < sides; side ++) {
+    float angle = sliceAngle(side, sides);
+    sliceHeight = innerRadius * sin(angle);
+    radiusDeviation = innerRadius * cos(angle);
+    stackRadius = radius + radiusDeviation;
 
-    borders.push_back(circunference(slices, stackRadius, stackHeight));
+    borders.push_back(circunference(rings, stackRadius, sliceHeight));
   }
 
-  int cornersNumber = borders.size();
-  for(int i = 0; i < cornersNumber; i++) {
-    int nextLine = (i +1) % cornersNumber;
-    torus = triangulateLines(borders.at(i), borders.at(nextLine), torus);
+  /* Triangulate the sides of the torus */
+  for(int side = 0; side < sides; side++) {
+    int nextLine = (side +1) % sides;
+    torus = triangulateLines(borders.at(side), borders.at(nextLine), torus);
   }
 
   // Open/Create file.
   FILE * file = fopen(parameters[4], "w+");
-
   for (int i = 0; i < torus->size(); i++) {
     Point p = torus->at(i);
 
