@@ -20,8 +20,10 @@
 using namespace std;
 
 // Global variables.
-float camX = 0.0,   camY = 0.0, camZ = 5.0;
 float alpha = 0.0,  beta = 0.0, r = 5.0;
+float camX  = r * cos(beta) * cos(alpha),
+      camY  = r * sin(beta),
+      camZ  = r * cos(beta) * sin(alpha);
 int menuID;
 
 
@@ -217,7 +219,7 @@ int main (int argc, char** argv) {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  
+
   // Keyboard callbacks.
   glutSpecialFunc(arrowPressed);
 
