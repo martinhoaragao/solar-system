@@ -31,6 +31,7 @@ int verticesCount = 0;
 
 deque<string> fileNames;
 GLuint buffers[100];
+int bufferSize[100];
 
 
 /*-----------------------------------------------------------------------------------
@@ -152,9 +153,8 @@ void drawTrianglesFromFile() {
     vector<float>* pointsVector = pointsToVector(points);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
-    glVertexPointer(3, GL_FLOAT, 0, NULL);
     glBufferData(GL_ARRAY_BUFFER, pointsVector->size() * sizeof(float), &pointsVector->front(), GL_STATIC_DRAW);
-    glDrawArrays(GL_TRIANGLES, 0, pointsVector->size());
+    bufferSize[i] = pointsVector->size();
 
   }
 }
@@ -168,12 +168,22 @@ void renderScene() {
       0.0,0.0,0.0,
       0.0,1.0,0.0);
 
-  // Enable buffer
-  glEnableClientState(GL_VERTEX_ARRAY);
 
-  drawTrianglesFromFile();
+  for(int i = 0; i < fileNames.size(); i++) {
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
 
-  glDisableClientState(GL_VERTEX_ARRAY);
+    //Draw Triangle from VBO - do each time window, view point or data changes
+    glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+    // Enable buffer
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+    glDrawArrays(GL_TRIANGLES, 0, bufferSize[i]);
+
+    //Force display to be drawn now
+    glFlush();
+    glDisableClientState(GL_VERTEX_ARRAY);
+  }
 
   displayFPS();
 
@@ -237,6 +247,7 @@ int main (int argc, char** argv) {
   glutCreateWindow("CG-first-phase");
 
   // Required callback registry
+  drawTrianglesFromFile();
   glutDisplayFunc(renderScene);
   glutReshapeFunc(changeSize);
 
