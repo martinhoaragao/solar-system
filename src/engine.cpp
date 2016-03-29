@@ -25,6 +25,47 @@ float camX  = r * cos(beta) * cos(alpha),
       camY  = r * sin(beta),
       camZ  = r * cos(beta) * sin(alpha);
 int menuID;
+float timebase = 0;
+int frame = 0;
+int verticesCount = 0;
+
+deque<string> fileNames;
+GLuint buffers[100];
+
+
+/*-----------------------------------------------------------------------------------
+	Display FPS.
+-----------------------------------------------------------------------------------*/
+
+void displayFPS() {
+  int   time;
+  char  title[20];
+
+  frame++;
+  time = glutGet(GLUT_ELAPSED_TIME);
+  if (time - timebase > 1000) {
+    float fps = frame * 1000.0/(time - timebase);
+    timebase  = time;
+    frame     = 0;
+    sprintf(title,"%.2f FPS",fps);
+    glutSetWindowTitle(title);
+  }
+}
+
+// Points to array
+vector<float>* pointsToVector(queue<Point>* points) {
+  vector<float>* floatVector = new vector<float>();
+
+  while(points->size() > 0 ) {
+    Point point = points->front();
+    points->pop();
+    floatVector->push_back(point.getX());
+    floatVector->push_back(point.getY());
+    floatVector->push_back(point.getZ());
+  }
+
+  return floatVector;
+}
 
 
 /* Move camera position when keyboard arrows are pressed. */
@@ -62,19 +103,17 @@ void arrowPressed(int key, int x, int y) {
   glutPostRedisplay();
 }
 
-queue<string> extractFileNames (char* configFileName) {
-  queue<string> fileNames;
+void extractFileNames (char* configFileName) {
   tinyxml2::XMLDocument doc;
 
   doc.LoadFile(configFileName);
   tinyxml2::XMLElement * elem = doc.FirstChildElement()->FirstChildElement();
 
   while(elem != NULL) {
-    fileNames.push(elem->Attribute("file"));
+    fileNames.push_back(elem->Attribute("file"));
 
     elem = elem->NextSiblingElement();
   }
-  return fileNames;
 }
 
 queue<Point>* extractPoints(string fileName) {
@@ -87,6 +126,7 @@ queue<Point>* extractPoints(string fileName) {
 
   while (getline(pointsFile, line)) {
     istringstream iss(line);
+    verticesCount ++;
 
     iss >> x >> y >> z;
     Point point = Point(x,y,z);
@@ -98,37 +138,26 @@ queue<Point>* extractPoints(string fileName) {
   return points;
 }
 
-void drawTriangle(queue<Point>* points) {
-  glBegin(GL_TRIANGLES);
-  for(int i = 0; i < 3; i++){
-    Point point = points->front();
-    glVertex3f(point.getX(), point.getY(), point.getZ());
-    points->pop();
-  }
-  glEnd();
-}
 
-void drawTriangles(queue<Point>* points) {
-  int numTriangles = points->size()/3;
-  for(int i = 0; i < numTriangles; i++) {
-    drawTriangle(points);
-  }
-}
 
 void drawTrianglesFromFile() {
-  queue<string> fileNames;
   char configFileName[] = "config.xml";
-  fileNames = extractFileNames(configFileName);
+  extractFileNames(configFileName);
 
-  while(fileNames.size() > 0) {
-    queue<Point>* points = extractPoints(fileNames.front());
-    fileNames.pop();
-    drawTriangles(points);
+  // Generate Vertex Buffer Objects
+  glGenBuffers(fileNames.size(), buffers);
+
+  for(int i = 0; i < fileNames.size(); i++) {
+    queue<Point>* points = extractPoints(fileNames.at(i));
+    vector<float>* pointsVector = pointsToVector(points);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glBufferData(GL_ARRAY_BUFFER, pointsVector->size() * sizeof(float), &pointsVector->front(), GL_STATIC_DRAW);
   }
 }
 
 void renderScene() {
-
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // set the camera
@@ -137,7 +166,14 @@ void renderScene() {
       0.0,0.0,0.0,
       0.0,1.0,0.0);
 
+  // Enable buffer
+  glEnableClientState(GL_VERTEX_ARRAY);
+
   drawTrianglesFromFile();
+  glDrawArrays(GL_TRIANGLES, 0, verticesCount);
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+  displayFPS();
 
   // End of frame
   glutSwapBuffers();

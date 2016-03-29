@@ -1,54 +1,38 @@
-# Phase 1 - Graphical Primitives
+# Phase 2 – Geometric Transforms
 
-This phase requires two applications: one to generate files with the models information
-(in this phase only generate the vertices for the model) and the engine itself which will
-read a configuration file, written in XML, and display the models.
+This phase is about creating hierarchical scenes using geometric transforms.
+Consider a scene defined as a tree where each node contains a set of geometric transforms
+(translate, rotate and scale) and a set of models. Each node can also have children nodes.
+Example of a configuration XML file with a single group:
 
-To create the model files an application (independent from the engine) will receive as
-parameters the graphical primitive’s type, other parameters required for the model creation,
-and the destination file where the vertices will be stored.
+  <scene>
+    <group>
+      <translate X=5 Y=0 Z=2 />
+      <rotate angle=45 axisX=0 axisY=1 axisZ=0 />
+      <models>
+        <model file=”sphere.3d” />
+      </models>
+    </group>
+  </scene>
 
-In this phase the following graphical primitives are required:
-- Plane (a square in the XZ plane, centred in the origin, made with 2 triangles)
-- Box (requires X, Y and Z dimensions)
-- Sphere (requires radius, slices and stacks)
-- Cone (requires bottom radius, height, slices and stacks)
+Example of a group with a child group:
 
-For instance, if we wanted to create a sphere with radius 1, 10 slices, 10 stacks, and store the
-resulting vertices in file sphere.3d, and assuming our application is called generator, we could
-write:
+  <scene>
+    <group>
+      <translate X=1 />
+      <models>
+        <model file=”sphere.3d” />
+      </models>
+      <group>
+        <translate Y=1 />
+        <models>
+          <model file=”cone.3d” />
+        </models>
+      </group>
+    </group>
+  </scene>
 
-    generator sphere 1 10 10 shpere.3d
-
-The file format should be defined by the students and can support additional information
-to assist the reading process, for example, the file may contain a line at the beginning
-stating the number of vertices it contains.
-
-Example of a .3d file for a plane centered in the origin with width 2:
-
-    4 // Number of different vertices
-    -1.0 0.0 1.0
-    -1.0 0.0 -1.0
-    1.0  0.0 1.0
-    1.0  0.0 -1.0
-    1.0  0.0 1.0
-    -1.0 0.0 -1.0
-
-
-Afterwards, the engine will receive a configuration file, written in XML. In this phase the XML
-file will contain only the indication of which previously generated files to load.
-
-Several alternatives are available to assist the XML Reading, such as tinyXML
-(http://www.grinninglizard.com/tinyxml/).
-
-Example of a XML configuration file for phase one:
-
-    <scene>
-      <model file="sphere.3d" />
-      <model file="plane.3d" />
-    </scene>
-
-Note: in the above example it is assumed that the files “sphere.3d” and “plane.3d” have been
-previously created with the generator application.
-The demo scenes for this phase are the XML configuration and model files to display
-each graphical primitive.
+In the second example the child group will inherit the geometric transforms from the parent.
+Note: the order of the geometric transforms is relevant.
+The required demo scene for this phase is a static model of the solar system, including the sun,
+planets and moons defined in a hierarchy.
