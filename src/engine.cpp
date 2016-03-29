@@ -152,8 +152,10 @@ void drawTrianglesFromFile() {
     vector<float>* pointsVector = pointsToVector(points);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
-    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glVertexPointer(3, GL_FLOAT, 0, NULL);
     glBufferData(GL_ARRAY_BUFFER, pointsVector->size() * sizeof(float), &pointsVector->front(), GL_STATIC_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, pointsVector->size());
+
   }
 }
 
@@ -170,7 +172,7 @@ void renderScene() {
   glEnableClientState(GL_VERTEX_ARRAY);
 
   drawTrianglesFromFile();
-  glDrawArrays(GL_TRIANGLES, 0, verticesCount);
+
   glDisableClientState(GL_VERTEX_ARRAY);
 
   displayFPS();
