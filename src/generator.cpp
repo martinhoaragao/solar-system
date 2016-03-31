@@ -343,7 +343,10 @@ int torus(int argc, char ** parameters) {
   }
 
   // Open/Create file.
-  FILE * file = fopen(parameters[4], "w+");
+  char filename[100];
+  sprintf(filename, "%s.3d", parameters[4]);
+  FILE * file = fopen(filename, "w+");
+
   for (int i = 0; i < torus->size(); i++) {
     Point p = torus->at(i);
 

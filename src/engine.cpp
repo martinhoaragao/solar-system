@@ -164,7 +164,7 @@ void renderScene() {
 
   // set the camera
   glLoadIdentity();
-  gluLookAt(camX,camY,camZ,
+  gluLookAt(camX,camY+500.0f,camZ+500.0f,
       0.0,0.0,0.0,
       0.0,1.0,0.0);
 
