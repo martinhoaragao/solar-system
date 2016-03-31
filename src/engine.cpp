@@ -83,20 +83,26 @@ void arrowPressed(int key, int x, int y) {
       camZ  = r * cos(beta) * sin(alpha);
       break;
     case GLUT_KEY_UP:
-      if (beta <= (M_PI)/2.0) {
+      /*if (beta <= (M_PI)/2.0) {
         beta  += ((M_PI)/2.0)/36.0;
         camX  = r * cos(beta) * cos(alpha);
         camY  = r * sin(beta);
         camZ  = r * cos(beta) * sin(alpha);
-      }
+      }*/
+      //More zoom
+      camY-=25;
+      camZ-=25;
       break;
     case GLUT_KEY_DOWN:
-      if (beta >= (-M_PI)/2.0) {
+      /*if (beta >= (-M_PI)/2.0) {
         beta  -= ((M_PI)/2.0)/36.0;
         camX  = r * cos(beta) * cos(alpha);
         camY  = r * sin(beta);
         camZ  = r * cos(beta) * sin(alpha);
-      }
+      }*/
+      //Less zoom    
+      camY+=25;
+      camZ+=25;
       break;
     default: break;
   }
