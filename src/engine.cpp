@@ -15,7 +15,7 @@
 #include <iostream>
 
 #include "tinyxml2.h"
-#include "point.h"
+#include "file.h"
 
 using namespace std;
 
@@ -29,10 +29,7 @@ float timebase = 0;
 int frame = 0;
 int verticesCount = 0;
 
-deque<string> fileNames;
-GLuint buffers[100];
-int bufferSize[100];
-
+vector<File> files;
 
 /*-----------------------------------------------------------------------------------
 	Display FPS.
@@ -52,22 +49,6 @@ void displayFPS() {
     glutSetWindowTitle(title);
   }
 }
-
-// Points to array
-vector<float>* pointsToVector(queue<Point>* points) {
-  vector<float>* floatVector = new vector<float>();
-
-  while(points->size() > 0 ) {
-    Point point = points->front();
-    points->pop();
-    floatVector->push_back(point.getX());
-    floatVector->push_back(point.getY());
-    floatVector->push_back(point.getZ());
-  }
-
-  return floatVector;
-}
-
 
 /* Move camera position when keyboard arrows are pressed. */
 void arrowPressed(int key, int x, int y) {
@@ -110,8 +91,13 @@ void arrowPressed(int key, int x, int y) {
   glutPostRedisplay();
 }
 
-void extractFileNames (char* configFileName) {
+/*-----------------------------------------------------------------------------------
+	Parser.
+-----------------------------------------------------------------------------------*/
+
+vector<string> extractFileNames (char* configFileName) {
   tinyxml2::XMLDocument doc;
+  vector<string> fileNames;
 
   doc.LoadFile(configFileName);
   tinyxml2::XMLElement * elem = doc.FirstChildElement()->FirstChildElement();
@@ -121,47 +107,17 @@ void extractFileNames (char* configFileName) {
 
     elem = elem->NextSiblingElement();
   }
+
+  return fileNames;
 }
 
-queue<Point>* extractPoints(string fileName) {
-  queue<Point>* points = new queue<Point>();
-  ifstream pointsFile;
-  string line;
-  float x, y, z;
-
-  pointsFile.open(fileName);
-
-  while (getline(pointsFile, line)) {
-    istringstream iss(line);
-    verticesCount ++;
-
-    iss >> x >> y >> z;
-    Point point = Point(x,y,z);
-
-    points->push(point);
-  }
-
-  pointsFile.close();
-  return points;
-}
-
-
-
-void drawTrianglesFromFile() {
+void refreshBuffersFromConfig() {
   char configFileName[] = "config.xml";
-  extractFileNames(configFileName);
-
-  // Generate Vertex Buffer Objects
-  glGenBuffers(fileNames.size(), buffers);
+  vector<string> fileNames = extractFileNames(configFileName);
 
   for(int i = 0; i < fileNames.size(); i++) {
-    queue<Point>* points = extractPoints(fileNames.at(i));
-    vector<float>* pointsVector = pointsToVector(points);
-
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
-    glBufferData(GL_ARRAY_BUFFER, pointsVector->size() * sizeof(float), &pointsVector->front(), GL_STATIC_DRAW);
-    bufferSize[i] = pointsVector->size();
-
+    File file(fileNames.at(i));
+    files.push_back(file);
   }
 }
 
@@ -170,13 +126,13 @@ void renderScene() {
 
   // set the camera
   glLoadIdentity();
-  gluLookAt(camX,camY+500.0f,camZ+500.0f,
+  gluLookAt(camX,camY,camZ,
       0.0,0.0,0.0,
       0.0,1.0,0.0);
 
 
-  for(int i = 0; i < fileNames.size(); i++) {
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
+  for(int i = 0; i < files.size(); i++) {
+    glBindBuffer(GL_ARRAY_BUFFER, files.at(i).getCoordinatesID());
 
     //Draw Triangle from VBO - do each time window, view point or data changes
     glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -184,7 +140,7 @@ void renderScene() {
     // Enable buffer
     glEnableClientState(GL_VERTEX_ARRAY);
 
-    glDrawArrays(GL_TRIANGLES, 0, bufferSize[i]);
+    glDrawArrays(GL_TRIANGLES, 0, files.at(i).coordinatesLength()/3);
 
     //Force display to be drawn now
     glFlush();
@@ -253,7 +209,7 @@ int main (int argc, char** argv) {
   glutCreateWindow("CG-first-phase");
 
   // Required callback registry
-  drawTrianglesFromFile();
+  refreshBuffersFromConfig();
   glutDisplayFunc(renderScene);
   glutReshapeFunc(changeSize);
 
