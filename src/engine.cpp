@@ -14,8 +14,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "tinyxml2.h"
-#include "file.h"
+#include "group.h"
 
 using namespace std;
 
@@ -26,9 +25,8 @@ float camX, camY, camZ;
 int menuID;
 float timebase = 0;
 int frame = 0;
-int verticesCount = 0;
 
-vector<File> files;
+Group *group;
 
 /*-----------------------------------------------------------------------------------
 	Display FPS.
@@ -84,31 +82,6 @@ void arrowPressed(int key, int x, int y) {
 	Parser.
 -----------------------------------------------------------------------------------*/
 
-vector<string> extractFileNames (char* configFileName) {
-  tinyxml2::XMLDocument doc;
-  vector<string> fileNames;
-
-  doc.LoadFile(configFileName);
-  tinyxml2::XMLElement * elem = doc.FirstChildElement()->FirstChildElement();
-
-  while(elem != NULL) {
-    fileNames.push_back(elem->Attribute("file"));
-
-    elem = elem->NextSiblingElement();
-  }
-
-  return fileNames;
-}
-
-void refreshBuffersFromConfig() {
-  char configFileName[] = "config.xml";
-  vector<string> fileNames = extractFileNames(configFileName);
-
-  for(int i = 0; i < fileNames.size(); i++) {
-    File file(fileNames.at(i));
-    files.push_back(file);
-  }
-}
 
 void renderScene() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -119,22 +92,7 @@ void renderScene() {
       0.0,0.0,0.0,
       0.0,1.0,0.0);
 
-
-  for(int i = 0; i < files.size(); i++) {
-    glBindBuffer(GL_ARRAY_BUFFER, files.at(i).getCoordinatesID());
-
-    //Draw Triangle from VBO - do each time window, view point or data changes
-    glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-    // Enable buffer
-    glEnableClientState(GL_VERTEX_ARRAY);
-
-    glDrawArrays(GL_TRIANGLES, 0, files.at(i).coordinatesLength()/3);
-
-    //Force display to be drawn now
-    glFlush();
-    glDisableClientState(GL_VERTEX_ARRAY);
-  }
+  group->draw();
 
   displayFPS();
 
@@ -204,10 +162,12 @@ int main (int argc, char** argv) {
   glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
   glutInitWindowPosition(100,100);
   glutInitWindowSize(800,800);
+
   glutCreateWindow("CG-first-phase");
 
   // Required callback registry
-  refreshBuffersFromConfig();
+  group = new Group();
+
   glutDisplayFunc(renderScene);
   glutReshapeFunc(changeSize);
 

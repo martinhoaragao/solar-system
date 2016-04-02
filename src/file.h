@@ -28,6 +28,7 @@ class File {
     int coordinatesLength();
     GLuint getCoordinatesID();
     void reloadFile();
+    void draw();
 };
 
 #endif
