@@ -19,11 +19,10 @@
 
 using namespace std;
 
-// Global variables.
+// Camera variables and coordinates.
 float alpha = 0.0,  beta = 0.0, r = 5.0;
-float camX  = r * cos(beta) * cos(alpha),
-      camY  = r * sin(beta),
-      camZ  = r * cos(beta) * sin(alpha);
+float camX, camY, camZ;
+
 int menuID;
 float timebase = 0;
 int frame = 0;
@@ -50,44 +49,34 @@ void displayFPS() {
   }
 }
 
+/* Calculate the camera coordinates. */
+void calculateCamCoordinates() {
+  camX = r * cos(beta) * sin(alpha);
+  camY = r * sin(beta);
+  camZ = r * cos(beta) * cos(alpha);
+}
+
 /* Move camera position when keyboard arrows are pressed. */
 void arrowPressed(int key, int x, int y) {
   switch (key) {
     case GLUT_KEY_RIGHT:
-      alpha += ((M_PI)/2.0)/36.0;
-      camX  = r * cos(beta) * cos(alpha);
-      camZ  = r * cos(beta) * sin(alpha);
+      alpha -= 0.1;
       break;
     case GLUT_KEY_LEFT:
-      alpha -= ((M_PI)/2.0)/36.0;
-      camX  = r * cos(beta) * cos(alpha);
-      camZ  = r * cos(beta) * sin(alpha);
+      alpha += 0.1;
       break;
     case GLUT_KEY_UP:
-      /*if (beta <= (M_PI)/2.0) {
-        beta  += ((M_PI)/2.0)/36.0;
-        camX  = r * cos(beta) * cos(alpha);
-        camY  = r * sin(beta);
-        camZ  = r * cos(beta) * sin(alpha);
-      }*/
-      //More zoom
-      camY-=25;
-      camZ-=25;
+      beta += 0.1f;
+      if (beta > 1.5f) beta = 1.5f;
       break;
     case GLUT_KEY_DOWN:
-      /*if (beta >= (-M_PI)/2.0) {
-        beta  -= ((M_PI)/2.0)/36.0;
-        camX  = r * cos(beta) * cos(alpha);
-        camY  = r * sin(beta);
-        camZ  = r * cos(beta) * sin(alpha);
-      }*/
-      //Less zoom    
-      camY+=25;
-      camZ+=25;
+      beta -= 0.1f;
+      if (beta < -1.5f) beta = -1.5f;
       break;
     default: break;
   }
 
+  calculateCamCoordinates();
   glutPostRedisplay();
 }
 
@@ -154,7 +143,6 @@ void renderScene() {
 }
 
 void changeSize(int width, int height) {
-
   // Prevent a divide by zero, when window is too short
   if(height == 0)
     height = 1;
@@ -189,7 +177,17 @@ void keyboardNormal(unsigned char key, int x, int y) {
   else if (key == 'r' || key == 'R') {
     glColor3f(1,0,0);
   }
-
+  else if (key == 'w' || key == 'W') {
+    // Zoom in by reducing the radius of the 'sphere' where the camera rotates.
+    r -= 0.1;
+    if (r < 0.0) r = 0.0;
+    calculateCamCoordinates();
+  }
+  else if (key == 's' || key == 'S') {  // Zoom out.
+    // Zoom out by increasing the radius of the 'sphere' where the camera rotates.
+    r += 0.1;
+    calculateCamCoordinates();
+  }
 
   glutPostRedisplay();
 }
@@ -233,6 +231,9 @@ int main (int argc, char** argv) {
 
   // Keyboard callbacks.
   glutSpecialFunc(arrowPressed);
+
+  // Calculate initial camera coordinates before starting to render.
+  calculateCamCoordinates();
 
   // enter GLUT's main cycle
   glutMainLoop();
