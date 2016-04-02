@@ -6,6 +6,7 @@ class Point {
     float x, y, z;
 
   public:
+    Point();
     Point(float, float, float);
     float getX();
     float getY();
