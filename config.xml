@@ -8,9 +8,8 @@
       <model file="sphere.3d" />
     </models>
     <group>
-      <translate x="0" y="0" z="0" />
+      <translate x="0" />
       <scale x="0.2" y="0.2" z="0.2" />
-      <rotate angle="0" x="0" y="0" z="0" />
       <models>
         <model file="cone.3d" />
         <model file="plane.3d" />

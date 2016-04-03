@@ -72,10 +72,11 @@ Point XMLParser::getScale() {
 
   float x, y, z;
   x = 1; y = 1; z = 1;
-
-  temp->QueryFloatAttribute( "x", &x );
-  temp->QueryFloatAttribute( "y", &y );
-  temp->QueryFloatAttribute( "z", &z );
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "x", &x );
+    temp->QueryFloatAttribute( "y", &y );
+    temp->QueryFloatAttribute( "z", &z );
+  }
 
   return Point(x, y, z);
 }
@@ -85,10 +86,12 @@ Rotation XMLParser::getRotation() {
   float angle, x, y, z;
   angle = 0, x = 0; y = 0; z = 0;
 
-  temp->QueryFloatAttribute( "angle", &angle );
-  temp->QueryFloatAttribute( "x", &x );
-  temp->QueryFloatAttribute( "y", &y );
-  temp->QueryFloatAttribute( "z", &z );
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "angle", &angle );
+    temp->QueryFloatAttribute( "x", &x );
+    temp->QueryFloatAttribute( "y", &y );
+    temp->QueryFloatAttribute( "z", &z );
+  }
 
   return Rotation(angle, x, y, z);
 }
@@ -98,9 +101,11 @@ Point XMLParser::getTranslation() {
   float x, y, z;
   x = 0; y = 0; z = 0;
 
-  temp->QueryFloatAttribute( "x", &x );
-  temp->QueryFloatAttribute( "y", &y );
-  temp->QueryFloatAttribute( "z", &z );
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "x", &x );
+    temp->QueryFloatAttribute( "y", &y );
+    temp->QueryFloatAttribute( "z", &z );
+  }
 
   return Point(x, y, z);
 }
