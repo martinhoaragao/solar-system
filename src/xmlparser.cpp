@@ -1,6 +1,5 @@
 #include "xmlparser.h"
 
-#include <iostream>
 /*-----------------------------------------------------------------------------------
 	API
 -----------------------------------------------------------------------------------*/
@@ -69,19 +68,13 @@ vector<string> XMLParser::extractFileNames() {
 }
 
 Point XMLParser::getScale() {
-  cout << "here" << endl;
-
   tinyxml2::XMLElement *temp = elem->FirstChildElement("scale");
 
   float x, y, z;
   x = 1; y = 1; z = 1;
 
   temp->QueryFloatAttribute( "x", &x );
-  cout << "Error 1.0" << endl;
-
   temp->QueryFloatAttribute( "y", &y );
-  cout << "Error 1.0.1" << endl;
-
   temp->QueryFloatAttribute( "z", &z );
 
   return Point(x, y, z);

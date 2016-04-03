@@ -1,8 +1,5 @@
 #include "group.h"
 
-#include <iostream>
-
-
 /*-----------------------------------------------------------------------------------
 	API
 -----------------------------------------------------------------------------------*/
@@ -28,34 +25,11 @@ Group::Group() {
   }
 
   parser->FirstChildGroup();
-  cout << "Parser address copied: ";
-  cout << (parser->getElem()) << endl;
-  cout << (parser->getElem()->Value()) << endl;
-
-
-  XMLParser* child = parser->deepCopy(parser);
-  cout << "Parser address changed? ";
-  cout << (parser->getElem()) << endl;
-  cout << (parser->getElem()->Value()) << endl;
-  cout << "Child address copied: ";
-  cout << (child->getElem()) << endl;
-  cout << (child->getElem()->Value()) << endl;
-
-  cout << child << " vs " << parser << endl;
-
 
   while(parser->getElem() != NULL) {
-    groups.push_back(new Group(child));
-    cout << "pushed 1" << endl;
-
-  if (parser->getElem() == NULL)
-    cout << "PARSER IS NULL NOW" << endl;
+    groups.push_back(new Group(parser->deepCopy(parser)));
     parser->NextSiblingGroup();
-    cout << "went to sibling" << endl;
-
   }
-  cout << "THE END" << endl;
-
 }
 Group::Group(char* configFileName) {
 
@@ -77,14 +51,11 @@ Group::Group(char* configFileName) {
   }
 
   parser->FirstChildGroup();
-  XMLParser* child = parser;
-  while(parser->getElem() != NULL) {
-    groups.push_back(new Group(child));
 
+  while(parser->getElem() != NULL) {
+    groups.push_back(new Group(parser->deepCopy(parser)));
     parser->NextSiblingGroup();
   }
-  cout << "THE END" << endl;
-
 }
 
 Group::Group(XMLParser* parser) {
@@ -92,34 +63,22 @@ Group::Group(XMLParser* parser) {
   rotation = Rotation(0, 1, 1, 1);
   translation = Point(0, 0, 0);
 
-  cout << "Error 1" << endl;
   scale = parser->getScale();
-  cout << "Error 1.1" << endl;
-
   rotation = parser->getRotation();
   translation = parser->getTranslation();
-
-  cout << "Error 2" << endl;
 
   vector<string> fileNames = parser->extractFileNames();
   for(int i = 0; i < fileNames.size(); i++) {
     File file(fileNames.at(i));
     files.push_back(file);
   }
-  cout << "Error 3" << endl;
 
   parser->FirstChildGroup();
-  XMLParser* child = parser;
+
   while(parser->getElem() != NULL) {
-    groups.push_back(new Group(child));
-    cout << "Error 4" << endl;
-
+    groups.push_back(new Group(parser->deepCopy(parser)));
     parser->NextSiblingGroup();
-    if (parser == NULL)
-      cout << "IT IS NULL" << endl;
   }
-  cout << "Error 5" << endl;
-
 }
 
 void Group::draw() {
