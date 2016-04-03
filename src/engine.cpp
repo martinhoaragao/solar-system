@@ -22,6 +22,7 @@ using namespace std;
 float alpha     = (M_PI/2.0), beta  = 0.0, r = 550.0;
 float fastZoom  = 1.0, slowZoom     = 0.5;
 float camX, camY, camZ;
+int extraSpeed  = 0;
 
 int menuID;
 float timebase = 0;
@@ -155,20 +156,24 @@ void keyboardNormal(unsigned char key, int x, int y) {
     case 81: group = new Group(); break;
     // 'w'.
     case 119: // Faster Zoom In.
-      r -= fastZoom; if (r < 0.0) r = 0.0;
+      r -= fastZoom * pow(5.0, extraSpeed); if (r < 0.0) r = 0.0;
       calculateCamCoordinates(); break;
     // 'W'.
     case 87:  // Slower Zoom In.
-      r -= slowZoom; if (r < 0.0) r = 0.0;
+      r -= slowZoom * pow(5.0, extraSpeed); if (r < 0.0) r = 0.0;
       calculateCamCoordinates(); break;
     // 's'.
     case 115: // Faster Zoom Out.
-      r += fastZoom;
+      r += fastZoom * pow(5.0, extraSpeed);
       calculateCamCoordinates(); break;
     // 'S'.
     case 83:  // Slower Zoom Out.
-      r += slowZoom;
+      r += slowZoom * pow(5.0, extraSpeed);
       calculateCamCoordinates(); break;
+    // Space ' '.
+    case 32:
+      extraSpeed == 1 ? extraSpeed = 0 : extraSpeed = 1;
+      break;
     default: break;
   }
 
