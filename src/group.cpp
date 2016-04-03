@@ -84,9 +84,9 @@ Group::Group(XMLParser* parser) {
 void Group::draw() {
   glPushMatrix();
 
+  glTranslatef(translation.getX(), translation.getY(), translation.getZ());
   glScalef(scale.getX(), scale.getY(), scale.getZ());
   glRotatef(rotation.getAngle(), rotation.getX(), rotation.getY(), rotation.getZ());
-  glTranslatef(translation.getX(), translation.getY(), translation.getZ());
 
   for(int i = 0; i < files.size(); i++) {
     files.at(i).draw();

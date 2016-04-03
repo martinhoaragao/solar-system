@@ -1,45 +1,178 @@
 <?xml version="1.0" ?>
 <scene>
   <group>
-    <translate x="0" y="0" z="0" />
-    <scale x="2" y="1" z="1" />
-    <rotate angle="0" x="0" y="0" z="0" />
     <models>
-      <model file="sphere.3d" />
+      <model file="plane.3d" />
     </models>
+    
     <group>
-      <translate x="0" />
-      <scale x="0.2" y="0.2" z="0.2" />
+      <translate x="0" y="0" z="0" />
+      <scale x="50" y="50" z="50" />
+      <rotate angle="0" x="0" y="0" z="0" />
       <models>
-        <model file="cone.3d" />
-        <model file="plane.3d" />
-        <model file="box.3d" />
-        <model file="sphere.3d" />
-        <model file="plane.3d" />
-        <model file="torus.3d" />
+        <model file="grandes.3d" />
+      </models>
+    </group>  
+    
+    <group>
+      <translate x="-32.42" y="0" z="14.29" />
+      <scale x="1.75" y="1.75" z="1.75" />
+      <models>
+        <model file="pequenos.3d" />
+      </models>
+    </group>
+    <group>
+      <translate x="-13.82" y="0" z="9.22" />
+      <scale x="4.34" y="4.34" z="4.34" />
+      <models>
+        <model file="grandes.3d" />
+      </models>
+    </group>
+    
+    <group>
+      <translate x="-13.5" z="12.9" />
+      <scale x="4.575" y="4.575" z="4.575" />
+      <models>
+        <model file="grandes.3d" />
       </models>
       <group>
-        <translate x="3" y="0" z="0" />
-        <scale x="1" y="1" z="1" />
-        <rotate angle="0" x="0" y="0" z="0" />
+        <translate x="-4" y="5" />
+        <scale x="0.27" y="0.27" z="0.27" />
         <models>
-          <model file="cone.3d" />
-          <model file="plane.3d" />
-          <model file="box.3d" />
-          <model file="sphere.3d" />
-          <model file="plane.3d" />
-          <model file="torus.3d" />
+          <model file="pequenos.3d" />
         </models>
-        <group>
-          <translate x="0" y="0" z="0" />
-          <scale x="1" y="1" z="3" />
-          <rotate angle="0" x="0" y="0" z="0" />
-          <models>
+      </group>  
+    </group>
+    
+    <group>
+      <translate x="-23.5" z="30.0" />
+      <scale x="2.434" y="2.434" z="2.434" />
+      <models>
+        <model file="pequenos.3d" />
+      </models>  
+      <group>
+        <translate x="5" y="5" />
+        <scale x="0.2" y="0.2" z="0.2" />
+        <models>
+          <model file="pequenos.3d" />
+        </models>
+      </group>      
+      <group>
+        <translate x="-4" y="5" />
+        <scale x="0.2" y="0.2" z="0.2" />
+        <models>
+          <model file="pequenos.3d" />
+        </models>
+      </group> 
+    </group>
 
-            <model file="sphere.3d" />
+    <group>
+      <translate x="-5.94" z="9.9" />
+      <scale x="10.098" y="10.098" z="10.098" />
+      <models>
+        <model file="grandes.3d" />
+      </models> 
+      <group>
+        <translate x="-30" z="8" />
+        <scale x="0.0495" y="0.0495" z="0.0495" />
+        <models>
+          <model file="pequenos.3d" />
+        </models>
+      </group>
+      <group>
+        <translate x="45" z="30" />
+        <scale x="0.0295" y="0.0295" z="0.0295" />
+        <models>
+          <model file="pequenos.3d" />
+        </models>
+      </group>
+      <group>
+        <translate x="35" z="-25" />
+        <scale x="0.0295" y="0.0295" z="0.0295" />
+        <models>
+          <model file="pequenos.3d" />
+        </models>
+      </group>
+      <group>
+        <translate x="-55" z="-25" />
+        <scale x="0.0295" y="0.0295" z="0.0295" />
+        <models>
+          <model file="pequenos.3d" />
+        </models>
+      </group>
+    </group>
 
-          </models>
-        </group>
+    <group>
+      <translate x="-3.8" z="15" />
+      <scale x="8.36" y="8.36" z="8.36" />
+      <models>
+        <model file="grandes.3d" />
+      </models> 
+      <group>
+        <translate y="0" />
+        <scale x="0.1" y="0.1" z="0.1" />
+        <rotate angle="35" x="1" y="2" z="0" />
+        <models>
+          <model file="anel.3d" />
+        </models>
+      </group>
+    </group>
+
+    <group>
+      <translate x="-2" z="28" />
+      <scale x="5.463" y="5.463" z="5.463" />
+      <models> 
+        <model file="grandes.3d" />
+      </models> 
+      <group>
+        <translate x="4" y="3" />
+        <scale x="0.424" y="0.424" z="0.424" />
+        <models>
+          <model file="pequenos.3d" />
+        </models>
+      </group>
+      <group>
+        <translate x="-15" y="-5" />
+        <scale x="0.1" y="0.1" z="0.1" />
+        <models>
+           <model file="pequenos.3d" />
+        </models>
+      </group>
+      <group>
+        <translate x="-5" y="-5" z="-20" />
+        <scale x="0.1" y="0.1" z="0.1" />
+        <models>
+           <model file="pequenos.3d" />
+        </models>
+      </group>
+    </group>
+
+    <group>
+      <translate x="2" z="33" />
+      <scale x="5.312" y="5.312" z="5.312" />
+      <models> 
+        <model file="grandes.3d" />
+      </models> 
+      <group>
+        <translate x="-5" y="-5" z="-20" />
+        <scale x="0.1" y="0.1" z="0.1" />
+        <models>
+           <model file="pequenos.3d" />
+        </models>
+      </group>
+      <group>
+        <translate x="-15" y="-5" />
+        <scale x="0.1" y="0.1" z="0.1" />
+        <models>
+           <model file="pequenos.3d" />
+        </models>
+      </group>
+      <group>
+        <translate x="15" y="10" z="5" />
+        <scale x="0.1" y="0.1" z="0.1" />
+        <models>
+           <model file="pequenos.3d" />
+        </models>
       </group>
     </group>
 
