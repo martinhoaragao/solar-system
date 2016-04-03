@@ -34,7 +34,6 @@ class Group {
     Group(char*);
     Group(XMLParser*);
 
-    void reload();
     void draw();
 
 

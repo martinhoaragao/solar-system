@@ -88,7 +88,7 @@ void renderScene() {
 
   // set the camera
   glLoadIdentity();
-  gluLookAt(camX,camY,camZ,
+  gluLookAt(camX,camY+450,camZ+450,
       0.0,0.0,0.0,
       0.0,1.0,0.0);
 
@@ -145,6 +145,9 @@ void keyboardNormal(unsigned char key, int x, int y) {
     // Zoom out by increasing the radius of the 'sphere' where the camera rotates.
     r += 0.1;
     calculateCamCoordinates();
+  }
+  else if (key == 'q' || key == 'Q') {
+    group = new Group(); // Reload all
   }
 
   glutPostRedisplay();

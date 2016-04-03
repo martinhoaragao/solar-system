@@ -12,7 +12,6 @@ Group::Group() {
 }
 
 Group::Group(char* configFileName) {
-
   XMLParser* parser = new XMLParser(configFileName);
   parser->FirstChildGroup();
 
