@@ -19,7 +19,8 @@
 using namespace std;
 
 // Camera variables and coordinates.
-float alpha = 0.0,  beta = 0.0, r = 200.0;
+float alpha     = (M_PI/2.0), beta  = 0.0, r = 550.0;
+float fastZoom  = 1.0, slowZoom     = 0.5;
 float camX, camY, camZ;
 
 int menuID;
@@ -154,19 +155,19 @@ void keyboardNormal(unsigned char key, int x, int y) {
     case 81: group = new Group(); break;
     // 'w'.
     case 119: // Faster Zoom In.
-      r -= 0.2; if (r < 0.0) r = 0.0;
+      r -= fastZoom; if (r < 0.0) r = 0.0;
       calculateCamCoordinates(); break;
     // 'W'.
     case 87:  // Slower Zoom In.
-      r -= 0.05; if (r < 0.0) r = 0.0;
+      r -= slowZoom; if (r < 0.0) r = 0.0;
       calculateCamCoordinates(); break;
     // 's'.
     case 115: // Faster Zoom Out.
-      r += 0.2;
+      r += fastZoom;
       calculateCamCoordinates(); break;
     // 'S'.
     case 83:  // Slower Zoom Out.
-      r += 0.05;
+      r += slowZoom;
       calculateCamCoordinates(); break;
     default: break;
   }
