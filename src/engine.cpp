@@ -123,28 +123,48 @@ void changeSize(int width, int height) {
 
 // function to process keyboard events
 void keyboardNormal(unsigned char key, int x, int y) {
-  if (key == 'f' || key == 'F') glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-  else if (key == 'l' || key == 'L') glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-  else if (key == 'p' || key == 'P') glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
-  else if (key == 'b' || key == 'B') {
-    glColor3f(0,0,1);
-  }
-  else if (key == 'g' || key == 'G') {
-    glColor3f(0,1,0);
-  }
-  else if (key == 'r' || key == 'R') {
-    glColor3f(1,0,0);
-  }
-  else if (key == 'w' || key == 'W') {
-    // Zoom in by reducing the radius of the 'sphere' where the camera rotates.
-    r -= 0.1;
-    if (r < 0.0) r = 0.0;
-    calculateCamCoordinates();
-  }
-  else if (key == 's' || key == 'S') {  // Zoom out.
-    // Zoom out by increasing the radius of the 'sphere' where the camera rotates.
-    r += 0.1;
-    calculateCamCoordinates();
+  switch(key) {
+    // 'f'.
+    case 102: glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
+    // 'F'.
+    case 70: glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
+    // 'l'.
+    case 108: glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
+    // 'L'.
+    case 76: glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
+    // 'p'.
+    case 112: glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); break;
+    // 'P'.
+    case 80: glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); break;
+    // 'b'.
+    case 98: glColor3f(0, 0, 1); break;
+    // 'B'.
+    case 66: glColor3f(0, 0, 1); break;
+    // 'g'.
+    case 103: glColor3f(0, 1, 0); break;
+    // 'G'.
+    case 71: glColor3f(0, 1, 0); break;
+    // 'r'.
+    case 114: glColor3f(1, 0, 0); break;
+    // 'R'.
+    case 82: glColor3f(1, 0, 0); break;
+    // 'w'.
+    case 119: // Faster Zoom In.
+      r -= 0.2; if (r < 0.0) r = 0.0;
+      calculateCamCoordinates(); break;
+    // 'W'.
+    case 87:  // Slower Zoom In.
+      r -= 0.05; if (r < 0.0) r = 0.0;
+      calculateCamCoordinates(); break;
+    // 's'.
+    case 115: // Faster Zoom Out.
+      r += 0.2;
+      calculateCamCoordinates(); break;
+    // 'S'.
+    case 83:  // Slower Zoom Out.
+      r += 0.05;
+      calculateCamCoordinates(); break;
+    default: break;
   }
   else if (key == 'q' || key == 'Q') {
     group = new Group(); // Reload all
