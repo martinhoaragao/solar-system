@@ -19,7 +19,7 @@
 using namespace std;
 
 // Camera variables and coordinates.
-float alpha = 0.0,  beta = 0.0, r = 5.0;
+float alpha = 0.0,  beta = 0.0, r = 200.0;
 float camX, camY, camZ;
 
 int menuID;
@@ -88,7 +88,7 @@ void renderScene() {
 
   // set the camera
   glLoadIdentity();
-  gluLookAt(camX,camY+450,camZ+450,
+  gluLookAt(camX,camY,camZ,
       0.0,0.0,0.0,
       0.0,1.0,0.0);
 
