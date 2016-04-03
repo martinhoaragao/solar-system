@@ -18,19 +18,25 @@ using namespace std;
 
 class XMLParser {
   private:
-    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* elem;
+
+    tinyxml2::XMLNode *deepCopy(tinyxml2::XMLNode*, tinyxml2::XMLDocument*);
 
   public:
     XMLParser();
     XMLParser(char*);
-    tinyxml2::XMLElement* getElem(); 
+    XMLParser(XMLParser*);
+    XMLParser* deepCopy(XMLParser*);
+    tinyxml2::XMLElement* getElem() const;
+    tinyxml2::XMLDocument* getDoc() const;
     void FirstChildGroup();
     void NextSiblingGroup();
     vector<string> extractFileNames();
     Point getScale();
     Rotation getRotation();
     Point getTranslation();
+
 
 };
 
