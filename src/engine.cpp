@@ -148,6 +148,10 @@ void keyboardNormal(unsigned char key, int x, int y) {
     case 114: glColor3f(1, 0, 0); break;
     // 'R'.
     case 82: glColor3f(1, 0, 0); break;
+    // 'q'.
+    case 113: group = new Group(); break;
+    // 'Q'.
+    case 81: group = new Group(); break;
     // 'w'.
     case 119: // Faster Zoom In.
       r -= 0.2; if (r < 0.0) r = 0.0;
@@ -165,9 +169,6 @@ void keyboardNormal(unsigned char key, int x, int y) {
       r += 0.05;
       calculateCamCoordinates(); break;
     default: break;
-  }
-  else if (key == 'q' || key == 'Q') {
-    group = new Group(); // Reload all
   }
 
   glutPostRedisplay();
