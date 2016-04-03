@@ -14,6 +14,7 @@
 #include "point.h"
 #include "rotation.h"
 #include "file.h"
+#include "xmlparser.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ class Group {
   public:
     Group();
     Group(char*);
+    Group(XMLParser*);
 
     void reload();
     void draw();
