@@ -26,6 +26,7 @@ class Group {
     vector<File> files;
     vector<Group *> groups;
 
+    void init(XMLParser*);
     vector<string> extractFileNames(char*);
 
   public:

@@ -6,59 +6,24 @@
 
 Group::Group() {
   XMLParser* parser = new XMLParser();
-
   parser->FirstChildGroup();
 
-  scale = Point(1, 1, 1);
-  rotation = Rotation(0, 1, 1, 1);
-  translation = Point(0, 0, 0);
-
-  scale = parser->getScale();
-  rotation = parser->getRotation();
-  translation = parser->getTranslation();
-
-  vector<string> fileNames = parser->extractFileNames();
-
-  for(int i = 0; i < fileNames.size(); i++) {
-    File file(fileNames.at(i));
-    files.push_back(file);
-  }
-
-  parser->FirstChildGroup();
-
-  while(parser->getElem() != NULL) {
-    groups.push_back(new Group(parser->deepCopy(parser)));
-    parser->NextSiblingGroup();
-  }
+  init(parser);
 }
+
 Group::Group(char* configFileName) {
 
   XMLParser* parser = new XMLParser(configFileName);
   parser->FirstChildGroup();
 
-  scale = Point(1, 1, 1);
-  rotation = Rotation(0, 1, 1, 1);
-  translation = Point(0, 0, 0);
-
-  scale = parser->getScale();
-  rotation = parser->getRotation();
-  translation = parser->getTranslation();
-
-  vector<string> fileNames = parser->extractFileNames();
-  for(int i = 0; i < fileNames.size(); i++) {
-    File file(fileNames.at(i));
-    files.push_back(file);
-  }
-
-  parser->FirstChildGroup();
-
-  while(parser->getElem() != NULL) {
-    groups.push_back(new Group(parser->deepCopy(parser)));
-    parser->NextSiblingGroup();
-  }
+  init(parser);
 }
 
 Group::Group(XMLParser* parser) {
+  init(parser);
+}
+
+void Group::init(XMLParser* parser) {
   scale = Point(1, 1, 1);
   rotation = Rotation(0, 1, 1, 1);
   translation = Point(0, 0, 0);
