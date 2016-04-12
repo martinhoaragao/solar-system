@@ -55,7 +55,9 @@ void XMLParser::NextSiblingGroup() {
 }
 
 vector<string> XMLParser::extractFileNames() {
-  tinyxml2::XMLElement* temp = elem->FirstChildElement("models")->FirstChildElement();
+  tinyxml2::XMLElement* temp = elem->FirstChildElement("models");
+  if(temp != NULL)
+    temp = temp->FirstChildElement();
 
   vector<string> fileNames;
   while(temp != NULL) {

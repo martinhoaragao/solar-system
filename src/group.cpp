@@ -6,14 +6,12 @@
 
 Group::Group() {
   XMLParser* parser = new XMLParser();
-  parser->FirstChildGroup();
 
   init(parser);
 }
 
 Group::Group(char* configFileName) {
   XMLParser* parser = new XMLParser(configFileName);
-  parser->FirstChildGroup();
 
   init(parser);
 }
@@ -32,6 +30,7 @@ void Group::init(XMLParser* parser) {
   translation = parser->getTranslation();
 
   vector<string> fileNames = parser->extractFileNames();
+
   for(int i = 0; i < fileNames.size(); i++) {
     File file(fileNames.at(i));
     files.push_back(file);
