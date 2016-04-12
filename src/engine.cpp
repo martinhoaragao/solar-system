@@ -21,7 +21,9 @@ using namespace std;
 // Camera variables and coordinates.
 float alpha     = (M_PI/2.0), beta  = 0.0, r = 550.0;
 float fastZoom  = 1.0, slowZoom     = 0.5;
-float camX, camY, camZ;
+float camAlpha  = -2.40;
+float camX      = 200.0, camY = 0.0, camZ = 300.0;
+float lookX     = 0.0, lookZ = 0.0;
 int extraSpeed  = 0;
 
 int menuID;
@@ -49,34 +51,24 @@ void displayFPS() {
   }
 }
 
-/* Calculate the camera coordinates. */
-void calculateCamCoordinates() {
-  camX = r * cos(beta) * sin(alpha);
-  camY = r * sin(beta);
-  camZ = r * cos(beta) * cos(alpha);
-}
-
 /* Move camera position when keyboard arrows are pressed. */
 void arrowPressed(int key, int x, int y) {
   switch (key) {
     case GLUT_KEY_RIGHT:
-      alpha -= 0.1;
+      camAlpha -= 0.1;
       break;
     case GLUT_KEY_LEFT:
-      alpha += 0.1;
+      camAlpha += 0.1;
       break;
     case GLUT_KEY_UP:
-      beta += 0.1f;
-      if (beta > 1.5f) beta = 1.5f;
+      camY += 1;
       break;
     case GLUT_KEY_DOWN:
-      beta -= 0.1f;
-      if (beta < -1.5f) beta = -1.5f;
+      camY -= 1;
       break;
     default: break;
   }
 
-  calculateCamCoordinates();
   glutPostRedisplay();
 }
 
@@ -91,7 +83,7 @@ void renderScene() {
   // set the camera
   glLoadIdentity();
   gluLookAt(camX,camY,camZ,
-      0.0,0.0,0.0,
+      camX + 300 * sin(camAlpha), camY, camZ + 300 * cos(camAlpha),
       0.0,1.0,0.0);
 
   group->draw();
@@ -154,22 +146,26 @@ void keyboardNormal(unsigned char key, int x, int y) {
     case 113: group = new Group(); break;
     // 'Q'.
     case 81: group = new Group(); break;
+    // 'd'.
+    case 100:
+      camX -= cos(camAlpha);
+      camZ += sin(camAlpha);
+      break;
+    // 'a'.
+    case 97:
+      camX += cos(camAlpha);
+      camZ -= sin(camAlpha);
+      break;
     // 'w'.
-    case 119: // Faster Zoom In.
-      r -= fastZoom * pow(5.0, extraSpeed); if (r < 0.0) r = 0.0;
-      calculateCamCoordinates(); break;
-    // 'W'.
-    case 87:  // Slower Zoom In.
-      r -= slowZoom * pow(5.0, extraSpeed); if (r < 0.0) r = 0.0;
-      calculateCamCoordinates(); break;
+    case 119:
+      camZ += cos(camAlpha);
+      camX += sin(camAlpha);
+      break;
     // 's'.
-    case 115: // Faster Zoom Out.
-      r += fastZoom * pow(5.0, extraSpeed);
-      calculateCamCoordinates(); break;
-    // 'S'.
-    case 83:  // Slower Zoom Out.
-      r += slowZoom * pow(5.0, extraSpeed);
-      calculateCamCoordinates(); break;
+    case 115:
+      camZ -= cos(camAlpha);
+      camX -= sin(camAlpha);
+      break;
     // Space ' '.
     case 32:
       extraSpeed == 1 ? extraSpeed = 0 : extraSpeed = 1;
@@ -222,9 +218,6 @@ int main (int argc, char** argv) {
 
   // Keyboard callbacks.
   glutSpecialFunc(arrowPressed);
-
-  // Calculate initial camera coordinates before starting to render.
-  calculateCamCoordinates();
 
   // enter GLUT's main cycle
   glutMainLoop();
