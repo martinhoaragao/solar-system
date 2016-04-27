@@ -1,12 +1,18 @@
 CC=g++ -std=c++11
 
-all: point rotation file xmlparser group generator patchPoints engine 
+all: point rotation rotationstatic rotationanimation file xmlparser group generator patchPoints engine
 
 point: src/point.cpp
 	$(CC) -c src/point.cpp -o src/point.o
 
 rotation: src/rotation.cpp
 	$(CC) -c src/rotation.cpp -o src/rotation.o
+
+rotationanimation: src/rotationanimation.cpp src/rotation.o
+	$(CC) -c src/rotationanimation.cpp src/rotation.o -o src/rotationanimation.o -Wno-deprecated
+
+rotationstatic: src/rotationstatic.cpp src/rotation.o
+	$(CC) -c src/rotationstatic.cpp src/rotation.o -o src/rotationstatic.o -Wno-deprecated
 
 file: src/file.cpp
 	$(CC) -c src/file.cpp -o src/file.o
@@ -26,7 +32,7 @@ patchPoints: src/patchPoints.cpp src/patchPoints.o
 
 # Fix this...
 engine: src/engine.cpp src/file.o
-	$(CC) -framework GLUT -framework OpenGL -framework Cocoa src/point.o src/engine.cpp src/tinyxml2.cpp src/file.o src/xmlparser.o src/group.o src/rotation.o -o engine.out -Wno-deprecated
+	$(CC) -framework GLUT -framework OpenGL -framework Cocoa src/point.o src/engine.cpp src/tinyxml2.cpp src/file.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o -o engine.out -Wno-deprecated
 
 clean:
 	rm -f *.out

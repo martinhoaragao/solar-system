@@ -83,19 +83,28 @@ Point XMLParser::getScale() {
   return Point(x, y, z);
 }
 
-Rotation XMLParser::getRotation() {
+Rotation* XMLParser::getRotation() {
+  Rotation *rotation;
+  float angle, time, x, y, z;
+  angle = 0, time = 0, x = 0; y = 0; z = 0;
+
   tinyxml2::XMLElement *temp = elem->FirstChildElement("rotate");
-  float angle, x, y, z;
-  angle = 0, x = 0; y = 0; z = 0;
 
   if (temp != NULL) {
     temp->QueryFloatAttribute( "angle", &angle );
+    temp->QueryFloatAttribute( "time", &time );
+
     temp->QueryFloatAttribute( "x", &x );
     temp->QueryFloatAttribute( "y", &y );
     temp->QueryFloatAttribute( "z", &z );
   }
 
-  return Rotation(angle, x, y, z);
+  if (time != 0)
+    rotation = new RotationAnimation(time, x, y, z);
+  else
+    rotation = new RotationStatic(angle, x, y, z);
+
+  return rotation;
 }
 
 Point XMLParser::getTranslation() {
