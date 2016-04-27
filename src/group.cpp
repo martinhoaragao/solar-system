@@ -21,9 +21,6 @@ Group::Group(XMLParser* parser) {
 }
 
 void Group::init(XMLParser* parser) {
-  scale = Point(1, 1, 1);
-  rotation = Rotation(0, 1, 1, 1);
-  translation = Point(0, 0, 0);
 
   scale = parser->getScale();
   rotation = parser->getRotation();
@@ -49,7 +46,7 @@ void Group::draw() {
 
   glTranslatef(translation.getX(), translation.getY(), translation.getZ());
   glScalef(scale.getX(), scale.getY(), scale.getZ());
-  glRotatef(rotation.getAngle(), rotation.getX(), rotation.getY(), rotation.getZ());
+  rotation->glRotate();
 
   for(int i = 0; i < files.size(); i++) {
     files.at(i).draw();

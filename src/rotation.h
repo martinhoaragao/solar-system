@@ -4,18 +4,14 @@
 #include "point.h"
 
 class Rotation {
-  private:
-    float angle;
+  protected:
     Point coordinate;
 
   public:
     Rotation();
-    Rotation(float, Point);
-    Rotation(float, float, float, float);
-    float getAngle();
-    float getX();
-    float getY();
-    float getZ();
+    Rotation(Point);
+    Rotation(float, float, float);
+    virtual void glRotate();
 };
 
 #endif

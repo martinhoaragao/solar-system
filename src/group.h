@@ -21,7 +21,7 @@ using namespace std;
 class Group {
   private:
     Point scale;
-    Rotation rotation;
+    Rotation *rotation;
     Point translation;
     vector<File> files;
     vector<Group *> groups;

@@ -13,6 +13,9 @@
 #include "tinyxml2.h"
 #include "point.h"
 #include "rotation.h"
+#include "rotationstatic.h"
+#include "rotationanimation.h"
+
 
 using namespace std;
 
@@ -34,7 +37,7 @@ class XMLParser {
     void NextSiblingGroup();
     vector<string> extractFileNames();
     Point getScale();
-    Rotation getRotation();
+    Rotation* getRotation();
     Point getTranslation();
 
 
