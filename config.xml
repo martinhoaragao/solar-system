@@ -14,10 +14,10 @@
     <scale x="1.75" y="1.75" z="1.75" />
     <!--<translate x="-60.57" y="0" z="42.86" />-->
     <translate time="20">
-      <point x="-60.57" y="0" z="42.86" />
-      <point x="60.57" y="0" z="-42.86" />
-      <point x="-60.57" y="0" z="-42.86" />
-      <point x="60.57" y="0" z="42.86" />
+      <point x="-60.57" y="90" z="42.86" />
+      <point x="80.57" y="0" z="20.86" />
+      <point x="40.57" y="-80" z="-100.86" />
+      <point x="60.57" y="0" z="90.86" />
     </translate>
     <models>
       <model file="pequenos.3d" />
@@ -49,13 +49,25 @@
 
   <group>
     <scale x="2.434" y="2.434" z="2.434" />
-    <translate x="-50.5" z="100.0" />
+    <!--<translate x="-50.5" z="100.0" /> -->
+    <translate time="20">
+      <point x="-50.57" y="20" z="100.86" />
+      <point x="100.57" y="-5" z="50.86" />
+      <point x="140.57" y="-30" z="-10.86" />
+      <point x="60.57" y="0" z="90.86" />
+    </translate>
     <models>
       <model file="pequenos.3d" />
     </models>
     <group>
       <scale x="0.2" y="0.2" z="0.2" />
-      <translate x="1" y="3" />
+      <!--<translate x="1" y="3" />-->
+      <translate time="20">
+        <point x="1.57" y="3" z="0.86" />
+        <point x="-2" y="1" z="0.1" />
+        <point x="-5" y="0" z="0" />
+        <point x="0" y="3" z="-1" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>

@@ -162,8 +162,6 @@ Point XMLParser::getPoint(tinyxml2::XMLElement *temp) {
     temp->QueryFloatAttribute( "y", &y );
     temp->QueryFloatAttribute( "z", &z );
   }
-  cout << " PARSED X: "<< x << " Y: " << y << " Z: "<< z << endl;
-
 
   return Point(x, y, z);
 }

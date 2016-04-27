@@ -19,14 +19,16 @@ float Point::get(int x) {
   switch (x) {
     case 0:
       res = getX();
+      break;
     case 1:
       res = getY();
+      break;
     case 2:
       res = getZ();
+      break;
   }
   return res;
 }
-
 
 void Point::setX(float _x) { x = _x; }
 

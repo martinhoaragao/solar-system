@@ -87,8 +87,9 @@ void TranslationCatmull::getCatmullRomPoint(float t, int *indices, float *res) {
   for (int i = 0; i < 4; i++)
     aux[i] = pow(t, 3.0) * m[0][i] + pow(t, 2.0) * m[1][i] + t * m[2][i] + m[3][i];
 
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 3; i++) {
     res[i] = aux[0] * controlPoints->at(indices[0]).get(i) + aux[1] * controlPoints->at(indices[1]).get(i) + aux[2] * controlPoints->at(indices[2]).get(i) + aux[3] * controlPoints->at(indices[3]).get(i);
+  }
 }
 
 // given  global t, returns the point in the curve
