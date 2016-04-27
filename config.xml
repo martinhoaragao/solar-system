@@ -4,7 +4,7 @@
   <group>
     <scale x="50" y="50" z="50" />
     <translate x="0" y="0" z="0" />
-    <rotate time="5000" x="0" y="0" z="0" />
+    <rotate time="50" x="0" y="1" z="0" />
     <models>
       <model file="grandes.3d" />
     </models>
