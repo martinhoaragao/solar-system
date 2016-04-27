@@ -12,7 +12,13 @@
 
   <group>
     <scale x="1.75" y="1.75" z="1.75" />
-    <translate x="-60.57" y="0" z="42.86" />
+    <!--<translate x="-60.57" y="0" z="42.86" />-->
+    <translate time="20">
+      <point x="-60.57" y="0" z="42.86" />
+      <point x="60.57" y="0" z="-42.86" />
+      <point x="-60.57" y="0" z="-42.86" />
+      <point x="60.57" y="0" z="42.86" />
+    </translate>
     <models>
       <model file="pequenos.3d" />
     </models>

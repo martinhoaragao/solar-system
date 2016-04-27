@@ -15,6 +15,9 @@
 #include "rotation.h"
 #include "rotationstatic.h"
 #include "rotationanimation.h"
+#include "translation.h"
+#include "translationsimple.h"
+#include "translationcatmull.h"
 
 
 using namespace std;
@@ -24,7 +27,9 @@ class XMLParser {
     tinyxml2::XMLDocument* doc;
     tinyxml2::XMLElement* elem;
 
-    tinyxml2::XMLNode *deepCopy(tinyxml2::XMLNode*, tinyxml2::XMLDocument*);
+    tinyxml2::XMLNode* deepCopy(tinyxml2::XMLNode*, tinyxml2::XMLDocument*);
+    TranslationCatmull* getTranslationCatmull( tinyxml2::XMLElement*, float);
+    Point getPoint(tinyxml2::XMLElement*);
 
   public:
     XMLParser();
@@ -38,8 +43,7 @@ class XMLParser {
     vector<string> extractFileNames();
     Point getScale();
     Rotation* getRotation();
-    Point getTranslation();
-
+    Translation* getTranslation();
 
 };
 

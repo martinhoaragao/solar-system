@@ -44,7 +44,8 @@ void Group::init(XMLParser* parser) {
 void Group::draw() {
   glPushMatrix();
 
-  glTranslatef(translation.getX(), translation.getY(), translation.getZ());
+  translation->glTranslate();
+  
   glScalef(scale.getX(), scale.getY(), scale.getZ());
   rotation->glRotate();
 

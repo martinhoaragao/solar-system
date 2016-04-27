@@ -11,6 +11,7 @@ class Point {
     float getX();
     float getY();
     float getZ();
+    float get(int);
     void setX(float);
     void setY(float);
     void setZ(float);

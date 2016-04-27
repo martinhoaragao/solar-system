@@ -1,4 +1,5 @@
 #include "xmlparser.h"
+#include <iostream>
 
 /*-----------------------------------------------------------------------------------
 	API
@@ -107,8 +108,52 @@ Rotation* XMLParser::getRotation() {
   return rotation;
 }
 
-Point XMLParser::getTranslation() {
+Translation* XMLParser::getTranslation() {
+  Translation *translation;
+  float x, y, z, time;
+  x = 0; y = 0; z = 0, time = 0;
+
   tinyxml2::XMLElement *temp = elem->FirstChildElement("translate");
+
+
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "x", &x );
+    temp->QueryFloatAttribute( "y", &y );
+    temp->QueryFloatAttribute( "z", &z );
+    temp->QueryFloatAttribute( "time", &time );
+  }
+
+  if (time != 0)
+    translation = getTranslationCatmull(temp, time);
+  else
+    translation = new TranslationSimple(x, y, z);
+
+  return translation;
+}
+
+
+/*-----------------------------------------------------------------------------------
+	Helpers
+-----------------------------------------------------------------------------------*/
+
+TranslationCatmull* XMLParser::getTranslationCatmull( tinyxml2::XMLElement *temp
+                                                    , float time
+                                                    ) {
+
+  temp = temp->FirstChildElement("point");
+  vector<Point> *controlPoints = new vector<Point>();
+
+  while(temp != NULL) {
+    controlPoints->push_back(getPoint(temp));
+    temp = temp->NextSiblingElement();
+  }
+
+  TranslationCatmull *translation = new TranslationCatmull(time, controlPoints);
+
+  return translation;
+}
+
+Point XMLParser::getPoint(tinyxml2::XMLElement *temp) {
   float x, y, z;
   x = 0; y = 0; z = 0;
 
@@ -117,13 +162,11 @@ Point XMLParser::getTranslation() {
     temp->QueryFloatAttribute( "y", &y );
     temp->QueryFloatAttribute( "z", &z );
   }
+  cout << " PARSED X: "<< x << " Y: " << y << " Z: "<< z << endl;
+
 
   return Point(x, y, z);
 }
-
-/*-----------------------------------------------------------------------------------
-	Helpers
------------------------------------------------------------------------------------*/
 
 tinyxml2::XMLNode* XMLParser::deepCopy(tinyxml2::XMLNode *src, tinyxml2::XMLDocument *destDoc) {
   tinyxml2::XMLNode *current = src->ShallowClone( destDoc );
