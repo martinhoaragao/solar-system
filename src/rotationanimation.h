@@ -15,7 +15,6 @@
 class RotationAnimation : public Rotation  {
   private:
     float time;
-    Point coordinate;
 
   public:
     RotationAnimation();

@@ -20,7 +20,8 @@ RotationAnimation::RotationAnimation( float _time
 
 void RotationAnimation::glRotate() {
   float now = glutGet(GLUT_ELAPSED_TIME);
-  float angle = fmod(now, time) / time * 360.0;
+  float timeMiliSeconds = time * 1000;
+  float angle = fmod(now, timeMiliSeconds) / timeMiliSeconds * 360.0;
 
   glRotatef(angle, coordinate.getX(), coordinate.getY(), coordinate.getZ());
 }
