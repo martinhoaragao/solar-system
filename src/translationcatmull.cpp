@@ -108,7 +108,7 @@ void TranslationCatmull::getGlobalCatmullRomPoint(float gt, float *res) {
   indices[1] = (index + 1) % nControlPoints;
   indices[2] = (index + 2) % nControlPoints;
   indices[3] = (index + 3) % nControlPoints;
-  
+
   getCatmullRomPoint(t, indices, res);
 }
 

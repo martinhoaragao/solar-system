@@ -3,9 +3,9 @@
 
 class Point {
   private:
-    float x, y, z;
 
   public:
+    float x, y, z;
     Point();
     Point(float, float, float);
     float getX();
