@@ -1,14 +1,20 @@
 #include <iostream> // Needed to write to files.
 #include <fstream>  // Needed to write to files.
+#include <cstdlib>
 #include <stdio.h>
+#include <sstream>  
 #include <string.h>
 #include <math.h>
 #include <deque>
 #include "Point.h"
+#include "patchPoints.h"
 
 using namespace std;
 
+PatchPoints patchPoints;
+
 /* Functions prototypes. */
+int bezier(int, char **);
 int plane(int, char **);
 int box(int, char **);
 int sphere(int, char **);
@@ -37,7 +43,7 @@ int main (int argc, char ** argv) {
       torus(argc - 2, &argv[2]) != 0 ? printf("Error!\n") : printf("Done\n");
     }
     else {
-      printf("Invalid argument.\n");
+      bezier(argc -1, &argv[1]) != 0 ? printf("Error!\n") : printf("Done\n");
     }
   } else {
     printf("Error! Arguments needed!\n");
@@ -45,6 +51,55 @@ int main (int argc, char ** argv) {
 
   return 0;
 }
+
+
+int bezier(int argc, char ** parameters){
+  string aux, token;
+  char aux2[1000000], * tab;
+  int nr, patch[16], * patches;
+  float cp[3];
+  float * cp2;
+  // Check number of arguments.
+  if (argc < 2) { return -1; }
+
+  // Test if the file exists
+  ifstream file(parameters[0]);
+  if(!file.good()) {return -1;}
+  //Number of patches
+  getline(file,aux);
+  nr = stoi(aux);
+  patchPoints.setNrPatches(nr);
+
+  //Add patches to patchPoints
+  for(int j = 0; j < nr; j++){  
+    getline(file,aux);
+    strncpy(aux2, aux.c_str(), sizeof(aux2));
+    tab = strtok(aux2,",");
+    patch[0] = stoi(tab);
+    for(int i = 1; i < 16; i++){
+      tab = strtok (NULL, " ,.-");
+      patch[i] = stoi(tab);
+    }
+    patchPoints.addPatch(patch);
+  }
+
+  getline(file,aux);
+  nr = stoi(aux);
+  patchPoints.setNrCP(nr);
+  for(int i = 0; i < nr; i++){
+    getline(file,aux);
+    std::istringstream iss (aux);
+    for(int j=0;std::getline(iss, token,',');j++) {
+      strncpy(aux2, token.c_str(), sizeof(aux2));
+      tab = strtok(aux2,",");
+      cp[j] = atof(tab);
+    }
+    patchPoints.addCP(cp);
+  }
+
+  return 0;
+}
+
 
 /* Ouput the vertices needed to create a square in the XZ plane centered in the origin
  * made with 2 triangles.

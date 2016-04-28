@@ -2,7 +2,7 @@
 <scene>
   <group>
     <models>
-      <model file="plane.3d" />
+      <model file="cenas-2.3d" />
     </models>
     
     <group>

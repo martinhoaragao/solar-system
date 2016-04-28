@@ -1,6 +1,6 @@
 CC=g++ -std=c++11
 
-all: point rotation file xmlparser group generator engine
+all: point rotation file xmlparser group generator patchPoints engine 
 
 point: src/point.cpp
 	$(CC) -c src/point.cpp -o src/point.o
@@ -18,7 +18,11 @@ group: src/group.cpp
 	$(CC) -c src/group.cpp -o src/group.o
 
 generator: src/generator.cpp src/point.o
-	$(CC) src/generator.cpp src/point.o -o generator.out
+	$(CC) src/generator.cpp src/patchPoints.o src/point.o -o generator.out
+
+
+patchPoints: src/patchPoints.cpp src/patchPoints.o
+	$(CC) -c src/patchPoints.cpp -o src/patchPoints.o
 
 # Fix this...
 engine: src/engine.cpp src/file.o
