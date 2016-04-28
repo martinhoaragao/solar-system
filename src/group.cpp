@@ -45,7 +45,7 @@ void Group::draw() {
   glPushMatrix();
 
   translation->glTranslate();
-  
+
   glScalef(scale.getX(), scale.getY(), scale.getZ());
   rotation->glRotate();
 

@@ -115,7 +115,6 @@ Translation* XMLParser::getTranslation() {
 
   tinyxml2::XMLElement *temp = elem->FirstChildElement("translate");
 
-
   if (temp != NULL) {
     temp->QueryFloatAttribute( "x", &x );
     temp->QueryFloatAttribute( "y", &y );

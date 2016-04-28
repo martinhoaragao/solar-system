@@ -14,17 +14,17 @@ float Point::getY() { return y; }
 
 float Point::getZ() { return z; }
 
-float Point::get(int x) {
-  float res;
-  switch (x) {
+float Point::get(int xyz) {
+  float res = 0;
+  switch (xyz) {
     case 0:
-      res = getX();
+      res = x;
       break;
     case 1:
-      res = getY();
+      res = y;
       break;
     case 2:
-      res = getZ();
+      res = z;
       break;
   }
   return res;

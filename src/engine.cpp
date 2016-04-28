@@ -21,7 +21,7 @@ using namespace std;
 float alpha     = (M_PI/2.0), beta  = 0.0, r = 550.0;
 float fastZoom  = 1.0, slowZoom     = 0.5;
 float camAlpha  = -2.40;
-float camX      = 200.0, camY = 0.0, camZ = 300.0;
+float camX      = 100.0, camY = 100.0, camZ = 100.0;
 float lookX     = 0.0, lookZ = 0.0;
 int extraSpeed  = 0;
 
@@ -82,7 +82,7 @@ void renderScene() {
   // set the camera
   glLoadIdentity();
   gluLookAt(camX,camY,camZ,
-      camX + 300 * sin(camAlpha), camY, camZ + 300 * cos(camAlpha),
+      0, 0, 0,
       0.0,1.0,0.0);
 
   group->draw();

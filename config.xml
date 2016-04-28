@@ -1,109 +1,157 @@
 <?xml version="1.0" ?>
 <scene>
 
+  <!-- SUN -->
   <group>
     <scale x="50" y="50" z="50" />
-    <translate x="0" y="0" z="0" />
     <rotate time="50" x="0" y="1" z="0" />
     <models>
       <model file="grandes.3d" />
     </models>
   </group>
 
+  <!-- MERCURY -->
   <group>
+    <translate time="88">
+      <point x="-57.9" y="10" z="57.9" />
+      <point x="57.9" y="0" z="57.9" />
+      <point x="57.9" y="-10" z="-57.9" />
+      <point x="-57.9" y="0" z="-57.9" />
+    </translate>
     <scale x="1.75" y="1.75" z="1.75" />
     <!--<translate x="-60.57" y="0" z="42.86" />-->
-    <translate time="20">
-      <point x="-60.57" y="90" z="42.86" />
-      <point x="80.57" y="0" z="20.86" />
-      <point x="40.57" y="-80" z="-100.86" />
-      <point x="60.57" y="0" z="90.86" />
-    </translate>
     <models>
       <model file="pequenos.3d" />
     </models>
   </group>
 
+  <!-- VENUS -->
   <group>
+    <translate time="224.7">
+      <point x="-108.2" y="10" z="108.2" />
+      <point x="108.2" y="0" z="108.2" />
+      <point x="108.2" y="-10" z="-108.2" />
+      <point x="-108.2" y="0" z="-108.2" />
+    </translate>
     <scale x="4.34" y="4.34" z="4.34" />
-    <translate x="-58.82" y="0" z="65.22" />
     <models>
       <model file="grandes.3d" />
     </models>
   </group>
 
+  <!-- EARTH -->
   <group>
+    <translate time="365.2">
+      <point x="-149.6" y="10" z="149.6" />
+      <point x="149.6" y="0" z="149.6" />
+      <point x="149.6" y="-10" z="-149.6" />
+      <point x="-149.6" y="0" z="-149.6" />
+    </translate>
     <scale x="4.575" y="4.575" z="4.575" />
-    <translate x="-53.5" z="85.9" />
     <models>
       <model file="grandes.3d" />
     </models>
+    <!-- MOON -->
     <group>
+      <translate time="27.3">
+        <point x="-1" y="-0.5" z="1" />
+        <point x="1" y="0.2" z="1" />
+        <point x="1" y="-0.1" z="-1" />
+        <point x="-1" y="0.8" z="-1" />
+      </translate>
       <scale x="0.27" y="0.27" z="0.27" />
-      <translate x="-1" y="2" />
       <models>
         <model file="pequenos.3d" />
       </models>
     </group>
   </group>
 
+  <!-- MARS -->
   <group>
-    <scale x="2.434" y="2.434" z="2.434" />
-    <!--<translate x="-50.5" z="100.0" /> -->
-    <translate time="20">
-      <point x="-50.57" y="20" z="100.86" />
-      <point x="100.57" y="-5" z="50.86" />
-      <point x="140.57" y="-30" z="-10.86" />
-      <point x="60.57" y="0" z="90.86" />
+    <translate time="687.0">
+      <point x="-227.9" y="0" z="227.9" />
+      <point x="227.9" y="-1" z="227.9" />
+      <point x="227.9" y="0" z="-227.9" />
+      <point x="-227.9" y="0" z="-227.9" />
     </translate>
+    <scale x="2.434" y="2.434" z="2.434" />
     <models>
       <model file="pequenos.3d" />
     </models>
     <group>
+      <translate time="40">
+        <point x="-1" y="-1" z="1" />
+        <point x="1" y="1" z="1" />
+        <point x="1" y="0" z="-1" />
+        <point x="-1" y="-1" z="-1" />
+      </translate>
       <scale x="0.2" y="0.2" z="0.2" />
-      <!--<translate x="1" y="3" />-->
-      <translate time="20">
-        <point x="1.57" y="3" z="0.86" />
-        <point x="-2" y="1" z="0.1" />
-        <point x="-5" y="0" z="0" />
-        <point x="0" y="3" z="-1" />
+      <models>
+        <model file="pequenos.3d" />
+      </models>
+    </group>
+    <group>
+      <scale x="0.2" y="0.2" z="0.2" />
+      <!--<translate x="-2" y="-1" />-->
+      <translate time="100">
+        <point x="-2" y="1" z="2" />
+        <point x="2" y="1" z="2" />
+        <point x="2" y="-1" z="-2" />
+        <point x="-2" y="-1" z="-2" />
+      </translate>
+      <models>
+        <model file="pequenos.3d" />
+      </models>
+    </group>
+  </group>
+
+  <!-- JUPITER -->
+  <group>
+    <translate time="4331">
+      <point x="-778.6" y="3" z="778.6" />
+      <point x="778.6" y="-1" z="778.6" />
+      <point x="778.6" y="0" z="-778.6" />
+      <point x="-778.6" y="-3" z="-778.6" />
+    </translate>
+    <scale x="10.098" y="10.098" z="10.098" />
+    <models>
+      <model file="grandes.3d" />
+    </models>
+    <group>
+      <scale x="0.0495" y="0.0495" z="0.0495" />
+      <!--<translate x="-1" z="-1" />-->
+      <translate time="30">
+        <point x="-1" y="-0.2" z="1" />
+        <point x="1" y="1" z="1" />
+        <point x="1" y="0" z="-1" />
+        <point x="-1" y="0.1" z="-1" />
       </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
     </group>
     <group>
-      <scale x="0.2" y="0.2" z="0.2" />
-      <translate x="-2" y="-1" />
-      <models>
-        <model file="pequenos.3d" />
-      </models>
-    </group>
-  </group>
-
-  <group>
-    <scale x="10.098" y="10.098" z="10.098" />
-    <translate x="-65.94" z="130.9" />
-    <models>
-      <model file="grandes.3d" />
-    </models>
-    <group>
-      <scale x="0.0495" y="0.0495" z="0.0495" />
-      <translate x="-1" z="-1" />
+      <scale x="0.0295" y="0.0295" z="0.0295" />
+      <!--<translate x="1" z="-1" />-->
+      <translate time="35">
+        <point x="-1" y="0" z="1" />
+        <point x="1" y="0" z="1" />
+        <point x="1" y="0" z="-1" />
+        <point x="-1" y="0" z="-1" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
     </group>
     <group>
       <scale x="0.0295" y="0.0295" z="0.0295" />
-      <translate x="1" z="-1" />
-      <models>
-        <model file="pequenos.3d" />
-      </models>
-    </group>
-    <group>
-      <scale x="0.0295" y="0.0295" z="0.0295" />
-      <translate x="1" y="-1" z="-1" />
+      <!--<translate x="1" y="-1" z="-1" />-->
+      <translate time="50">
+        <point x="-1" y="-0.5" z="1" />
+        <point x="1" y="1" z="1" />
+        <point x="1" y="0" z="-1" />
+        <point x="-1" y="0.6" z="-1" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
@@ -117,9 +165,15 @@
     </group>
   </group>
 
+  <!-- SATURN -->
   <group>
+    <translate time="10747">
+      <point x="-1433.5" y="-0.5" z="1433.5" />
+      <point x="1433.5" y="0.1" z="1433.5" />
+      <point x="1433.5" y="0" z="-1433.5" />
+      <point x="-1433.5" y="0.6" z="-1433.5" />
+    </translate>
     <scale x="8.36" y="8.36" z="8.36" />
-    <translate x="-52.4" z="155" />
     <models>
       <model file="grandes.3d" />
     </models>
@@ -133,9 +187,15 @@
     </group>
   </group>
 
+  <!-- URANUS -->
   <group>
+    <translate time="30589">
+      <point x="-2872.5" y="-0.5" z="2872.5" />
+      <point x="2872.5" y="0.1" z="2872.5" />
+      <point x="2872.5" y="0" z="-2872.5" />
+      <point x="-2872.5" y="0.6" z="-2872.5" />
+    </translate>
     <scale x="5.463" y="5.463" z="5.463" />
-    <translate x="-42" z="174" />
     <models>
       <model file="grandes.3d" />
     </models>
@@ -162,9 +222,15 @@
     </group>
   </group>
 
+  <!-- NEPTUNE-->
   <group>
+    <translate time="59800">
+      <point x="-4495.1" y="-0.5" z="4495.1" />
+      <point x="4495.1" y="0.1" z="4495.1" />
+      <point x="4495.1" y="0" z="-4495.1" />
+      <point x="-4495.1" y="0.6" z="-4495.1" />
+    </translate>
     <scale x="5.312" y="5.312" z="5.312" />
-    <translate x="-28" z="195" />
     <models>
       <model file="grandes.3d" />
     </models>

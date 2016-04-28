@@ -19,6 +19,7 @@ class TranslationCatmull : public Translation  {
   private:
     float time;
     vector<Point> *controlPoints;
+    int nControlPoints;
 
     void buildRotMatrix(float*, float*, float*, float*);
     void cross(float*, float*, float*);

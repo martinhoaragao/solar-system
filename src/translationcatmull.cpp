@@ -8,6 +8,7 @@
 TranslationCatmull::TranslationCatmull() : Translation() {
   time = 0;
   controlPoints = new vector<Point>();
+  nControlPoints = controlPoints->size();
 }
 
 TranslationCatmull::TranslationCatmull( float _time
@@ -15,6 +16,7 @@ TranslationCatmull::TranslationCatmull( float _time
                                       ) : Translation() {
   time = _time;
   controlPoints = _controlPoints;
+  nControlPoints = controlPoints->size();
 }
 
 void TranslationCatmull::glTranslate() {
@@ -84,26 +86,29 @@ void TranslationCatmull::getCatmullRomPoint(float t, int *indices, float *res) {
 
   float aux[4];
 
-  for (int i = 0; i < 4; i++)
+  Point controls[4];
+  for (int i = 0; i < 4; i++) {
     aux[i] = pow(t, 3.0) * m[0][i] + pow(t, 2.0) * m[1][i] + t * m[2][i] + m[3][i];
+    controls[i] = (*controlPoints)[indices[i]];
+  }
 
   for (int i = 0; i < 3; i++) {
-    res[i] = aux[0] * controlPoints->at(indices[0]).get(i) + aux[1] * controlPoints->at(indices[1]).get(i) + aux[2] * controlPoints->at(indices[2]).get(i) + aux[3] * controlPoints->at(indices[3]).get(i);
+    res[i] = aux[0] * controls[0].get(i) + aux[1] * controls[1].get(i) + aux[2] * controls[2].get(i) + aux[3] * controls[3].get(i);
   }
 }
 
 // given  global t, returns the point in the curve
 void TranslationCatmull::getGlobalCatmullRomPoint(float gt, float *res) {
-  float t   = gt * controlPoints->size(); // this is the real global t
+  float t   = gt * nControlPoints; // this is the real global t
   int index = floor(t);         // which segment
   t         = t - index;        // where within  the segment
 
   // indices store the points
   int indices[4];
-  indices[0] = (index + controlPoints->size()-1)%controlPoints->size();
-  indices[1] = (indices[0]+1)%controlPoints->size();
-  indices[2] = (indices[1]+1)%controlPoints->size();
-  indices[3] = (indices[2]+1)%controlPoints->size();
+  indices[0] = (index -1)%nControlPoints;
+  indices[1] = (indices[0]+1)%nControlPoints;
+  indices[2] = (indices[1]+1)%nControlPoints;
+  indices[3] = (indices[2]+1)%nControlPoints;
 
   getCatmullRomPoint(t, indices, res);
 }
@@ -119,25 +124,28 @@ void TranslationCatmull::getCatmullRomDirection(float t, int *indices, float *re
 
   float aux[4];
 
-  for (int i = 0; i < 4; i++)
+  Point controls[4];
+  for (int i = 0; i < 4; i++) {
     aux[i] = (3 * pow(t, 2.0)) * m[0][i] + (2 * t) * m[1][i] + 1 * m[2][i];
+    controls[i] = (*controlPoints)[indices[i]];
+  }
 
   for (int i = 0; i < 3; i++)
-    res[i] = aux[0] * controlPoints->at(indices[0]).get(i) + aux[1] * controlPoints->at(indices[1]).get(i) + aux[2] * controlPoints->at(indices[2]).get(i) + aux[3] * controlPoints->at(indices[3]).get(i);
+    res[i] = aux[0] * controls[0].get(i) + aux[1] * controls[1].get(i) + aux[2] * controls[2].get(i) + aux[3] * controls[3].get(i);
 }
 
 // given  global t, returns the point in the curve
 void TranslationCatmull::getGlobalCatmullRomDirection(float gt, float *res) {
-  float t   = gt * controlPoints->size(); // this is the real global t
+  float t   = gt * nControlPoints; // this is the real global t
   int index = floor(t);         // which segment
   t         = t - index;        // where within  the segment
 
   // indices store the points
   int indices[4];
-  indices[0] = (index + controlPoints->size()-1)%controlPoints->size();
-  indices[1] = (indices[0]+1)%controlPoints->size();
-  indices[2] = (indices[1]+1)%controlPoints->size();
-  indices[3] = (indices[2]+1)%controlPoints->size();
+  indices[0] = (index + nControlPoints-1)%nControlPoints;
+  indices[1] = (indices[0]+1)%nControlPoints;
+  indices[2] = (indices[1]+1)%nControlPoints;
+  indices[3] = (indices[2]+1)%nControlPoints;
 
   getCatmullRomDirection(t, indices, res);
 }

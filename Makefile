@@ -41,7 +41,7 @@ patchPoints: src/patchPoints.cpp src/patchPoints.o
 
 # Fix this...
 engine: src/engine.cpp src/file.o
-	$(CC) -framework GLUT -framework OpenGL -framework Cocoa src/point.o src/engine.cpp src/tinyxml2.cpp src/file.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
+	$(CC) -framework GLUT -O2 -framework OpenGL -framework Cocoa src/point.o src/engine.cpp src/tinyxml2.cpp src/file.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
 
 clean:
 	rm -f *.out
