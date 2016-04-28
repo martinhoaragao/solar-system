@@ -91,9 +91,9 @@ void TranslationCatmull::getCatmullRomPoint(float t, int *indices, float *res) {
     controls[i] = (*controlPoints)[indices[i]];
   }
 
-  res[0] = aux[0] * controls[0].getX() + aux[1] * controls[1].getX() + aux[2] * controls[2].getX() + aux[3] * controls[3].getX();
-  res[1] = aux[0] * controls[0].getY() + aux[1] * controls[1].getY() + aux[2] * controls[2].getY() + aux[3] * controls[3].getY();
-  res[2] = aux[0] * controls[0].getZ() + aux[1] * controls[1].getZ() + aux[2] * controls[2].getZ() + aux[3] * controls[3].getZ();
+    res[0] = aux[0] * controls[0].x + aux[1] * controls[1].x + aux[2] * controls[2].x + aux[3] * controls[3].x;
+    res[1] = aux[0] * controls[0].y + aux[1] * controls[1].y + aux[2] * controls[2].y + aux[3] * controls[3].y;
+    res[2] = aux[0] * controls[0].z + aux[1] * controls[1].z + aux[2] * controls[2].z + aux[3] * controls[3].z;
 }
 
 // given  global t, returns the point in the curve
@@ -105,10 +105,10 @@ void TranslationCatmull::getGlobalCatmullRomPoint(float gt, float *res) {
   // indices store the points
   int indices[4];
   indices[0] = index % nControlPoints;
-  indices[1] = (indices[0]+1)%nControlPoints;
-  indices[2] = (indices[1]+1)%nControlPoints;
-  indices[3] = (indices[2]+1)%nControlPoints;
-
+  indices[1] = (index + 1) % nControlPoints;
+  indices[2] = (index + 2) % nControlPoints;
+  indices[3] = (index + 3) % nControlPoints;
+  
   getCatmullRomPoint(t, indices, res);
 }
 
