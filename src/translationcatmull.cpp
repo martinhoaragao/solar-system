@@ -24,11 +24,11 @@ void TranslationCatmull::glTranslate() {
   float t = fmod(now, timeMiliSeconds) / timeMiliSeconds;
 
 
-  //static float up[3]  = { 0.0, 1.0, 0.0 };
+  static float up[3]  = { 0.0, 1.0, 0.0 };
   float res[3];
   float dir[3];
-  //float left[3];
-  //float m[16];
+  float left[3];
+  float m[16];
 
   getGlobalCatmullRomPoint(t, res);
   getGlobalCatmullRomDirection(t, dir);
@@ -36,13 +36,13 @@ void TranslationCatmull::glTranslate() {
 
   glTranslatef(res[0], res[1], res[2]);
 
-  //cross(up, dir, left);
-  //cross(dir, left, up);
-  //normalize(up);
-  //normalize(left);
-  //normalize(dir);
-  //buildRotMatrix(left, up, dir, m);
-  //glMultMatrixf(m);
+  cross(up, dir, left);
+  cross(dir, left, up);
+  normalize(up);
+  normalize(left);
+  normalize(dir);
+  buildRotMatrix(left, up, dir, m);
+  glMultMatrixf(m);
 
 }
 
@@ -99,7 +99,7 @@ void TranslationCatmull::getCatmullRomPoint(float t, int *indices, float *res) {
 // given  global t, returns the point in the curve
 void TranslationCatmull::getGlobalCatmullRomPoint(float gt, float *res) {
   float t   = gt * nControlPoints; // this is the real global t
-  int index = (int) t;         // which segment
+  int index =  floor(t);         // which segment
   t         = t - index;        // where within  the segment
 
   // indices store the points

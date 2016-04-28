@@ -47,6 +47,7 @@ void Group::draw() {
   translation->glTranslate();
 
   glScalef(scale.getX(), scale.getY(), scale.getZ());
+
   rotation->glRotate();
 
   for(int i = 0; i < files.size(); i++) {
@@ -57,6 +58,7 @@ void Group::draw() {
   for(int i = 0; i < groups.size(); i++) {
     groups.at(i)->draw();
   }
+
 
   glPopMatrix();
 }
