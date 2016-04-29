@@ -22,6 +22,7 @@ int cone(int, char **);
 deque<Point>* circle(int, float, float, int);
 int torus(int, char **);
 void writeVerticesToFile(char **, int, FILE *);
+void renderBezierCurve(char *, char * );
 
 int main (int argc, char ** argv) {
   // Check for arguments.
@@ -47,54 +48,6 @@ int main (int argc, char ** argv) {
     }
   } else {
     printf("Error! Arguments needed!\n");
-  }
-
-  return 0;
-}
-
-
-int bezier(int argc, char ** parameters){
-  string aux, token;
-  char aux2[1000000], * tab;
-  int nr, patch[16], * patches;
-  float cp[3];
-  float * cp2;
-  // Check number of arguments.
-  if (argc < 2) { return -1; }
-
-  // Test if the file exists
-  ifstream file(parameters[0]);
-  if(!file.good()) {return -1;}
-  //Number of patches
-  getline(file,aux);
-  nr = stoi(aux);
-  patchPoints.setNrPatches(nr);
-
-  //Add patches to patchPoints
-  for(int j = 0; j < nr; j++){  
-    getline(file,aux);
-    strncpy(aux2, aux.c_str(), sizeof(aux2));
-    tab = strtok(aux2,",");
-    patch[0] = stoi(tab);
-    for(int i = 1; i < 16; i++){
-      tab = strtok (NULL, " ,.-");
-      patch[i] = stoi(tab);
-    }
-    patchPoints.addPatch(patch);
-  }
-
-  getline(file,aux);
-  nr = stoi(aux);
-  patchPoints.setNrCP(nr);
-  for(int i = 0; i < nr; i++){
-    getline(file,aux);
-    std::istringstream iss (aux);
-    for(int j=0;std::getline(iss, token,',');j++) {
-      strncpy(aux2, token.c_str(), sizeof(aux2));
-      tab = strtok(aux2,",");
-      cp[j] = atof(tab);
-    }
-    patchPoints.addCP(cp);
   }
 
   return 0;
@@ -416,4 +369,153 @@ int torus(int argc, char ** parameters) {
 void writeVerticesToFile(char ** vertices, int num, FILE * file) {
   for (int i = 0; i < num; i++)
     fprintf(file, "%s\n", vertices[i]);
+}
+
+int bezier(int argc, char ** parameters){
+  string aux, token;
+  char aux2[1000000], * tab;
+  int nr, patch[16], * patches;
+  float cp[3];
+  float * cp2;
+  // Check number of arguments.
+  if (argc < 2) { return -1; }
+
+  // Test if the file exists
+  ifstream file(parameters[0]);
+  if(!file.good()) {return -1;}
+  //Number of patches
+  getline(file,aux);
+  nr = stoi(aux);
+  patchPoints.setNrPatches(nr);
+
+  //Add patches to patchPoints
+  for(int j = 0; j < nr; j++){  
+    getline(file,aux);
+    strncpy(aux2, aux.c_str(), sizeof(aux2));
+    tab = strtok(aux2,",");
+    patch[0] = stoi(tab);
+    for(int i = 1; i < 16; i++){
+      tab = strtok (NULL, " ,.-");
+      patch[i] = stoi(tab);
+    }
+    patchPoints.addPatch(patch);
+  }
+
+  //Add control point to patchPoints
+  getline(file,aux);
+  nr = stoi(aux);
+  patchPoints.setNrCP(nr);
+  for(int i = 0; i < nr; i++){
+    getline(file,aux);
+    std::istringstream iss (aux);
+    for(int j=0;std::getline(iss, token,',');j++) {
+      strncpy(aux2, token.c_str(), sizeof(aux2));
+      tab = strtok(aux2,",");
+      cp[j] = atof(tab);
+    }
+    patchPoints.addCP(cp);
+  }
+
+  renderBezierCurve(parameters[1],parameters[2]);
+
+  return 0;
+}
+
+float getBezierPoint(float u, float v, float m[4][4] , float p[4][4]) {
+  float pointValue = 0;
+  float aux[4], aux2[4];
+  
+  //bu*M
+  for(int i = 0; i<4; i++){
+    aux[i] = (powf(u,3.0)*m[0][i]) + (powf(u,2.0)*m[1][i]) + (u*m[2][i]) + m[3][i];
+  }
+
+
+  //(bu*M)*P
+  for(int i = 0; i<4; i++){
+    aux2[i] = (aux[0]*p[0][i]) + (aux[1]*p[1][i]) + (aux[2]*p[2][i]) + (aux[3]*p[3][i]);
+  }
+
+  //((bu*M)*P)*MT
+  for(int i = 0; i<4; i++){
+    aux[i] = (aux2[0]*m[0][i]) + (aux2[1]*m[1][i]) + (aux2[2]*m[2][i]) + (aux2[3]*m[3][i]);
+  }  
+
+  //(((bu*M)*P)*MT)*bv
+  pointValue = aux[0] * powf(v,3.0);
+  pointValue += aux[1] * powf(v,2.0);
+  pointValue += aux[2] * v;
+  pointValue += aux[3];
+
+  return pointValue; 
+}
+
+void renderBezierCurve(char * tessellation, char * newFile){
+  int * patchIndice, aux;
+  float * ma[16], mT[3][16], px[4][4], py[4][4], pz[4][4], res[3];
+  char filename[100];
+  float u, v, level = (float)1/atoi(tessellation);
+  //Create new file .3d
+  sprintf(filename, "%s.3d", newFile);
+  FILE * file = fopen(filename, "w+");
+  for (int patch = 0; patch < patchPoints.getNrPatches(); patch++) {
+    aux = 0;
+    patchIndice = patchPoints.getPatch(patch);
+    //Fill matrix m with the control points of the patch
+    for(int i = 0; i < 16; i++) {
+      ma[i] = patchPoints.getCP(patchIndice[i]);
+    }
+    
+    //Matrix with all the Pix, Piy, Piz
+    for(int i = 0; i < 4; i++){
+      for(int j = 0; j < 4; j++, aux++){
+        px[i][j] = ma[aux][0];
+        py[i][j] = ma[aux][1];
+        pz[i][j] = ma[aux][2];
+      }
+    }
+
+    //Matrix M 
+    float m[4][4] = { {-1, 3, -3, 1},
+                    {3, -6, 3, 0 },
+                    {-3, 3, 0, 0},
+                    {1, 0, 0, 0}
+                  };
+
+    //Getting the points
+    for(u = 0.0f; u<1 ; u += level){
+      for(v = 0.0f; v<1 ; v += level){
+          res[0] = getBezierPoint(u, v, m, px);
+          res[1] = getBezierPoint(u, v, m, py);
+          res[2] = getBezierPoint(u, v, m, pz);
+          fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
+          
+          res[0] = getBezierPoint (u+level,v+level, m, px);
+          res[1] = getBezierPoint (u+level,v+level, m, py);
+          res[2] = getBezierPoint (u+level,v+level, m, pz);
+          fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
+        
+          res[0] = getBezierPoint (u+level,v, m, px);
+          res[1] = getBezierPoint (u+level,v, m, py);
+          res[2] = getBezierPoint (u+level,v, m, pz);
+          fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
+
+          res[0] = getBezierPoint(u, v, m, px);
+          res[1] = getBezierPoint(u, v, m, py);
+          res[2] = getBezierPoint(u, v, m, pz);
+          fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
+
+          res[0] = getBezierPoint (u,v+level, m, px);
+          res[1] = getBezierPoint (u,v+level, m, py);
+          res[2] = getBezierPoint (u,v+level, m, pz);
+          fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
+
+          res[0] = getBezierPoint (u+level,v+level, m, px);
+          res[1] = getBezierPoint (u+level,v+level, m, py);
+          res[2] = getBezierPoint (u+level,v+level, m, pz);
+          fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
+          
+      }
+    }     
+  }
 }

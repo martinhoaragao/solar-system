@@ -7,8 +7,8 @@ class PatchPoints {
     int nrCP;
     int nextPatch;
     int nextCP;
-    int patches[100][16];
-    float controlPoints[1000][3];
+    int patches[1000][16];
+    float controlPoints[10000][3];
 
   public:
 
