@@ -461,7 +461,7 @@ void renderBezierCurve(char * tessellation, char * newFile){
   for (int patch = 0; patch < patchPoints.getNrPatches(); patch++) {
     aux = 0;
     patchIndice = patchPoints.getPatch(patch);
-    //Fill matrix m with the control points of the patch
+    //Fill matrix ma with the control points of the patch
     for(int i = 0; i < 16; i++) {
       ma[i] = patchPoints.getCP(patchIndice[i]);
     }

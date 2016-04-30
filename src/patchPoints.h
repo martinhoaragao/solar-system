@@ -13,7 +13,6 @@ class PatchPoints {
   public:
 
     PatchPoints();
-    PatchPoints(int,int);
     int getNrPatches();
     int getNrCP();
     int getNextPatch();
