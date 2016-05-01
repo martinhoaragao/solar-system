@@ -22,9 +22,9 @@ Group::Group(XMLParser* parser) {
 
 void Group::init(XMLParser* parser) {
 
+  translation = parser->getTranslation();
   scale = parser->getScale();
   rotation = parser->getRotation();
-  translation = parser->getTranslation();
 
   vector<string> fileNames = parser->extractFileNames();
 
@@ -46,9 +46,9 @@ void Group::draw() {
 
   translation->glTranslate();
 
-  glScalef(scale.getX(), scale.getY(), scale.getZ());
-
   rotation->glRotate();
+
+  glScalef(scale.getX(), scale.getY(), scale.getZ());
 
   for(int i = 0; i < files.size(); i++) {
     files.at(i).draw();
