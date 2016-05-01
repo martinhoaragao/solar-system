@@ -3,14 +3,15 @@
 
 class Point {
   private:
-    float x, y, z;
 
   public:
+    float x, y, z;
     Point();
     Point(float, float, float);
     float getX();
     float getY();
     float getZ();
+    float get(int);
     void setX(float);
     void setY(float);
     void setZ(float);

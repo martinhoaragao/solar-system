@@ -14,6 +14,22 @@ float Point::getY() { return y; }
 
 float Point::getZ() { return z; }
 
+float Point::get(int xyz) {
+  float res = 0;
+  switch (xyz) {
+    case 0:
+      res = x;
+      break;
+    case 1:
+      res = y;
+      break;
+    case 2:
+      res = z;
+      break;
+  }
+  return res;
+}
+
 void Point::setX(float _x) { x = _x; }
 
 void Point::setY(float _y) { y = _y; }

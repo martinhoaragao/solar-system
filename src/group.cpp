@@ -22,9 +22,9 @@ Group::Group(XMLParser* parser) {
 
 void Group::init(XMLParser* parser) {
 
+  translation = parser->getTranslation();
   scale = parser->getScale();
   rotation = parser->getRotation();
-  translation = parser->getTranslation();
 
   vector<string> fileNames = parser->extractFileNames();
 
@@ -44,9 +44,11 @@ void Group::init(XMLParser* parser) {
 void Group::draw() {
   glPushMatrix();
 
-  glTranslatef(translation.getX(), translation.getY(), translation.getZ());
-  glScalef(scale.getX(), scale.getY(), scale.getZ());
+  translation->glTranslate();
+
   rotation->glRotate();
+
+  glScalef(scale.getX(), scale.getY(), scale.getZ());
 
   for(int i = 0; i < files.size(); i++) {
     files.at(i).draw();
@@ -56,6 +58,7 @@ void Group::draw() {
   for(int i = 0; i < groups.size(); i++) {
     groups.at(i)->draw();
   }
+
 
   glPopMatrix();
 }

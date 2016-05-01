@@ -13,6 +13,7 @@
 #include "tinyxml2.h"
 #include "point.h"
 #include "rotation.h"
+#include "translation.h"
 #include "file.h"
 #include "xmlparser.h"
 
@@ -22,7 +23,7 @@ class Group {
   private:
     Point scale;
     Rotation *rotation;
-    Point translation;
+    Translation *translation;
     vector<File> files;
     vector<Group *> groups;
 
