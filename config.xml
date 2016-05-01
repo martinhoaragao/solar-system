@@ -194,13 +194,6 @@
         <model file="pequenos.3d" />
       </models>
     </group>
-    <group>
-      <translate x="-55" z="-25" />
-      <scale x="0.0295" y="0.0295" z="0.0295" />
-      <models>
-        <model file="pequenos.3d" />
-      </models>
-    </group>
   </group>
 
   <!-- SATURN -->
