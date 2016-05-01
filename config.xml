@@ -231,21 +231,36 @@
     </group>
     <group>
       <scale x="0.424" y="0.424" z="0.424" />
-      <translate x="2" y="1" />
+      <translate time="60">
+        <point x="-2" y="0" z="1" />
+        <point x="2" y="0.3" z="1" />
+        <point x="2" y="0.2" z="-1" />
+        <point x="-2" y="0.1" z="-1" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
     </group>
     <group>
       <scale x="0.1" y="0.1" z="0.1" />
-      <translate x="-2" y="-2" />
+      <translate time="60">
+        <point x="-2" y="-0.2" z="2" />
+        <point x="2" y="1" z="2" />
+        <point x="2" y="0" z="-2" />
+        <point x="-2" y="0.1" z="-2" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
     </group>
     <group>
       <scale x="0.1" y="0.1" z="0.1" />
-      <translate x="0" y="-1" z="1" />
+      <translate time="30">
+        <point x="0" y="-0.5" z="4" />
+        <point x="0" y=".8" z="4" />
+        <point x="0" y="-0.3" z="-4" />
+        <point x="0" y="-0.1" z="-4" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
@@ -269,21 +284,36 @@
     </group>
     <group>
       <scale x="0.1" y="0.1" z="0.1" />
-      <translate x="-1" y="-1" z="-2" />
+      <translate time="90">
+        <point x="-1" y="-0.9" z="2" />
+        <point x="1" y="-0.2" z="2" />
+        <point x="1" y="0" z="-2" />
+        <point x="-1" y="0.1" z="-2" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
     </group>
     <group>
       <scale x="0.1" y="0.1" z="0.1" />
-      <translate x="-1.5" y="-1.5" />
+      <translate time="300">
+        <point x="-1.5" y="-0.2" z="1.5" />
+        <point x="1.5" y="0" z="1.5" />
+        <point x="1.5" y="0.2" z="-1.5" />
+        <point x="-1.5" y="-0.1" z="-1.5" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
     </group>
     <group>
       <scale x="0.1" y="0.1" z="0.1" />
-      <translate x="2" y="2" z="2" />
+      <translate time="50">
+        <point x="-2" y="-0.4" z="2" />
+        <point x="2" y="-1" z="2" />
+        <point x="2" y="0" z="-2" />
+        <point x="-2" y="0.1" z="-2" />
+      </translate>
       <models>
         <model file="pequenos.3d" />
       </models>
