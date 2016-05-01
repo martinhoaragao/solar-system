@@ -42,12 +42,7 @@ class XMLParser {
     vector<string> extractFileNames();
     Point getScale();
     Rotation* getRotation();
-<<<<<<< HEAD
-    Point getTranslation();
-
-=======
     Translation* getTranslation();
->>>>>>> phase3-dev
 
 };
 
