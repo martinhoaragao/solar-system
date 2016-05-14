@@ -12,6 +12,7 @@
 using namespace std;
 
 PatchPoints patchPoints;
+deque<Point>* derivada;
 
 /* Functions prototypes. */
 int bezier(int, char **);
@@ -23,7 +24,7 @@ deque<Point>* circle(int, float, float, int);
 int torus(int, char **);
 void writeVerticesToFile(char **, int, FILE *);
 void renderBezierCurve(char *, char * );
-
+void bezierTangent(char * tessellation);
 int main (int argc, char ** argv) {
   // Check for arguments.
   // Only 'plane', 'box', 'sphere', 'cone' and 'torus' are possible.
@@ -145,7 +146,7 @@ int sphere(int argc, char ** parameters) {
     char filename[100];
     sprintf(filename, "%s.3d", parameters[3]);
     FILE * file = fopen(filename, "w+");
-
+    fprintf(file, "%d\n",(stacks)*(slices)*6 );
     for (int stack = 0; stack < stacks; stack++, angleA += incA) {
       r = radius * cos(angleA);
       h = radius * sin(angleA);
@@ -175,8 +176,28 @@ int sphere(int argc, char ** parameters) {
             (radius * cos(angleA + incA)) * cos(angleB));
       }
     }
-  }
 
+    angleA  = M_PI / 2;
+    fprintf(file, "%d\n", stacks * slices * 6);
+    for (int stack = 0; stack < stacks; stack++, angleA += incA) {
+      angleB  = 0.0;
+      for (int slice = 0; slice < slices; slice++, angleB += incB) {
+        fprintf(file, "%f %f %f\n",sin(angleB), sin(angleA), cos(angleB));
+
+        fprintf(file, "%f %f %f\n",cos(angleA + incA) * sin(angleB), sin(angleA + incA), cos(angleA + incA) * cos(angleB));
+
+        fprintf(file,"%f %f %f\n",cos(angleA + incA) * sin(angleB + incB), sin(angleA + incA), cos(angleA + incA) * cos(angleB + incB));
+
+        fprintf(file, "%f %f %f\n",sin(angleB), sin(angleA), cos(angleB));
+
+        fprintf(file, "%f %f %f\n",sin(angleB - incB),sin(angleA),cos(angleB - incB));
+
+        fprintf(file, "%f %f %f\n",cos(angleA + incA) * sin(angleB),sin(angleA + incA),cos(angleA + incA) * cos(angleB));
+      }
+    }
+
+  }
+  
   return 0;
 }
 
@@ -252,6 +273,22 @@ float sliceAngle(int slice, int slices) {
   return slice * ((2 * M_PI) / slices);
 }
 
+deque<Point>* circunferenceNormals(int slices, float z){
+  deque<Point>* circunference = new deque<Point>();
+  float x, y, angle;
+  Point origin = Point(0,0,0);
+
+  for(int i = 0; i < slices; i++){
+    angle = sliceAngle(i, slices);
+    x = sin(angle);
+    y = cos(angle);
+    Point point = Point(x, y, z);
+    circunference->push_back(point);
+  }
+
+  return circunference;
+}
+
 deque<Point>* circunference(int slices, float radius, float z) {
   deque<Point>* circunference = new deque<Point>();
   float x, y, angle;
@@ -324,8 +361,10 @@ deque<Point>* circle(int slices, float radius, float z, int stacks) {
 
 int torus(int argc, char ** parameters) {
   deque<Point>* torus = new deque<Point>();
+  deque<Point>* normals = new deque<Point>();
   float sliceHeight, radiusDeviation, stackRadius;
   deque< deque<Point>* > borders;
+  deque< deque<Point>* > normalsBorders;
 
   if (argc != 5) { return -1; }
   else {
@@ -342,21 +381,31 @@ int torus(int argc, char ** parameters) {
     stackRadius = radius + radiusDeviation;
 
     borders.push_back(circunference(rings, stackRadius, sliceHeight));
+    normalsBorders.push_back(circunferenceNormals(rings,sin(angle)));
   }
 
   /* Triangulate the sides of the torus */
   for(int side = 0; side < sides; side++) {
     int nextLine = (side +1) % sides;
     torus = triangulateLines(borders.at(side), borders.at(nextLine), torus);
+    normals = triangulateLines(normalsBorders.at(side), borders.at(nextLine),torus);
   }
 
   // Open/Create file.
   char filename[100];
   sprintf(filename, "%s.3d", parameters[4]);
   FILE * file = fopen(filename, "w+");
-
+  int size = torus->size();
+  fprintf(file,"%d\n",size);
   for (int i = 0; i < torus->size(); i++) {
     Point p = torus->at(i);
+
+    fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+  }
+  size = normals->size();
+  fprintf(file,"%d\n",size);
+  for (int i = 0; i < normals->size(); i++) {
+    Point p = normals->at(i);
 
     fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
   }
@@ -377,6 +426,7 @@ int bezier(int argc, char ** parameters){
   int nr, patch[16], * patches;
   float cp[3];
   float * cp2;
+  deque<Point> * derivada;
   // Check number of arguments.
   if (argc < 2) { return -1; }
 
@@ -416,7 +466,9 @@ int bezier(int argc, char ** parameters){
     patchPoints.addCP(cp);
   }
 
+  bezierTangent(parameters[1]);
   renderBezierCurve(parameters[1],parameters[2]);
+  
 
   return 0;
 }
@@ -458,6 +510,8 @@ void renderBezierCurve(char * tessellation, char * newFile){
   //Create new file .3d
   sprintf(filename, "%s.3d", newFile);
   FILE * file = fopen(filename, "w+");
+  float size = patchPoints.getNrPatches() * 6 * (1/level) * (1/level);
+  fprintf(file, "%f\n",size );
   for (int patch = 0; patch < patchPoints.getNrPatches(); patch++) {
     aux = 0;
     patchIndice = patchPoints.getPatch(patch);
@@ -484,7 +538,7 @@ void renderBezierCurve(char * tessellation, char * newFile){
 
     //Getting the points
     for(u = 0.0f; u<1 ; u += level){
-      for(v = 0.0f; v<1 ; v += level){
+      for(v = 0.0f; v < 1 ; v += level){
           res[0] = getBezierPoint(u, v, m, px);
           res[1] = getBezierPoint(u, v, m, py);
           res[2] = getBezierPoint(u, v, m, pz);
@@ -518,4 +572,174 @@ void renderBezierCurve(char * tessellation, char * newFile){
       }
     }     
   }
+  fprintf(file, "%f\n",size );
+  for(int i = 0; i < size;i++){
+    Point p = derivada->at(i);
+
+    fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+  }
 }
+
+float getBezierPointTangent(float u, float v, float m[4][4] , float p[4][4], int derivada) {
+  float pointValue = 0;
+  float aux[4], aux2[4];
+
+  //derivada de u
+  if(derivada == 0){
+    //bu*M
+    for(int i = 0; i<4; i++){
+      aux[i] = (3 * powf(u,2.0)*m[0][i]) + (2*u*m[1][i]) + (1*m[2][i]);
+    }
+  } else {
+    for(int i = 0; i<4; i++){
+      aux[i] = (powf(u,3.0)*m[0][i]) + (powf(u,2.0)*m[1][i]) + (u*m[2][i]) + m[3][i];
+    }
+  }
+  
+  //(bu*M)*P
+  for(int i = 0; i<4; i++){
+    aux2[i] = (aux[0]*p[0][i]) + (aux[1]*p[1][i]) + (aux[2]*p[2][i]) + (aux[3]*p[3][i]);
+  }
+  
+  //((bu*M)*P)*MT
+  for(int i = 0; i<4; i++){
+    aux[i] = (aux2[0]*m[0][i]) + (aux2[1]*m[1][i]) + (aux2[2]*m[2][i]) + (aux2[3]*m[3][i]);
+  }  
+
+  if(derivada == 0) {
+    //(((bu*M)*P)*MT)*bv
+    pointValue = aux[0] * powf(v,3.0);
+    pointValue += aux[1] * powf(v,2.0);
+    pointValue += aux[2] * v;
+    pointValue += aux[3];
+  //derivada de v
+  } else {
+    //(((bu*M)*P)*MT)*bv
+    pointValue = aux[0] * (3 * powf(v,2.0));
+    pointValue += aux[1] * (2 * v);
+    pointValue += aux[2];
+  }
+
+  return pointValue; 
+}
+
+void cross(float *a, float *b, float *res) {
+  res[0] = a[1]*b[2] - a[2]*b[1];
+  res[1] = a[2]*b[0] - a[0]*b[2];
+  res[2] = a[0]*b[1] - a[1]*b[0];
+}
+
+void normalize(float *a) {
+  float l = sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
+  if(l!=0) {
+    a[0] = a[0]/l;
+    a[1] = a[1]/l;
+    a[2] = a[2]/l;
+  } else {
+    a[0] = 0;
+    a[1] = 0;
+    a[2] = 0;
+  }
+}
+
+void bezierTangent(char * tessellation){
+  derivada = new deque<Point>();
+  int * patchIndice, aux;
+  float * ma[16], mT[3][16], px[4][4], py[4][4], pz[4][4], resU[3], resV[3], res[3];
+  float u, v, level = (float)1/atoi(tessellation);
+
+  for(int patch = 0; patch < patchPoints.getNrPatches(); patch++){ //first for
+    aux = 0;
+    patchIndice = patchPoints.getPatch(patch);
+    //Fill matrix ma with the control points of the patch
+    for(int i = 0; i < 16; i++) { //second for
+      ma[i] = patchPoints.getCP(patchIndice[i]);
+    }//end of second for
+
+    //Matrix with all the Pix, Piy, Piz
+    for(int i = 0; i < 4; i++){ //third
+      for(int j = 0; j < 4; j++, aux++){ //fourth
+        px[i][j] = ma[aux][0];
+        py[i][j] = ma[aux][1];
+        pz[i][j] = ma[aux][2];
+      }//fourth
+    } //third
+
+      //Matrix M 
+    float m[4][4] = { {-1, 3, -3, 1},
+                    {3, -6, 3, 0 },
+                    {-3, 3, 0, 0},
+                    {1, 0, 0, 0}
+                  };
+
+    for(u = 0.0f; u<1 ; u += level){ //fifth
+      for(v = 0.0f; v<1 ; v += level){ //sixth
+          resU[0] = getBezierPointTangent(u, v, m, px,0);
+          resU[1] = getBezierPointTangent(u, v, m, py,0);
+          resU[2] = getBezierPointTangent(u, v, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent(u, v, m, px,1);
+          resV[1] = getBezierPointTangent(u, v, m, py,1);
+          resV[2] = getBezierPointTangent(u, v, m, pz,1);
+          normalize(resV); 
+          cross(resU,resV,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent (u+level,v+level, m, px,0);
+          resU[1] = getBezierPointTangent (u+level,v+level, m, py,0);
+          resU[2] = getBezierPointTangent (u+level,v+level, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent (u+level,v+level, m, pz,1);
+          resV[1] = getBezierPointTangent (u+level,v+level, m, pz,1);
+          resV[2] = getBezierPointTangent (u+level,v+level, m, pz,1);
+          normalize(resV);
+          cross(resU,resV,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent (u+level,v, m, px,0);
+          resU[1] = getBezierPointTangent (u+level,v, m, py,0);
+          resU[2] = getBezierPointTangent (u+level,v, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent (u+level,v, m, pz,1);
+          resV[1] = getBezierPointTangent (u+level,v, m, pz,1);
+          resV[2] = getBezierPointTangent (u+level,v, m, pz,1);
+          normalize(resV);
+          cross(resU,resV,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent(u, v, m, px,0);
+          resU[1] = getBezierPointTangent(u, v, m, py,0);
+          resU[2] = getBezierPointTangent(u, v, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent(u, v, m, px,1);
+          resV[1] = getBezierPointTangent(u, v, m, py,1);
+          resV[2] = getBezierPointTangent(u, v, m, pz,1);
+          normalize(resV);
+          cross(resU,resV,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent (u,v+level, m, px,0);
+          resU[1] = getBezierPointTangent (u,v+level, m, py,0);
+          resU[2] = getBezierPointTangent (u,v+level, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent (u,v+level, m, px,1);
+          resV[1] = getBezierPointTangent (u,v+level, m, py,1);
+          resV[2] = getBezierPointTangent (u,v+level, m, pz,1);
+          normalize(resV);
+          cross(resU,resV,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent (u+level,v+level, m, px,0);
+          resU[1] = getBezierPointTangent (u+level,v+level, m, py,0);
+          resU[2] = getBezierPointTangent (u+level,v+level, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent (u+level,v+level, m, px,1);
+          resV[1] = getBezierPointTangent (u+level,v+level, m, py,1);
+          resV[2] = getBezierPointTangent (u+level,v+level, m, pz,1);
+          normalize(resV);
+          cross(resU,resV,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+      }//sixth
+    }//fifth     
+  }//end of first for
+} //end of bezierTangent
