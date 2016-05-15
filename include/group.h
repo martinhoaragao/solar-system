@@ -1,19 +1,6 @@
 #ifndef GROUP_H
 #define GROUP_H
 
-// Include GLUT header based on operating system.
-#ifdef __APPLE__
-  #include <GLUT/glut.h>
-#elif _WIN32
-  #include <GL/glut.h>
-#endif
-
-#include <string>
-#include <vector>
-#include "tinyxml2.h"
-#include "point.h"
-#include "rotation.h"
-#include "translation.h"
 #include "file.h"
 #include "xmlparser.h"
 

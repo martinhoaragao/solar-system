@@ -1,4 +1,4 @@
-CC=g++ -std=c++11
+CC=g++ -std=c++11 -I include
 
 all: point rotation rotationstatic rotationanimation translation translationcatmull translationsimple file xmlparser group patchPoints generator engine
 
@@ -32,16 +32,15 @@ xmlparser: src/xmlparser.cpp
 group: src/group.cpp
 	$(CC) -c src/group.cpp -o src/group.o
 
-generator: src/generator.cpp src/point.o
-	$(CC) src/generator.cpp src/patchPoints.o src/point.o -o generator.out
-
-
 patchPoints: src/patchPoints.cpp src/patchPoints.o
 	$(CC) -c src/patchPoints.cpp -o src/patchPoints.o
 
+generator: src/generator.cpp src/point.o
+	$(CC) src/generator.cpp src/patchPoints.o src/point.o -o generator.out
+
 # Fix this...
 engine: src/engine.cpp src/file.o
-	$(CC) -framework GLUT -framework OpenGL -framework Cocoa src/point.o src/engine.cpp src/tinyxml2.cpp src/file.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
+	$(CC) -framework GLUT -framework OpenGL -framework Cocoa src/point.o src/engine.cpp lib/tinyxml2.cpp src/file.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
 
 clean:
 	rm -f *.out

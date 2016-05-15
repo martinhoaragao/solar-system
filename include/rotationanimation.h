@@ -8,9 +8,8 @@
   #include <GL/glut.h>
 #endif
 
-#include "rotation.h"
 #include <math.h>
-
+#include "rotation.h"
 
 class RotationAnimation : public Rotation  {
   private:

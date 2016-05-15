@@ -8,10 +8,11 @@
   #include <GL/glut.h>
 #endif
 
-#include "translation.h"
-#include "point.h"
 #include <math.h>
 #include <vector>
+#include "translation.h"
+#include "point.h"
+
 
 using namespace std;
 

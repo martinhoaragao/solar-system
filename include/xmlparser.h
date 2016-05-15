@@ -1,21 +1,9 @@
 #ifndef XMLPARSER_H
 #define XMLPARSER_H
 
-// Include GLUT header based on operating system.
-#ifdef __APPLE__
-  #include <GLUT/glut.h>
-#elif _WIN32
-  #include <GL/glut.h>
-#endif
-
-#include <string>
-#include <vector>
-#include "tinyxml2.h"
-#include "point.h"
-#include "rotation.h"
+#include "../lib/tinyxml2.h"
 #include "rotationstatic.h"
 #include "rotationanimation.h"
-#include "translation.h"
 #include "translationsimple.h"
 #include "translationcatmull.h"
 
