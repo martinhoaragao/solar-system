@@ -18,15 +18,13 @@ File::File(string fn) {
 
 void File::draw() {
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID[0]);
-  //Draw Triangle from VBO - do each time window, view point or data changes
   glVertexPointer(3, GL_FLOAT, 0, NULL);
 
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID[1]);
-  //Draw Triangle from VBO - do each time window, view point or data changes
   glNormalPointer(GL_FLOAT, 0, NULL);
 
   // Enable buffer
-  //glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_VERTEX_ARRAY);
 
   glDrawArrays(GL_TRIANGLES, 0, numberCoordinates[0]/3);
 
@@ -71,7 +69,6 @@ vector<float>* File::extractPointsSegment(ifstream& pointsFile) {
     istringstream iss(line);
 
     iss >> x >> y >> z;
-    cout << x << endl;
 
     points->push_back(x);
     points->push_back(y);
