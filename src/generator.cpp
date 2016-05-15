@@ -388,7 +388,7 @@ int torus(int argc, char ** parameters) {
   for(int side = 0; side < sides; side++) {
     int nextLine = (side +1) % sides;
     torus = triangulateLines(borders.at(side), borders.at(nextLine), torus);
-    normals = triangulateLines(normalsBorders.at(side), borders.at(nextLine),torus);
+    normals = triangulateLines(normalsBorders.at(side), normalsBorders.at(nextLine),torus);
   }
 
   // Open/Create file.
