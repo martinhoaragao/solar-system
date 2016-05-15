@@ -16,18 +16,15 @@ using namespace std;
 class File {
   private:
     string fileName;
-    int numberCoordinates;
-    GLuint coordinatesID;
+    int numberCoordinates[3];
+    GLuint coordinatesID[2];
 
-
-    void uploadData(vector<float>*);
-    vector<float>* extractPoints();
+    void uploadData(vector<float>*, int);
+    vector<float>* extractPointsSegment(ifstream&);
 
   public:
     File(string);
-    int coordinatesLength();
-    GLuint getCoordinatesID();
-    void reloadFile();
+    void loadFile();
     void draw();
 };
 
