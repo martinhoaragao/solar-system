@@ -87,13 +87,14 @@ void renderScene() {
 
   float pos[4] = {0, 0, 0, 1};
   float amb[4] = {0.2, 0.2, 0.2, 1.0};
-  glPushMatrix();
-  glEnable( GL_LIGHT0 );
-  glEnable( GL_LIGHTING );
-  glPopMatrix();
+  float diff[4] = {1.0, 1.0, 1.0, 1.0};
+
+  glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHTING);
 
   glLightfv(GL_LIGHT0, GL_POSITION, pos);
   glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
 
   group->draw();
 
@@ -226,11 +227,12 @@ int main (int argc, char** argv) {
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
+  glShadeModel(GL_SMOOTH);
+  glEnable(GL_NORMALIZE);
 
   // Material.
-  float red[4] = {0.8f, 0.2f, 0.2f, 1.0f};
+  float red[4] = {0.8f, 0.0f, 0.0f, 1.0f};
   glMaterialfv(GL_FRONT, GL_DIFFUSE, red);
-  glMaterialf(GL_FRONT, GL_SHININESS, 128.0);
 
   // Keyboard callbacks.
   glutSpecialFunc(arrowPressed);

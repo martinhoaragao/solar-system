@@ -138,12 +138,18 @@ void TranslationCatmull::renderCatmullRomCurve() {
   float res[3];
   float t = 0;
 
+  glPushMatrix();
+  glDisable(GL_LIGHTING);
+
   glBegin(GL_LINE_LOOP);
 
-  for (t = 0; t < 1; t += 0.0001) {
+  for (t = 0; t < 1; t += 0.01) {
     getGlobalCatmullRomPoint(t, res);
     glVertex3f(res[0], res[1], res[2]);
   }
 
   glEnd();
+  glPopMatrix();
+  glEnable(GL_LIGHTING);
+
 }
