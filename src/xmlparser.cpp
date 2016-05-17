@@ -70,6 +70,30 @@ vector<string> XMLParser::extractFileNames() {
   return fileNames;
 }
 
+vector<Light> XMLParser::getLights() {
+  tinyxml2::XMLElement* temp = elem->FirstChildElement("lights");
+  if(temp != NULL)
+    temp = temp->FirstChildElement();
+
+  vector<Light> lights;
+  bool isVector;
+  while(temp != NULL) {
+    Point position = getPoint(temp);
+
+    if(strcmp(temp->Attribute("type"),"point") == 0)
+      isVector = false;
+    else
+      isVector = true;
+
+    lights.push_back(Light(position, isVector));
+
+    temp = temp->NextSiblingElement();
+  }
+
+  return lights;
+}
+
+
 Point XMLParser::getScale() {
   tinyxml2::XMLElement *temp = elem->FirstChildElement("scale");
 

@@ -1,9 +1,12 @@
 CC=g++ -std=c++11 -I include
 
-all: point rotation rotationstatic rotationanimation translation translationcatmull translationsimple file xmlparser group patchPoints generator engine
+all: point light rotation rotationstatic rotationanimation translation translationcatmull translationsimple file xmlparser group patchPoints generator engine
 
 point: src/point.cpp
 	$(CC) -c src/point.cpp -o src/point.o
+
+light: src/light.cpp
+	$(CC) -c src/light.cpp -o src/light.o
 
 rotation: src/rotation.cpp
 	$(CC) -c src/rotation.cpp -o src/rotation.o
@@ -40,7 +43,7 @@ generator: src/generator.cpp src/point.o
 
 # Fix this...
 engine: src/engine.cpp src/file.o
-	$(CC) -framework GLUT -framework OpenGL -framework Cocoa src/point.o src/engine.cpp lib/tinyxml2.cpp src/file.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
+	$(CC) -framework GLUT -framework OpenGL -framework Cocoa src/point.o src/engine.cpp lib/tinyxml2.cpp src/file.o src/light.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
 
 clean:
 	rm -f *.out

@@ -2,6 +2,7 @@
 #define XMLPARSER_H
 
 #include "../lib/tinyxml2.h"
+#include "light.h"
 #include "rotationstatic.h"
 #include "rotationanimation.h"
 #include "translationsimple.h"
@@ -28,6 +29,7 @@ class XMLParser {
     void FirstChildGroup();
     void NextSiblingGroup();
     vector<string> extractFileNames();
+    vector<Light> getLights();
     Point getScale();
     Rotation* getRotation();
     Translation* getTranslation();

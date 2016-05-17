@@ -12,6 +12,7 @@ class Group {
     Rotation *rotation;
     Translation *translation;
     vector<File> files;
+    vector<Light> lights;
     vector<Group *> groups;
 
     void init(XMLParser*);

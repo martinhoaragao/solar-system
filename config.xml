@@ -1,6 +1,9 @@
 <?xml version="1.0" ?>
 <scene>
-
+  <lights>
+    <light type="point" x="0" y="0" z="0"/>
+    <light type="vector" x="0" y="0" z="0"/>
+  </lights>
   <!-- SUN -->
   <group>
     <scale x="50" y="50" z="50" />

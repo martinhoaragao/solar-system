@@ -33,6 +33,8 @@ void Group::init(XMLParser* parser) {
     files.push_back(file);
   }
 
+  lights = parser->getLights();
+
   parser->FirstChildGroup();
 
   while(parser->getElem() != NULL) {
