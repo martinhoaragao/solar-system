@@ -1,12 +1,13 @@
 <?xml version="1.0" ?>
 <scene>
-  <lights>
-    <light type="point" x="0" y="0" z="0"/>
-  </lights>
+
   <!-- SUN -->
   <group>
     <scale x="50" y="50" z="50" />
     <rotate time="50" x="0" y="1" z="0" />
+    <lights>
+      <light type="point" x="0" y="0" z="0"/>
+    </lights>
     <models>
       <model file="grandes.3d" />
     </models>
