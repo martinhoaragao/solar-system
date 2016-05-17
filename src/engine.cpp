@@ -85,17 +85,6 @@ void renderScene() {
       camX + 300 * sin(camAlpha), camY, camZ + 300 * cos(camAlpha),
       0.0,1.0,0.0);
 
-  float pos[4] = {0, 0, 0, 1};
-  float amb[4] = {0.2, 0.2, 0.2, 1.0};
-  float diff[4] = {1.0, 1.0, 1.0, 1.0};
-
-  glEnable(GL_LIGHT0);
-  glEnable(GL_LIGHTING);
-
-  glLightfv(GL_LIGHT0, GL_POSITION, pos);
-  glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
-
   group->draw();
 
   displayFPS();
@@ -227,12 +216,17 @@ int main (int argc, char** argv) {
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
-  glShadeModel(GL_SMOOTH);
-  glEnable(GL_NORMALIZE);
 
   // Material.
   float red[4] = {0.8f, 0.0f, 0.0f, 1.0f};
   glMaterialfv(GL_FRONT, GL_DIFFUSE, red);
+
+  // Light
+  glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHTING);
+  glShadeModel(GL_SMOOTH);
+  // Refresh normals after scale
+  glEnable(GL_NORMALIZE);
 
   // Keyboard callbacks.
   glutSpecialFunc(arrowPressed);

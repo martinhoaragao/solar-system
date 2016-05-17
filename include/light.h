@@ -17,7 +17,7 @@ class Light {
 
   public:
     Light(Point, bool);
-    void render();
+    void draw();
 };
 
 #endif

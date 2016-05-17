@@ -44,13 +44,17 @@ void Group::init(XMLParser* parser) {
 }
 
 void Group::draw() {
+  for(int i = 0; i < lights.size(); i++) {
+    lights.at(i).draw();
+  }
   glPushMatrix();
 
   translation->glTranslate();
 
-  //rotation->glRotate();
+  rotation->glRotate();
 
   glScalef(scale.getX(), scale.getY(), scale.getZ());
+
 
 
   for(int i = 0; i < files.size(); i++) {

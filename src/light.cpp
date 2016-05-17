@@ -9,7 +9,7 @@ Light::Light(Point point, bool _isPoint) {
   isPoint = _isPoint;
 }
 
-void Light::render() {
+void Light::draw() {
   GLfloat amb[4] = {0.2, 0.2, 0.2, 1.0};
   GLfloat diff[4] = {1.0, 1.0, 1.0, 1.0};
   GLfloat pos[4] = {position.x, position.y , position.z, (float) isPoint};
