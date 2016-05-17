@@ -48,9 +48,10 @@ void Group::draw() {
 
   translation->glTranslate();
 
-  rotation->glRotate();
+  //rotation->glRotate();
 
   glScalef(scale.getX(), scale.getY(), scale.getZ());
+
 
   for(int i = 0; i < files.size(); i++) {
     files.at(i).draw();

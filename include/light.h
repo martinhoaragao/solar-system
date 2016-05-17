@@ -13,7 +13,7 @@
 class Light {
   private:
     Point position;
-    bool isVector;
+    bool isPoint;
 
   public:
     Light(Point, bool);

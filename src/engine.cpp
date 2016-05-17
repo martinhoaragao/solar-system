@@ -85,6 +85,16 @@ void renderScene() {
       camX + 300 * sin(camAlpha), camY, camZ + 300 * cos(camAlpha),
       0.0,1.0,0.0);
 
+  float pos[4] = {0, 0, 0, 1};
+  float amb[4] = {0.2, 0.2, 0.2, 1.0};
+  glPushMatrix();
+  glEnable( GL_LIGHT0 );
+  glEnable( GL_LIGHTING );
+  glPopMatrix();
+
+  glLightfv(GL_LIGHT0, GL_POSITION, pos);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+
   group->draw();
 
   displayFPS();
@@ -214,6 +224,13 @@ int main (int argc, char** argv) {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_NORMAL_ARRAY);
+
+  // Material.
+  float red[4] = {0.8f, 0.2f, 0.2f, 1.0f};
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, red);
+  glMaterialf(GL_FRONT, GL_SHININESS, 128.0);
 
   // Keyboard callbacks.
   glutSpecialFunc(arrowPressed);

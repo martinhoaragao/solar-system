@@ -31,6 +31,9 @@ class TranslationCatmull : public Translation  {
     void getGlobalCatmullRomDirection(float, float*);
     void renderCatmullRomCurve();
 
+    void prepareCilinder(float, float, int);
+
+
   public:
     TranslationCatmull();
     TranslationCatmull(float, vector<Point>*);

@@ -2,7 +2,7 @@
 #include <fstream>  // Needed to write to files.
 #include <cstdlib>
 #include <stdio.h>
-#include <sstream>  
+#include <sstream>
 #include <string.h>
 #include <math.h>
 #include <deque>
@@ -177,27 +177,40 @@ int sphere(int argc, char ** parameters) {
       }
     }
 
+    fprintf(file, "%d\n",(stacks)*(slices)*6 );
     angleA  = M_PI / 2;
-    fprintf(file, "%d\n", stacks * slices * 6);
     for (int stack = 0; stack < stacks; stack++, angleA += incA) {
+      r = cos(angleA);
+      h = sin(angleA);
       angleB  = 0.0;
+
       for (int slice = 0; slice < slices; slice++, angleB += incB) {
-        fprintf(file, "%f %f %f\n",sin(angleB), sin(angleA), cos(angleB));
+        Point p = Point(r * sin(angleB), h, r * cos(angleB));
 
-        fprintf(file, "%f %f %f\n",cos(angleA + incA) * sin(angleB), sin(angleA + incA), cos(angleA + incA) * cos(angleB));
+        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        fprintf(file, "%f %f %f\n",
+            cos(angleA + incA) * sin(angleB),
+            sin(angleA + incA),
+            cos(angleA + incA) * cos(angleB));
+        fprintf(file, "%f %f %f\n",
+            cos(angleA + incA) * sin(angleB + incB),
+            sin(angleA + incA),
+            cos(angleA + incA) * cos(angleB + incB));
 
-        fprintf(file,"%f %f %f\n",cos(angleA + incA) * sin(angleB + incB), sin(angleA + incA), cos(angleA + incA) * cos(angleB + incB));
-
-        fprintf(file, "%f %f %f\n",sin(angleB), sin(angleA), cos(angleB));
-
-        fprintf(file, "%f %f %f\n",sin(angleB - incB),sin(angleA),cos(angleB - incB));
-
-        fprintf(file, "%f %f %f\n",cos(angleA + incA) * sin(angleB),sin(angleA + incA),cos(angleA + incA) * cos(angleB));
+        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        fprintf(file, "%f %f %f\n",
+            r * sin(angleB - incB),
+            h,
+            r * cos(angleB - incB));
+        fprintf(file, "%f %f %f\n",
+            cos(angleA + incA) * sin(angleB),
+            sin(angleA + incA),
+            cos(angleA + incA) * cos(angleB));
       }
     }
 
   }
-  
+
   return 0;
 }
 
@@ -439,7 +452,7 @@ int bezier(int argc, char ** parameters){
   patchPoints.setNrPatches(nr);
 
   //Add patches to patchPoints
-  for(int j = 0; j < nr; j++){  
+  for(int j = 0; j < nr; j++){
     getline(file,aux);
     strncpy(aux2, aux.c_str(), sizeof(aux2));
     tab = strtok(aux2,",");
@@ -468,7 +481,7 @@ int bezier(int argc, char ** parameters){
 
   bezierTangent(parameters[1]);
   renderBezierCurve(parameters[1],parameters[2]);
-  
+
 
   return 0;
 }
@@ -476,7 +489,7 @@ int bezier(int argc, char ** parameters){
 float getBezierPoint(float u, float v, float m[4][4] , float p[4][4]) {
   float pointValue = 0;
   float aux[4], aux2[4];
-  
+
   //bu*M
   for(int i = 0; i<4; i++){
     aux[i] = (powf(u,3.0)*m[0][i]) + (powf(u,2.0)*m[1][i]) + (u*m[2][i]) + m[3][i];
@@ -491,7 +504,7 @@ float getBezierPoint(float u, float v, float m[4][4] , float p[4][4]) {
   //((bu*M)*P)*MT
   for(int i = 0; i<4; i++){
     aux[i] = (aux2[0]*m[0][i]) + (aux2[1]*m[1][i]) + (aux2[2]*m[2][i]) + (aux2[3]*m[3][i]);
-  }  
+  }
 
   //(((bu*M)*P)*MT)*bv
   pointValue = aux[0] * powf(v,3.0);
@@ -499,7 +512,7 @@ float getBezierPoint(float u, float v, float m[4][4] , float p[4][4]) {
   pointValue += aux[2] * v;
   pointValue += aux[3];
 
-  return pointValue; 
+  return pointValue;
 }
 
 void renderBezierCurve(char * tessellation, char * newFile){
@@ -519,7 +532,7 @@ void renderBezierCurve(char * tessellation, char * newFile){
     for(int i = 0; i < 16; i++) {
       ma[i] = patchPoints.getCP(patchIndice[i]);
     }
-    
+
     //Matrix with all the Pix, Piy, Piz
     for(int i = 0; i < 4; i++){
       for(int j = 0; j < 4; j++, aux++){
@@ -529,7 +542,7 @@ void renderBezierCurve(char * tessellation, char * newFile){
       }
     }
 
-    //Matrix M 
+    //Matrix M
     float m[4][4] = { {-1, 3, -3, 1},
                     {3, -6, 3, 0 },
                     {-3, 3, 0, 0},
@@ -543,12 +556,12 @@ void renderBezierCurve(char * tessellation, char * newFile){
           res[1] = getBezierPoint(u, v, m, py);
           res[2] = getBezierPoint(u, v, m, pz);
           fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
-          
+
           res[0] = getBezierPoint (u+level,v+level, m, px);
           res[1] = getBezierPoint (u+level,v+level, m, py);
           res[2] = getBezierPoint (u+level,v+level, m, pz);
           fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
-        
+
           res[0] = getBezierPoint (u+level,v, m, px);
           res[1] = getBezierPoint (u+level,v, m, py);
           res[2] = getBezierPoint (u+level,v, m, pz);
@@ -568,9 +581,9 @@ void renderBezierCurve(char * tessellation, char * newFile){
           res[1] = getBezierPoint (u+level,v+level, m, py);
           res[2] = getBezierPoint (u+level,v+level, m, pz);
           fprintf(file, "%f %f %f\n", res[0],res[1],res[2]);
-          
+
       }
-    }     
+    }
   }
   fprintf(file, "%f\n",size );
   for(int i = 0; i < size;i++){
@@ -595,16 +608,16 @@ float getBezierPointTangent(float u, float v, float m[4][4] , float p[4][4], int
       aux[i] = (powf(u,3.0)*m[0][i]) + (powf(u,2.0)*m[1][i]) + (u*m[2][i]) + m[3][i];
     }
   }
-  
+
   //(bu*M)*P
   for(int i = 0; i<4; i++){
     aux2[i] = (aux[0]*p[0][i]) + (aux[1]*p[1][i]) + (aux[2]*p[2][i]) + (aux[3]*p[3][i]);
   }
-  
+
   //((bu*M)*P)*MT
   for(int i = 0; i<4; i++){
     aux[i] = (aux2[0]*m[0][i]) + (aux2[1]*m[1][i]) + (aux2[2]*m[2][i]) + (aux2[3]*m[3][i]);
-  }  
+  }
 
   if(derivada == 0) {
     //(((bu*M)*P)*MT)*bv
@@ -620,7 +633,7 @@ float getBezierPointTangent(float u, float v, float m[4][4] , float p[4][4], int
     pointValue += aux[2];
   }
 
-  return pointValue; 
+  return pointValue;
 }
 
 void cross(float *a, float *b, float *res) {
@@ -665,7 +678,7 @@ void bezierTangent(char * tessellation){
       }//fourth
     } //third
 
-      //Matrix M 
+      //Matrix M
     float m[4][4] = { {-1, 3, -3, 1},
                     {3, -6, 3, 0 },
                     {-3, 3, 0, 0},
@@ -681,7 +694,7 @@ void bezierTangent(char * tessellation){
           resV[0] = getBezierPointTangent(u, v, m, px,1);
           resV[1] = getBezierPointTangent(u, v, m, py,1);
           resV[2] = getBezierPointTangent(u, v, m, pz,1);
-          normalize(resV); 
+          normalize(resV);
           cross(resU,resV,res);
           derivada->push_back(Point(res[0],res[1], res[2]));
 
@@ -740,6 +753,6 @@ void bezierTangent(char * tessellation){
           cross(resU,resV,res);
           derivada->push_back(Point(res[0],res[1], res[2]));
       }//sixth
-    }//fifth     
+    }//fifth
   }//end of first for
 } //end of bezierTangent

@@ -76,16 +76,16 @@ vector<Light> XMLParser::getLights() {
     temp = temp->FirstChildElement();
 
   vector<Light> lights;
-  bool isVector;
+  bool isPoint;
   while(temp != NULL) {
     Point position = getPoint(temp);
 
     if(strcmp(temp->Attribute("type"),"point") == 0)
-      isVector = false;
+      isPoint = true;
     else
-      isVector = true;
+      isPoint = false;
 
-    lights.push_back(Light(position, isVector));
+    lights.push_back(Light(position, isPoint));
 
     temp = temp->NextSiblingElement();
   }
