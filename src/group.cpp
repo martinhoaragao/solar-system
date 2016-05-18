@@ -1,8 +1,8 @@
 #include "group.h"
 
-/*-----------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
 	API
------------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------*/
 
 Group::Group() {
   XMLParser* parser = new XMLParser();
@@ -25,14 +25,7 @@ void Group::init(XMLParser* parser) {
   translation = parser->getTranslation();
   scale = parser->getScale();
   rotation = parser->getRotation();
-
-  vector<string> fileNames = parser->extractFileNames();
-
-  for(int i = 0; i < fileNames.size(); i++) {
-    File file(fileNames.at(i));
-    files.push_back(file);
-  }
-
+  files = parser->extractFiles();
   lights = parser->getLights();
 
   parser->FirstChildGroup();
@@ -73,24 +66,4 @@ void Group::draw() {
 
 
   glPopMatrix();
-}
-
-/*-----------------------------------------------------------------------------------
-	Helpers
------------------------------------------------------------------------------------*/
-
-vector<string> Group::extractFileNames (char* configFileName) {
-  tinyxml2::XMLDocument doc;
-  vector<string> fileNames;
-
-  doc.LoadFile(configFileName);
-  tinyxml2::XMLElement* elem = doc.FirstChildElement()->FirstChildElement();
-
-  while(elem != NULL) {
-    fileNames.push_back(elem->Attribute("file"));
-
-    elem = elem->NextSiblingElement();
-  }
-
-  return fileNames;
 }

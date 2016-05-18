@@ -16,7 +16,6 @@ class Group {
     vector<Group *> groups;
 
     void init(XMLParser*);
-    vector<string> extractFileNames(char*);
 
   public:
     Group();

@@ -19,6 +19,7 @@ using namespace std;
 class TranslationCatmull : public Translation  {
   private:
     float time;
+    GLuint coordinatesID;
     vector<Point> *controlPoints;
     int nControlPoints;
 
@@ -29,7 +30,8 @@ class TranslationCatmull : public Translation  {
     void getGlobalCatmullRomPoint(float, float*);
     void getCatmullRomDirection(float, int*, float*);
     void getGlobalCatmullRomDirection(float, float*);
-    void renderCatmullRomCurve();
+    void loadCatmullRomCurve();
+    void drawCatmullRomCurve();
 
     void prepareCilinder(float, float, int);
 

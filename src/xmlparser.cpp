@@ -55,19 +55,24 @@ void XMLParser::NextSiblingGroup() {
   elem = elem->NextSiblingElement();
 }
 
-vector<string> XMLParser::extractFileNames() {
+vector<File> XMLParser::extractFiles() {
   tinyxml2::XMLElement* temp = elem->FirstChildElement("models");
   if(temp != NULL)
     temp = temp->FirstChildElement();
 
-  vector<string> fileNames;
+  vector<File> files;
+  string fileName;
+  Material material;
   while(temp != NULL) {
-    fileNames.push_back(temp->Attribute("file"));
+    fileName = temp->Attribute("file");
+    material = getMaterial(temp);
+
+    files.push_back(File(fileName, material));
 
     temp = temp->NextSiblingElement();
   }
 
-  return fileNames;
+  return files;
 }
 
 vector<Light> XMLParser::getLights() {
@@ -176,6 +181,16 @@ TranslationCatmull* XMLParser::getTranslationCatmull( tinyxml2::XMLElement *temp
   return translation;
 }
 
+tinyxml2::XMLNode* XMLParser::deepCopy(tinyxml2::XMLNode *src, tinyxml2::XMLDocument *destDoc) {
+  tinyxml2::XMLNode *current = src->ShallowClone( destDoc );
+  for( tinyxml2::XMLNode *child=src->FirstChild(); child; child=child->NextSibling() )
+  {
+    current->InsertEndChild( deepCopy( child, destDoc ) );
+  }
+
+  return current;
+}
+
 Point XMLParser::getPoint(tinyxml2::XMLElement *temp) {
   float x, y, z;
   x = 0; y = 0; z = 0;
@@ -189,12 +204,61 @@ Point XMLParser::getPoint(tinyxml2::XMLElement *temp) {
   return Point(x, y, z);
 }
 
-tinyxml2::XMLNode* XMLParser::deepCopy(tinyxml2::XMLNode *src, tinyxml2::XMLDocument *destDoc) {
-  tinyxml2::XMLNode *current = src->ShallowClone( destDoc );
-  for( tinyxml2::XMLNode *child=src->FirstChild(); child; child=child->NextSibling() )
-  {
-    current->InsertEndChild( deepCopy( child, destDoc ) );
+Material XMLParser::getMaterial(tinyxml2::XMLElement *temp) {
+  Point amb, diff, spec, emi;
+
+  amb = getAmbient(temp);
+  diff = getDiffuse(temp);
+  spec = getSpecular(temp);
+  emi = getEmission(temp);
+
+  return Material(amb, diff, spec, emi);
+}
+
+Point XMLParser::getAmbient(tinyxml2::XMLElement *temp) {
+  float x, y, z;
+  x = 0.2; y = 0.2; z = 0.2;
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "ambX", &x );
+    temp->QueryFloatAttribute( "ambY", &y );
+    temp->QueryFloatAttribute( "ambZ", &z );
   }
 
-  return current;
+  return Point(x, y, z);
+}
+
+Point XMLParser::getDiffuse(tinyxml2::XMLElement *temp) {
+  float x, y, z;
+  x = 0.8; y = 0.8; z = 0.8;
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "diffX", &x );
+    temp->QueryFloatAttribute( "diffY", &y );
+    temp->QueryFloatAttribute( "diffZ", &z );
+  }
+
+  return Point(x, y, z);
+}
+
+Point XMLParser::getSpecular(tinyxml2::XMLElement *temp) {
+  float x, y, z;
+  x = 0; y = 0; z = 0;
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "specX", &x );
+    temp->QueryFloatAttribute( "specY", &y );
+    temp->QueryFloatAttribute( "specZ", &z );
+  }
+
+  return Point(x, y, z);
+}
+
+Point XMLParser::getEmission(tinyxml2::XMLElement *temp) {
+  float x, y, z;
+  x = 0; y = 0; z = 0;
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "emiX", &x );
+    temp->QueryFloatAttribute( "emiY", &y );
+    temp->QueryFloatAttribute( "emiZ", &z );
+  }
+
+  return Point(x, y, z);
 }

@@ -3,6 +3,8 @@
 
 #include "../lib/tinyxml2.h"
 #include "light.h"
+#include "file.h"
+#include "material.h"
 #include "rotationstatic.h"
 #include "rotationanimation.h"
 #include "translationsimple.h"
@@ -18,6 +20,11 @@ class XMLParser {
     tinyxml2::XMLNode* deepCopy(tinyxml2::XMLNode*, tinyxml2::XMLDocument*);
     TranslationCatmull* getTranslationCatmull( tinyxml2::XMLElement*, float);
     Point getPoint(tinyxml2::XMLElement*);
+    Material getMaterial(tinyxml2::XMLElement*);
+    Point getAmbient(tinyxml2::XMLElement*);
+    Point getDiffuse(tinyxml2::XMLElement*);
+    Point getSpecular(tinyxml2::XMLElement*);
+    Point getEmission(tinyxml2::XMLElement*);
 
   public:
     XMLParser();
@@ -28,7 +35,7 @@ class XMLParser {
     tinyxml2::XMLDocument* getDoc() const;
     void FirstChildGroup();
     void NextSiblingGroup();
-    vector<string> extractFileNames();
+    vector<File> extractFiles();
     vector<Light> getLights();
     Point getScale();
     Rotation* getRotation();

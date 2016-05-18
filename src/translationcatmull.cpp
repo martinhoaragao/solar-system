@@ -8,6 +8,8 @@ TranslationCatmull::TranslationCatmull() : Translation() {
   time = 0;
   controlPoints = new vector<Point>();
   nControlPoints = controlPoints->size();
+  glGenBuffers(1, &coordinatesID);
+  loadCatmullRomCurve();
 }
 
 TranslationCatmull::TranslationCatmull( float _time
@@ -16,6 +18,8 @@ TranslationCatmull::TranslationCatmull( float _time
   time = _time;
   controlPoints = _controlPoints;
   nControlPoints = controlPoints->size();
+  glGenBuffers(1, &coordinatesID);
+  loadCatmullRomCurve();
 }
 
 void TranslationCatmull::glTranslate() {
@@ -25,7 +29,7 @@ void TranslationCatmull::glTranslate() {
   float t = fmod(now, timeMiliSeconds) / timeMiliSeconds;
 
   getGlobalCatmullRomPoint(t, res);
-  renderCatmullRomCurve();
+  drawCatmullRomCurve();
 
   glTranslatef(res[0], res[1], res[2]);
 }
@@ -134,23 +138,31 @@ void TranslationCatmull::getGlobalCatmullRomDirection(float gt, float *res) {
   getCatmullRomDirection(t, indices, res);
 }
 
-void TranslationCatmull::renderCatmullRomCurve() {
-  float res[3];
-  float t = 0;
+void TranslationCatmull::loadCatmullRomCurve() {
+  float res[3], t;
 
-  glPushMatrix();
-  glDisable(GL_LIGHTING);
+  vector<float> p;
 
-  glBegin(GL_LINE_LOOP);
-
-  for (t = 0; t < 1; t += 0.01) {
-    glColor3f(0.1f, 0.1f, 0.6f);
+  for (t = 0; t < 1; t += 0.001) {
     getGlobalCatmullRomPoint(t, res);
-    glVertex3f(res[0], res[1], res[2]);
+    p.push_back(res[0]);
+    p.push_back(res[1]);
+    p.push_back(res[2]);
   }
 
-  glEnd();
-  glPopMatrix();
-  glEnable(GL_LIGHTING);
+  glBindBuffer(GL_ARRAY_BUFFER, coordinatesID);
+  glBufferData(GL_ARRAY_BUFFER, p.size() * sizeof(float), &p.front(), GL_STATIC_DRAW);
+}
 
+
+void TranslationCatmull::drawCatmullRomCurve() {
+  float diff[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+  float red[4] = {0.2f, 0.2f, 0.2f, 1.0f};
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
+  glMaterialfv(GL_FRONT, GL_EMISSION, red);
+
+  glBindBuffer(GL_ARRAY_BUFFER, coordinatesID);
+  glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+  glDrawArrays(GL_LINE_LOOP, 0, 1000);
 }

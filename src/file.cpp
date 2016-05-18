@@ -7,12 +7,13 @@
 	API
 ------------------------------------------------------------------------------*/
 
-File::File(string fn) {
+File::File(string fn, Material mat) {
   // Generate Vertex Buffer Objects
 
   glGenBuffers(2, coordinatesID);
 
   fileName = fn;
+  material = mat;
   loadFile();
 }
 
@@ -23,14 +24,12 @@ void File::draw() {
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID[1]);
   glNormalPointer(GL_FLOAT, 0, NULL);
 
-  // Enable buffer
-  glEnableClientState(GL_VERTEX_ARRAY);
+  material.draw();
 
   glDrawArrays(GL_TRIANGLES, 0, numberCoordinates[0]/3);
 
   //Force display to be drawn now
   glFlush();
-  glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 /*------------------------------------------------------------------------------

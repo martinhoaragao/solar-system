@@ -11,11 +11,14 @@
 #include <string>
 #include <vector>
 
+#include "material.h"
+
 using namespace std;
 
 class File {
   private:
     string fileName;
+    Material material;
     int numberCoordinates[3];
     GLuint coordinatesID[2];
 
@@ -23,7 +26,7 @@ class File {
     vector<float>* extractPointsSegment(ifstream&);
 
   public:
-    File(string);
+    File(string, Material);
     void loadFile();
     void draw();
 };
