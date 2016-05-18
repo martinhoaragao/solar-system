@@ -49,15 +49,9 @@ void Group::draw() {
 
   glScalef(scale.getX(), scale.getY(), scale.getZ());
 
-  // Light inside
-  if (lights.size() > 0)
-    glDisable(GL_LIGHTING);
-
   for(int i = 0; i < files.size(); i++) {
     files.at(i).draw();
   }
-
-  glEnable(GL_LIGHTING);
 
   // Recursive draw other groups
   for(int i = 0; i < groups.size(); i++) {
