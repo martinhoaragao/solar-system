@@ -158,11 +158,13 @@ void TranslationCatmull::loadCatmullRomCurve() {
 void TranslationCatmull::drawCatmullRomCurve() {
   float diff[4] = {0.0f, 0.0f, 0.0f, 1.0f};
   float red[4] = {0.2f, 0.2f, 0.2f, 1.0f};
-  glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
-  glMaterialfv(GL_FRONT, GL_EMISSION, red);
+
+  Material orbit = Material(Point(0.2, 0.2, 0.2), Point(0, 0, 0), Point(0, 0, 0), Point(0.2, 0.2, 0.2));
+  orbit.draw();
 
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID);
   glVertexPointer(3, GL_FLOAT, 0, NULL);
+
 
   glDrawArrays(GL_LINE_LOOP, 0, 1000);
 }

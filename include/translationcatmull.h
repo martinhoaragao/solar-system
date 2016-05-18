@@ -12,7 +12,7 @@
 #include <vector>
 #include "translation.h"
 #include "point.h"
-
+#include "material.h"
 
 using namespace std;
 

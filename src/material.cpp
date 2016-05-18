@@ -4,23 +4,30 @@
 	API
 ------------------------------------------------------------------------------*/
 
-Material::Material() {
-  ambient = Point(0.2, 0.2, 0.2);
-  diffuse = Point(0.8, 0.8, 0.8);
-  specular = Point(0, 0, 0);
-  emission = Point(0, 0, 0);
-}
+Material::Material() {}
 
 Material::Material(Point amb, Point diff, Point spec, Point emi) {
-  ambient = amb;
-  diffuse = diff;
-  specular = spec;
-  emission = emi;
+  ambient[0] = amb.x;
+  ambient[1] = amb.y;
+  ambient[2] = amb.z;
+
+  diffuse[0] = diff.x;
+  diffuse[1] = diff.y;
+  diffuse[2] = diff.z;
+
+  specular[0] = spec.x;
+  specular[1] = spec.y;
+  specular[2] = spec.z;
+
+  emission[0] = emi.x;
+  emission[1] = emi.y;
+  emission[2] = emi.z;
+
 }
 
 void Material::draw() {
-  glMaterialfv(GL_FRONT, GL_AMBIENT, ambient.toArray());
-  glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse.toArray());
-  glMaterialfv(GL_FRONT, GL_SPECULAR, specular.toArray());
-  glMaterialfv(GL_FRONT, GL_EMISSION, emission.toArray());
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
 }

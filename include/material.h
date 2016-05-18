@@ -12,10 +12,10 @@
 
 class Material {
   private:
-    Point ambient;
-    Point diffuse;
-    Point specular;
-    Point emission;
+    float ambient[4] = {0.2, 0.2, 0.2, 1};
+    float diffuse[4] = {0.8, 0.8, 0.8, 1};
+    float specular[4] = {0, 0, 0, 1};
+    float emission[4] = {0, 0, 0, 1};
 
   public:
     Material();

@@ -61,11 +61,9 @@ vector<File> XMLParser::extractFiles() {
     temp = temp->FirstChildElement();
 
   vector<File> files;
-  string fileName;
-  Material material;
   while(temp != NULL) {
-    fileName = temp->Attribute("file");
-    material = getMaterial(temp);
+    string fileName = temp->Attribute("file");
+    Material material = getMaterial(temp);
 
     files.push_back(File(fileName, material));
 
@@ -253,7 +251,7 @@ Point XMLParser::getSpecular(tinyxml2::XMLElement *temp) {
 
 Point XMLParser::getEmission(tinyxml2::XMLElement *temp) {
   float x, y, z;
-  x = 0; y = 0; z = 0;
+  x = 0.0; y = 0.0; z = 0.0;
   if (temp != NULL) {
     temp->QueryFloatAttribute( "emiX", &x );
     temp->QueryFloatAttribute( "emiY", &y );

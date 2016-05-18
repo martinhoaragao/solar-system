@@ -78,9 +78,10 @@ void set_camera(float a, float b, float r) {
 
 
 void renderScene() {
+  // set the camera
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // set the camera
+  glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 if (freeCamera){
 gluLookAt(  px, py, pz,
@@ -180,11 +181,11 @@ void keyboardNormal(unsigned char key, int x, int y) {
     case 'p': glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); break;
     // 'P'.
     case 'P': glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); break;
-   
+
     case 'q': group = new Group(); break;
     // 'Q'.
     case 'Q': group = new Group(); break;
-    
+
     case 'n': freeCamera = !freeCamera;
     case 'm':{
               if (freeCamera){
@@ -271,10 +272,6 @@ int main (int argc, char** argv) {
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
 
-  // Material.
-  float red[4] = {0.8f, 0.0f, 0.0f, 1.0f};
-  glMaterialfv(GL_FRONT, GL_DIFFUSE, red);
-
   // Light
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
@@ -291,7 +288,7 @@ int main (int argc, char** argv) {
   glutAddMenuEntry("Change color to green",'g');
   glutAddMenuEntry("Change color to blue",'b');
   glutAttachMenu(GLUT_RIGHT_BUTTON);
-  
+
 
   // enter GLUT's main cycle
   glutMainLoop();
