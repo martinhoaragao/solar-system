@@ -24,12 +24,11 @@ float timebase = 0;
 int frame = 0;
 
 // Camera variables
-bool freeCamera = false;
 float defAlpha = 0, defBeta = 0, defRadius = DEFAULT_CAM_RADIUS;
-float alpha = 0, freeAlpha = 0;
-float beta = 0, freeBeta = 0;
+float alpha = 0;
+float beta = 0;
 float radius = DEFAULT_CAM_RADIUS;
-float freeCamSpeed = 0.5;
+float camSpeed = 1.5;
 float px = 0.0f;
 float py = 0.0f;
 float pz = 0.0f;
@@ -64,12 +63,25 @@ void displayFPS() {
 void set_camera(float a, float b, float r) {
   defAlpha = (a * M_PI) / 180;
   defBeta = (b * M_PI) / 180;
-    defRadius = r < 1 ? DEFAULT_CAM_RADIUS : r;
+  defRadius = r < 1 ? DEFAULT_CAM_RADIUS : r;
   alpha = (a * M_PI) / 180;
   beta = (b * M_PI) / 180;
   radius = defRadius;
 }
 
+
+void arrowPressed(int key, int x, int y) {
+  switch (key) {
+    case GLUT_KEY_UP:
+      py += camSpeed;
+      break;
+    case GLUT_KEY_DOWN:
+      py -= camSpeed;
+      break;
+    default: break;
+  }
+  glutPostRedisplay();
+}
 
 
 /*-----------------------------------------------------------------------------------
@@ -83,16 +95,9 @@ void renderScene() {
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-if (freeCamera){
-gluLookAt(  px, py, pz,
-          px + rx, py + ry, pz + rz,
-          0.0f, 1.0f, 0.0f);
-}
-else{
-gluLookAt(  radius*cos(beta)*sin(alpha), radius*sin(beta), radius*cos(beta)*cos(alpha),
-          0.0f, 0.0f, 0.0f,
-          0.0f, 1.0f, 0.0f);
-  }
+  gluLookAt(  px, py, pz,
+              px + rx, py + ry, pz + rz,
+              0.0f, 1.0f, 0.0f);
 
   group->draw();
 
@@ -125,16 +130,16 @@ void changeSize(int width, int height) {
 
 
 // Mouse button callback
-static void mousePress(int button, int state, int x, int y) {
-// Camera only moves while the left mouse button is pressed
-if (button == GLUT_LEFT_BUTTON) {
-// If the button is released, origin coordinates reset.
-if (state == GLUT_UP) {
+void mousePress(int button, int state, int x, int y) {
+  // Camera only moves while the left mouse button is pressed
+  if (button == GLUT_LEFT_BUTTON) {
+    // If the button is released, origin coordinates reset.
+    if (state == GLUT_UP) {
       xOri = -1;
       yOri = -1;
     }
-// Else, button is pressed, origin coordinates are updated.
-else  {
+    // Else, button is pressed, origin coordinates are updated.
+    else {
       xOri = x;
       yOri = y;
     }
@@ -142,25 +147,17 @@ else  {
 }
 
 // Motion while mouse button is pressed
-static void mouseMotion(int x, int y) {
-if (xOri >= 0) {
-int xDiff = x - xOri;
-int yDiff = y - yOri;
-if (freeCamera){
-      freeAlpha -= xDiff * 0.01f;
-      freeBeta -= yDiff * 0.01f;
-if (freeBeta > (M_PI / 2) - 0.001) freeBeta = (M_PI / 2) - 0.001;
-if (freeBeta < -(M_PI / 2) + 0.001) freeBeta = -(M_PI / 2) + 0.001;
-      rx = cos(freeBeta)*sin(freeAlpha);
-      ry = sin(freeBeta);
-      rz = cos(freeBeta)*cos(freeAlpha);
-    }
-else{
-      alpha -= xDiff * 0.01f;
-      beta -= yDiff * 0.01f;
-if (beta > (M_PI / 2) - 0.001) beta = (M_PI / 2) - 0.001;
-if (beta < -(M_PI / 2) + 0.001) beta = -(M_PI / 2) + 0.001;
-    }
+void mouseMotion(int x, int y) {
+  if (xOri >= 0) {
+    int xDiff = x - xOri;
+    int yDiff = y - yOri;
+    alpha -= xDiff * 0.001f;
+    beta -= yDiff * 0.001f;
+    if (beta > (M_PI / 2) - 0.001) beta = (M_PI / 2) - 0.001;
+    if (beta < -(M_PI / 2) + 0.001) beta = -(M_PI / 2) + 0.001;
+    rx = cos(beta)*sin(alpha);
+    ry = sin(beta);
+    rz = cos(beta)*cos(alpha);
   }
   xOri = x;
   yOri = y;
@@ -185,52 +182,41 @@ void keyboardNormal(unsigned char key, int x, int y) {
     case 'q': group = new Group(); break;
     // 'Q'.
     case 'Q': group = new Group(); break;
-
-    case 'n': freeCamera = !freeCamera;
-    case 'm':{
-              if (freeCamera){
-                    px = 0.0f;
-                    py = 0.0f;
-                    pz = 0.0f;
-                    freeAlpha = defAlpha;
-                    freeBeta = defBeta;
-                  }
-              else if (!freeCamera){
-                    alpha = defAlpha;
-                    beta = defBeta;
-                    radius = defRadius;
-              }
-    }
     case 'w': {
-      if(freeCamera){
-        pz += rz*freeCamSpeed;
-        px += rx*freeCamSpeed;
-        py += ry*freeCamSpeed;
-      }
-      break;
+        pz += rz*camSpeed;
+        px += rx*camSpeed;
+        py += ry*camSpeed;
+        break;
     }
     case 's': {
-      if(freeCamera){
-        pz -= rz*freeCamSpeed;
-        px -= rx*freeCamSpeed;
-        py -= ry*freeCamSpeed;
-      }
-      break;
+        pz -= rz*camSpeed;
+        px -= rx*camSpeed;
+        py -= ry*camSpeed;
+        break;
     }
     case 'd': {
-      if(freeCamera){
-        pz += rx*freeCamSpeed;
-        px -= rz*freeCamSpeed;
-      }
-      break;
+        pz += rx*camSpeed;
+        px -= rz*camSpeed;
+        break;
     }
     case 'a': {
-      if(freeCamera){
-        pz -= rx*freeCamSpeed;
-        px += rz*freeCamSpeed;
-      }
-      break;
+        pz -= rx*camSpeed;
+        px += rz*camSpeed;
+        break;
     }
+    case '-': if (camSpeed - 0.5 > 0) camSpeed -= 0.5; break;
+    case '+': camSpeed += 0.5; break;
+    case '1': pz=60; px=60; py=5; break;
+    case '2': pz=115; px=115; py=5; break;
+    case '3': pz=175; px=175; py=10; break;
+    case '4': pz=235; px=235; py=5; break;
+    case '5': pz=335; px=335; py=5; break;
+    case '6': pz=465; px=465; py=5; break;
+    case '7': pz=575; px=575; py=5; break;
+    case '8': pz=725; px=725; py=5; break;
+    case '9': pz=115; px=75; py=5; break;
+    case '0': pz=0; px=0; py=0; break;
+    default: break;
   }
 
   glutPostRedisplay();
@@ -289,6 +275,8 @@ int main (int argc, char** argv) {
   glutAddMenuEntry("Change color to blue",'b');
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 
+  // Keyboard callbacks.
+  glutSpecialFunc(arrowPressed);
 
   // enter GLUT's main cycle
   glutMainLoop();
