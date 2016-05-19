@@ -10,23 +10,42 @@
 File::File(string fn, Material mat) {
   // Generate Vertex Buffer Objects
 
-  glGenBuffers(2, coordinatesID);
+  glGenBuffers(3, coordinatesID);
+  //glGenTextures(1, &textureID);
+  textureID = 0;
 
   fileName = fn;
   material = mat;
   loadFile();
 }
 
+File::File(string fn, Material mat, string tn) {
+  // Generate Vertex Buffer Objects
+
+  glGenBuffers(3, coordinatesID);
+
+  fileName = fn;
+  material = mat;
+  loadTexture(tn);
+  loadFile();
+}
+
 void File::draw() {
+  glBindTexture(GL_TEXTURE_2D, textureID);
+
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID[0]);
   glVertexPointer(3, GL_FLOAT, 0, NULL);
 
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID[1]);
   glNormalPointer(GL_FLOAT, 0, NULL);
 
+  glBindBuffer(GL_ARRAY_BUFFER, coordinatesID[2]);
+  glTexCoordPointer(2,GL_FLOAT,0,0);
+
   material.draw();
 
   glDrawArrays(GL_TRIANGLES, 0, numberCoordinates[0]/3);
+  glBindTexture(GL_TEXTURE_2D, 0);
 
   //Force display to be drawn now
   glFlush();
@@ -36,6 +55,21 @@ void File::draw() {
 	Helpers
 ------------------------------------------------------------------------------*/
 
+void File::loadTexture(string tn) {
+  cv::Mat img = cv::imread(tn);
+  if(!img.data)
+    std::cout <<  "Could not open or find the image: " << tn << std::endl;
+
+  glGenTextures(1, &textureID);
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.cols, img.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, img.data);
+  glBindTexture( GL_TEXTURE_2D, 0 );
+}
+
 void File::loadFile() {
   vector<float>* points;
   ifstream pointsFile;
@@ -44,7 +78,7 @@ void File::loadFile() {
 
   pointsFile.open(fileName);
 
-  for(int i = 0; i < 2; i++) {
+  for(int i = 0; i < 3; i++) {
     points = extractPointsSegment(pointsFile);
     numberCoordinates[i] = points->size();
     uploadData(points, i);

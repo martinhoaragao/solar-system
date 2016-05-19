@@ -10,6 +10,9 @@
 
 #include <string>
 #include <vector>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/opencv.hpp>
 
 #include "material.h"
 
@@ -20,14 +23,17 @@ class File {
     string fileName;
     Material material;
     int numberCoordinates[3];
-    GLuint coordinatesID[2];
+    GLuint coordinatesID[3];
+    GLuint textureID;
 
-    void uploadData(vector<float>*, int);
+    void loadTexture(string);
+    void loadFile();
     vector<float>* extractPointsSegment(ifstream&);
+    void uploadData(vector<float>*, int);
 
   public:
     File(string, Material);
-    void loadFile();
+    File(string, Material, string);
     void draw();
 };
 

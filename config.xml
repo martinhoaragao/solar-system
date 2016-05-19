@@ -9,7 +9,7 @@
       <light type="point" x="0" y="0" z="0"/>
     </lights>
     <models>
-      <model file="grandes.3d" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="0.5"/>
+      <model file="pequenos.3d" texture="sol.jpg" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="0.5"/>
     </models>
   </group>
 

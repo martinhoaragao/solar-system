@@ -1,4 +1,6 @@
 CC=g++ -std=c++11 -I include
+CFLAGS = `pkg-config --cflags opencv`
+LIBS = `pkg-config --libs opencv`
 
 all: point light material rotation rotationstatic rotationanimation translation translationcatmull translationsimple file xmlparser group patchPoints generator engine
 
@@ -45,8 +47,8 @@ generator: src/generator.cpp src/point.o
 	$(CC) src/generator.cpp src/patchPoints.o src/point.o -o generator.out
 
 # Fix this...
-engine: src/engine.cpp src/file.o
-	$(CC) -framework GLUT -framework OpenGL -framework Cocoa src/point.o src/material.o src/engine.cpp lib/tinyxml2.cpp src/file.o src/light.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
+engine: src/engine.cpp
+	$(CC) -framework GLUT -framework OpenGL -framework Cocoa $(CFLAGS) $(LIBS) src/point.o src/material.o src/engine.cpp lib/tinyxml2.cpp src/file.o src/light.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
 
 clean:
 	rm -f *.out

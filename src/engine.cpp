@@ -257,6 +257,7 @@ int main (int argc, char** argv) {
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
   // Light
   glEnable(GL_LIGHT0);
@@ -264,6 +265,9 @@ int main (int argc, char** argv) {
   glShadeModel(GL_SMOOTH);
   // Refresh normals after scale
   glEnable(GL_NORMALIZE);
+
+  // Textures
+  glEnable(GL_TEXTURE_2D);
 
   // Menu definition
   menuID = glutCreateMenu(newMenu);

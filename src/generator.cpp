@@ -264,6 +264,34 @@ int sphere(int argc, char ** parameters) {
       }
     }
 
+    fprintf(file, "%d\n",(stacks)*(slices)*6 );
+    angleA  = M_PI / 2;
+    for (int stack = 0; stack < stacks; stack++, angleA += incA) {
+      r = cos(angleA);
+      h = sin(angleA);
+      angleB  = 0.0;
+
+      for (int slice = 0; slice < slices; slice++, angleB += incB) {
+        Point p = Point(r * sin(angleB), h, r * cos(angleB));
+
+        fprintf(file, "%f %f\n", (sin(angleB) +1)/2, (cos(angleB) +1)/2);
+        fprintf(file, "%f %f\n",
+            (cos(angleA + incA) * sin(angleB) +1)/2,
+            (sin(angleA + incA) +1)/2);
+        fprintf(file, "%f %f\n",
+            (cos(angleA + incA) * sin(angleB + incB) +1)/2,
+            (sin(angleA + incA) +1)/2);
+
+        fprintf(file, "%f %f\n", (sin(angleB) +1)/2, (cos(angleB) +1)/2);
+        fprintf(file, "%f %f\n",
+            (r * sin(angleB - incB) +1)/2,
+            (h+1)/2 );
+        fprintf(file, "%f %f\n",
+            (cos(angleA + incA) * sin(angleB) +1)/2,
+            (sin(angleA + incA) +1)/2 );
+      }
+    }
+
   }
 
   return 0;

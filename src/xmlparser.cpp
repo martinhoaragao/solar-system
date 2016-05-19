@@ -65,8 +65,10 @@ vector<File> XMLParser::extractFiles() {
   while(temp != NULL) {
     string fileName = temp->Attribute("file");
     Material material = getMaterial(temp);
-
-    files.push_back(File(fileName, material));
+    if (temp->Attribute("texture"))
+      files.push_back(File(fileName, material, temp->Attribute("texture")));
+    else
+      files.push_back(File(fileName, material));
 
     temp = temp->NextSiblingElement();
   }
