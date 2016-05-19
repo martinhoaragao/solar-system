@@ -695,51 +695,7 @@ void bezierTangent(char * tessellation){
           resV[1] = getBezierPointTangent(u, v, m, py,1);
           resV[2] = getBezierPointTangent(u, v, m, pz,1);
           normalize(resV);
-          cross(resU,resV,res);
-          derivada->push_back(Point(res[0],res[1], res[2]));
-
-          resU[0] = getBezierPointTangent (u+level,v+level, m, px,0);
-          resU[1] = getBezierPointTangent (u+level,v+level, m, py,0);
-          resU[2] = getBezierPointTangent (u+level,v+level, m, pz,0);
-          normalize(resU);
-          resV[0] = getBezierPointTangent (u+level,v+level, m, pz,1);
-          resV[1] = getBezierPointTangent (u+level,v+level, m, pz,1);
-          resV[2] = getBezierPointTangent (u+level,v+level, m, pz,1);
-          normalize(resV);
-          cross(resU,resV,res);
-          derivada->push_back(Point(res[0],res[1], res[2]));
-
-          resU[0] = getBezierPointTangent (u+level,v, m, px,0);
-          resU[1] = getBezierPointTangent (u+level,v, m, py,0);
-          resU[2] = getBezierPointTangent (u+level,v, m, pz,0);
-          normalize(resU);
-          resV[0] = getBezierPointTangent (u+level,v, m, pz,1);
-          resV[1] = getBezierPointTangent (u+level,v, m, pz,1);
-          resV[2] = getBezierPointTangent (u+level,v, m, pz,1);
-          normalize(resV);
-          cross(resU,resV,res);
-          derivada->push_back(Point(res[0],res[1], res[2]));
-
-          resU[0] = getBezierPointTangent(u, v, m, px,0);
-          resU[1] = getBezierPointTangent(u, v, m, py,0);
-          resU[2] = getBezierPointTangent(u, v, m, pz,0);
-          normalize(resU);
-          resV[0] = getBezierPointTangent(u, v, m, px,1);
-          resV[1] = getBezierPointTangent(u, v, m, py,1);
-          resV[2] = getBezierPointTangent(u, v, m, pz,1);
-          normalize(resV);
-          cross(resU,resV,res);
-          derivada->push_back(Point(res[0],res[1], res[2]));
-
-          resU[0] = getBezierPointTangent (u,v+level, m, px,0);
-          resU[1] = getBezierPointTangent (u,v+level, m, py,0);
-          resU[2] = getBezierPointTangent (u,v+level, m, pz,0);
-          normalize(resU);
-          resV[0] = getBezierPointTangent (u,v+level, m, px,1);
-          resV[1] = getBezierPointTangent (u,v+level, m, py,1);
-          resV[2] = getBezierPointTangent (u,v+level, m, pz,1);
-          normalize(resV);
-          cross(resU,resV,res);
+          cross(resV,resU,res);
           derivada->push_back(Point(res[0],res[1], res[2]));
 
           resU[0] = getBezierPointTangent (u+level,v+level, m, px,0);
@@ -750,7 +706,51 @@ void bezierTangent(char * tessellation){
           resV[1] = getBezierPointTangent (u+level,v+level, m, py,1);
           resV[2] = getBezierPointTangent (u+level,v+level, m, pz,1);
           normalize(resV);
-          cross(resU,resV,res);
+          cross(resV,resU,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent (u+level,v, m, px,0);
+          resU[1] = getBezierPointTangent (u+level,v, m, py,0);
+          resU[2] = getBezierPointTangent (u+level,v, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent (u+level,v, m, px,1);
+          resV[1] = getBezierPointTangent (u+level,v, m, py,1);
+          resV[2] = getBezierPointTangent (u+level,v, m, pz,1);
+          normalize(resV);
+          cross(resV,resU,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent(u, v, m, px,0);
+          resU[1] = getBezierPointTangent(u, v, m, py,0);
+          resU[2] = getBezierPointTangent(u, v, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent(u, v, m, px,1);
+          resV[1] = getBezierPointTangent(u, v, m, py,1);
+          resV[2] = getBezierPointTangent(u, v, m, pz,1);
+          normalize(resV);
+          cross(resV,resU,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent (u,v+level, m, px,0);
+          resU[1] = getBezierPointTangent (u,v+level, m, py,0);
+          resU[2] = getBezierPointTangent (u,v+level, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent (u,v+level, m, px,1);
+          resV[1] = getBezierPointTangent (u,v+level, m, py,1);
+          resV[2] = getBezierPointTangent (u,v+level, m, pz,1);
+          normalize(resV);
+          cross(resV,resU,res);
+          derivada->push_back(Point(res[0],res[1], res[2]));
+
+          resU[0] = getBezierPointTangent (u+level,v+level, m, px,0);
+          resU[1] = getBezierPointTangent (u+level,v+level, m, py,0);
+          resU[2] = getBezierPointTangent (u+level,v+level, m, pz,0);
+          normalize(resU);
+          resV[0] = getBezierPointTangent (u+level,v+level, m, px,1);
+          resV[1] = getBezierPointTangent (u+level,v+level, m, py,1);
+          resV[2] = getBezierPointTangent (u+level,v+level, m, pz,1);
+          normalize(resV);
+          cross(resV,resU,res);
           derivada->push_back(Point(res[0],res[1], res[2]));
       }//sixth
     }//fifth
