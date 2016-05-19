@@ -400,7 +400,7 @@ int torus(int argc, char ** parameters) {
   /* Triangulate the sides of the torus */
   for(int side = 0; side < sides; side++) {
     int nextLine = (side +1) % sides;
-    torus = triangulateLines(borders.at(side), borders.at(nextLine), torus);
+    torus = triangulateLines(borders.at(nextLine), borders.at(side), torus);
     normals = triangulateLines(normalsBorders.at(side), normalsBorders.at(nextLine),normals);
   }
 
