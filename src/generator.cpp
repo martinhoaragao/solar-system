@@ -230,14 +230,38 @@ int sphere(int argc, char ** parameters) {
     }
 
     fprintf(file, "%d\n",(stacks)*(slices)*6 );
-    for (int i = 0; i < sphere->size(); i++) {
-      double normalizedX, normalizedY;
-      Point p = sphere->at(i);
+    for (int i = 0; i < sphere->size(); i+=3) {
+      double normalizedX, normalizedY, normalizedX2, normalizedY2, normalizedX3, normalizedY3;
 
+      Point p = sphere->at(i);
       normalizedX = (-atan2(-p.getX(), p.getZ())  + M_PI) / (2*M_PI);
       normalizedY = ((-(p.getY()/radius)) + 1) / 2.0;
 
+
+      p = sphere->at(i+1);
+      normalizedX2 = (-atan2(-p.getX(), p.getZ())  + M_PI) / (2*M_PI);
+      normalizedY2 = ((-(p.getY()/radius)) + 1) / 2.0;
+
+      p = sphere->at(i+2);
+      normalizedX3 = (-atan2(-p.getX(), p.getZ())  + M_PI) / (2*M_PI);
+      normalizedY3 = ((-(p.getY()/radius)) + 1) / 2.0;
+
+      if(normalizedX > normalizedX2 && fabs(normalizedX - normalizedX2) > 0.8)
+        normalizedX2 = 1.0;
+      if(normalizedX > normalizedX3 && fabs(normalizedX - normalizedX3) > 0.8)
+        normalizedX3 = 1.0;
+      if (normalizedX2 > normalizedX && fabs(normalizedX2 - normalizedX) > 0.8)
+        normalizedX = 1.0;
+      if (normalizedX2 > normalizedX3 && fabs(normalizedX2 - normalizedX3) > 0.8)
+        normalizedX3 = 1.0;
+      if (normalizedX3 > normalizedX && fabs(normalizedX3 - normalizedX) > 0.8)
+        normalizedX = 1.0;
+      if (normalizedX3 > normalizedX2 && fabs(normalizedX3 - normalizedX2) > 0.8)
+        normalizedX2 = 1.0;
+
       fprintf(file, "%.10f %.10f\n", normalizedX, normalizedY);
+      fprintf(file, "%.10f %.10f\n", normalizedX2, normalizedY2);
+      fprintf(file, "%.10f %.10f\n", normalizedX3, normalizedY3);
     }
 
   }

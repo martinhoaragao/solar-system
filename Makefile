@@ -2,7 +2,7 @@ CC=g++ -std=c++11 -I include
 CFLAGS = `pkg-config --cflags opencv`
 LIBS = `pkg-config --libs opencv`
 
-all: point light material rotation rotationstatic rotationanimation translation translationcatmull translationsimple file xmlparser group patchpoints generator engine
+all: generator engine
 
 point: src/point.cpp
 	$(CC) -c src/point.cpp -o src/point.o

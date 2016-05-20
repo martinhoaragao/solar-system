@@ -69,10 +69,6 @@ void File::loadTexture(string tn) {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.cols, img.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, img.data);
   glBindTexture( GL_TEXTURE_2D, 0 );
 
-  std::cout <<  (atan2(-0.000001, -2)  + M_PI) / (2*M_PI) << " " << (atan2(-2, 0)  + M_PI) / (2*M_PI) << " " << (atan2(0, 2)  + M_PI) / (2*M_PI) << " " << (atan2(2, 0)  + M_PI) / (2*M_PI)<< std::endl;
-  std::cout << ((-(0.9/1)) + 1) / 2 << " " << ((-(0/1)) + 1) / 2.0 << " " << ((-(-0.9/1)) + 1) / 2 << std::endl;
-  std::cout << atan2(-0.1, -0.1) << " " <<  atan2(-0.1, 0.1) << " " << atan2(1, 1) << std::endl;
-  std::cout << (atan2(-0.1, -0.1)  + M_PI) / (2.0*M_PI) << " " <<  (atan2(-0.1, 0.1)  + M_PI) / (2*M_PI) << " " <<(atan2(1, 1)  + M_PI) / (2*M_PI) << std::endl;
 }
 
 void File::loadFile() {
