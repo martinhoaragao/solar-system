@@ -28,7 +28,7 @@ class File {
 
     void loadTexture(string);
     void loadFile();
-    vector<float>* extractPointsSegment(ifstream&);
+    vector<float>* extractPointsSegment(ifstream&, int);
     void uploadData(vector<float>*, int);
 
   public:

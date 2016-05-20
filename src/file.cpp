@@ -84,7 +84,7 @@ void File::loadFile() {
   pointsFile.open(fileName);
 
   for(int i = 0; i < 3; i++) {
-    points = extractPointsSegment(pointsFile);
+    points = extractPointsSegment(pointsFile, i);
     numberCoordinates[i] = points->size();
     uploadData(points, i);
   }
@@ -92,7 +92,7 @@ void File::loadFile() {
   pointsFile.close();
 }
 
-vector<float>* File::extractPointsSegment(ifstream& pointsFile) {
+vector<float>* File::extractPointsSegment(ifstream& pointsFile, int segment) {
   vector<float>* points = new vector<float>();
   string line;
   float x, y, z;
@@ -106,11 +106,15 @@ vector<float>* File::extractPointsSegment(ifstream& pointsFile) {
     getline(pointsFile, line);
     istringstream iss(line);
 
-    iss >> x >> y >> z;
+    if (segment == 2)
+      iss >> x >> y;
+    else
+      iss >> x >> y >> z;
 
     points->push_back(x);
     points->push_back(y);
-    points->push_back(z);
+    if (segment != 2)
+      points->push_back(z);
   }
 
   return points;
