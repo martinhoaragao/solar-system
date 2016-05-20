@@ -25,8 +25,9 @@ File::File(string fn, Material mat, string tn) {
   glGenBuffers(3, coordinatesID);
 
   fileName = fn;
+  string texturePath = "textures/";
   material = mat;
-  loadTexture(tn);
+  loadTexture(texturePath.append(tn));
   loadFile();
 }
 
