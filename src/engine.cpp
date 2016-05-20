@@ -107,25 +107,30 @@ void renderScene() {
   glutSwapBuffers();
 }
 
-void changeSize(int width, int height) {
-  // Prevent a divide by zero, when window is too short
-  if(height == 0)
-    height = 1;
+static void changeSize(int w, int h) {
 
-  float windowAspectRatio = width / height;
+	// Prevent a divide by zero, when window is too short
+	// (you cant make a window with zero width).
+	if (h == 0)
+		h = 1;
 
-  // Set the projection matrix as current
-  glMatrixMode(GL_PROJECTION);
+	// compute window's aspect ratio
+	float ratio = w * 1.0 / h;
 
-  glLoadIdentity();
+	// Set the projection matrix as current
+	glMatrixMode(GL_PROJECTION);
+	// Load Identity Matrix
+	glLoadIdentity();
 
-  // Set the viewport to be the entire window
-  glViewport(0, 0, width, height);
+	// Set the viewport to be the entire window
+	glViewport(0, 0, w, h);
 
-  gluPerspective(45.0f, windowAspectRatio, 1.0f ,1000.0);
+	// Set perspective
+	gluPerspective(45.0f, ratio, 1.0f, 1000.0f);
 
-  // return to the model view matrix mode
-  glMatrixMode(GL_MODELVIEW);
+
+	// return to the model view matrix mode
+	glMatrixMode(GL_MODELVIEW);
 }
 
 
