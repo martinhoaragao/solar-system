@@ -219,24 +219,25 @@ int sphere(int argc, char ** parameters) {
     for (int i = 0; i < sphere->size(); i++) {
       Point p = sphere->at(i);
 
-      fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+      fprintf(file, "%.10f %.10f %.10f\n", p.getX(), p.getY(), p.getZ());
     }
 
     fprintf(file, "%d\n",(stacks)*(slices)*6 );
     for (int i = 0; i < sphere->size(); i++) {
       Point p = sphere->at(i);
 
-      fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+      fprintf(file, "%.10f %.10f %.10f\n", p.getX(), p.getY(), p.getZ());
     }
 
     fprintf(file, "%d\n",(stacks)*(slices)*6 );
     for (int i = 0; i < sphere->size(); i++) {
+      double normalizedX, normalizedY;
       Point p = sphere->at(i);
 
-      float normalizedY = fmod((-asin(p.getY()/radius) + (M_PI /2)) / M_PI, 1.0);
-      float normalizedX = fmod((-atan2(p.getZ(), p.getX())  + M_PI) / (2*M_PI), 1.0);
+      normalizedX = (-atan2(-p.getX(), p.getZ())  + M_PI) / (2*M_PI);
+      normalizedY = ((-(p.getY()/radius)) + 1) / 2.0;
 
-      fprintf(file, "%f %f\n", normalizedX, normalizedY);
+      fprintf(file, "%.10f %.10f\n", normalizedX, normalizedY);
     }
 
   }
