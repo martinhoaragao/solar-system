@@ -2,7 +2,7 @@ CC=g++ -std=c++11 -I include
 CFLAGS = `pkg-config --cflags opencv`
 LIBS = `pkg-config --libs opencv`
 
-all: point light material rotation rotationstatic rotationanimation translation translationcatmull translationsimple file xmlparser group patchPoints generator engine
+all: point light material rotation rotationstatic rotationanimation translation translationcatmull translationsimple file xmlparser group patchpoints generator engine
 
 point: src/point.cpp
 	$(CC) -c src/point.cpp -o src/point.o
@@ -40,11 +40,11 @@ xmlparser: src/xmlparser.cpp
 group: src/group.cpp
 	$(CC) -c src/group.cpp -o src/group.o
 
-patchPoints: src/patchPoints.cpp src/patchPoints.o
-	$(CC) -c src/patchPoints.cpp -o src/patchPoints.o
+patchpoints: src/patchpoints.cpp
+	$(CC) -c src/patchpoints.cpp -o src/patchpoints.o
 
 generator: src/generator.cpp src/point.o
-	$(CC) src/generator.cpp src/patchPoints.o src/point.o -o generator.out
+	$(CC) src/generator.cpp src/patchpoints.o src/point.o -o generator.out
 
 # Fix this...
 engine: src/engine.cpp
