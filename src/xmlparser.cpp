@@ -14,6 +14,7 @@ XMLParser::XMLParser() {
 }
 
 XMLParser::XMLParser(char *configFileName) {
+  doc = new tinyxml2::XMLDocument();
   doc->LoadFile(configFileName);
 
   elem = doc->FirstChildElement();

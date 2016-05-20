@@ -72,12 +72,23 @@ int plane(int argc, char ** parameters) {
     FILE * file     = fopen(filename, "w+");
 
     // write to file.
+    fprintf(file, "6\n");
     fprintf(file, "%f 0.0 %f\n", -d, -d);
     fprintf(file, "%f 0.0 %f\n", -d,  d);
     fprintf(file, "%f 0.0 %f\n",  d,  d);
     fprintf(file, "%f 0.0 %f\n",  d, -d);
     fprintf(file, "%f 0.0 %f\n", -d, -d);
     fprintf(file, "%f 0.0 %f\n",  d,  d);
+
+    //normals
+
+    fprintf(file, "6\n");
+    fprintf(file, "0 1.0 0\n");
+    fprintf(file, "0 1.0 0\n");
+    fprintf(file, "0 1.0 0\n");
+    fprintf(file, "0 1.0 0\n");
+    fprintf(file, "0 1.0 0\n");
+
 
     fclose(file);
   }
@@ -96,6 +107,7 @@ int box(int argc, char ** parameters) {
 
     // Create vertices.
     char A[50], B[50], C[50], D[50], E[50], F[50], G[50], H[50];
+    char AA[50], BB[50], CC[50], DD[50], EE[50], FF[50];
     sprintf(A, "%f %f %f", -x, y, -z);
     sprintf(B, "%f %f %f",  x, y, -z);
     sprintf(C, "%f %f %f", -x, y,  z);
@@ -104,6 +116,12 @@ int box(int argc, char ** parameters) {
     sprintf(F, "%f 0.0 %f",  x, -z);
     sprintf(G, "%f 0.0 %f", -x,  z);
     sprintf(H, "%f 0.0 %f",  x,  z);
+    sprintf(AA, "0 0 1");
+    sprintf(BB, "0 0 -1");
+    sprintf(CC, "-1 0 0");
+    sprintf(DD, "1 0 0");
+    sprintf(EE, "0 1 0");
+    sprintf(FF, "0 -1 0");
     char * vertices[36] = {
       E, H, G, F, H, E, // Base.
       A, C, D, B, A, D, // Top.
@@ -117,9 +135,46 @@ int box(int argc, char ** parameters) {
     char filename[100];
     sprintf(filename, "%s.3d", parameters[3]);
     FILE * file = fopen(filename, "w+");
-
+    fprintf(file, "%d\n",36);
     // Write vertices to file.
     writeVerticesToFile(vertices, 36, file);
+    fprintf(file, "36\n");
+    fprintf(file, "%s\n",AA);
+    fprintf(file, "%s\n",AA);
+    fprintf(file, "%s\n",AA);
+    fprintf(file, "%s\n",AA);
+    fprintf(file, "%s\n",AA);
+    fprintf(file, "%s\n",AA);
+    fprintf(file, "%s\n",DD);
+    fprintf(file, "%s\n",DD);
+    fprintf(file, "%s\n",DD);
+    fprintf(file, "%s\n",DD);
+    fprintf(file, "%s\n",DD);
+    fprintf(file, "%s\n",DD);
+    fprintf(file, "%s\n",BB);
+    fprintf(file, "%s\n",BB);
+    fprintf(file, "%s\n",BB);
+    fprintf(file, "%s\n",BB);
+    fprintf(file, "%s\n",BB);
+    fprintf(file, "%s\n",BB);
+    fprintf(file, "%s\n",FF);
+    fprintf(file, "%s\n",FF);
+    fprintf(file, "%s\n",FF);
+    fprintf(file, "%s\n",FF);
+    fprintf(file, "%s\n",FF);
+    fprintf(file, "%s\n",FF);
+    fprintf(file, "%s\n",EE);
+    fprintf(file, "%s\n",EE);
+    fprintf(file, "%s\n",EE);
+    fprintf(file, "%s\n",EE);
+    fprintf(file, "%s\n",EE);
+    fprintf(file, "%s\n",EE);
+    fprintf(file, "%s\n",CC);
+    fprintf(file, "%s\n",CC);
+    fprintf(file, "%s\n",CC);
+    fprintf(file, "%s\n",CC);
+    fprintf(file, "%s\n",CC);
+    fprintf(file, "%s\n",CC);
   }
 
   return 0;
@@ -220,10 +275,10 @@ int cone(int argc, char ** parameters) {
   if (argc != 5) { return -1; }
   else {
     // Parse base radius, height, slices and stacks.
-    float radius  = stof(parameters[0]);
-    float height  = stof(parameters[1]);
-    int slices    = stoi(parameters[2]);
-    int stacks    = stoi(parameters[3]);
+    float static radius  = stof(parameters[0]);
+    float static height  = stof(parameters[1]);
+    int static slices    = stoi(parameters[2]);
+    int static stacks    = stoi(parameters[3]);
     float angle   = 0.0;
     float inc     = (2 * M_PI)/slices;
     float h       = 0.0;
@@ -235,6 +290,7 @@ int cone(int argc, char ** parameters) {
     sprintf(filename, "%s.3d", parameters[4]);
     FILE * file = fopen(filename, "w+");
 
+    fprintf(file,"%d\n",slices*3+stacks*slices*6);
     // Draw base circunference.
     for (int slice = 0; slice < slices; slice++, angle += inc) {
       Point p = Point(r * sin(angle), h, r * cos(angle));
@@ -275,6 +331,48 @@ int cone(int argc, char ** parameters) {
             (((height - (h - hInc)) * radius)/height) * cos(angle));
       }
     }
+    //normals
+    h = 0.0f;
+    fprintf(file,"%d\n",slices*3+stacks*slices*6);
+    for (int slice = 0; slice < slices; slice++, angle += inc) {
+      Point p = Point(r * sin(angle), height/sqrtf((height * height) + (radius * radius)), r * cos(angle));
+
+      fprintf(file, "0.0 0.0 0.0\n");
+      fprintf(file, "%f 0.0 %f\n", r * sin(angle + inc), r * cos(angle + inc));
+      fprintf(file, "%f 0.0 %f\n", p.getX(), p.getZ());
+    }
+
+    h += hInc;
+
+    for (int stack = 0; stack < stacks; stack++, h += hInc) {
+      r     = ((height - h)) / height;
+      angle = 0.0;
+
+      for (int slice = 0; slice < slices; slice++, angle += inc) {
+        Point p = Point(r * sin(angle), height/sqrtf((height * height) + (radius * radius)), r * cos(angle));
+
+        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        fprintf(file, "%f %f %f\n",
+            (((height - (h - hInc)))/height) * sin(angle),
+            height/sqrtf((height * height) + (radius * radius)),
+            (((height - (h - hInc)))/height) * cos(angle));
+        fprintf(file, "%f %f %f\n",
+            (((height - (h - hInc)))/height) * sin(angle + inc),
+            height/sqrtf((height * height) + (radius * radius)),
+            (((height - (h - hInc)))/height) * cos(angle + inc));
+
+        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        fprintf(file, "%f %f %f\n",
+            r * sin(angle - inc),
+            height/sqrtf((height * height) + (radius * radius)),
+            r * cos(angle - inc));
+        fprintf(file, "%f %f %f\n",
+            (((height - (h - hInc)))/height) * sin(angle),
+            height/sqrtf((height * height) + (radius * radius)),
+            (((height - (h - hInc)))/height) * cos(angle));
+      }
+    }
+    
 
 
   }
@@ -394,14 +492,14 @@ int torus(int argc, char ** parameters) {
     stackRadius = radius + radiusDeviation;
 
     borders.push_back(circunference(rings, stackRadius, sliceHeight));
-    normalsBorders.push_back(circunferenceNormals(rings,sin(angle)));
+    normalsBorders.push_back(circunferenceNormals(rings,sliceHeight));
   }
 
   /* Triangulate the sides of the torus */
   for(int side = 0; side < sides; side++) {
     int nextLine = (side +1) % sides;
     torus = triangulateLines(borders.at(nextLine), borders.at(side), torus);
-    normals = triangulateLines(normalsBorders.at(side), normalsBorders.at(nextLine),normals);
+    normals = triangulateLines(normalsBorders.at(nextLine), normalsBorders.at(side),normals);
   }
 
   // Open/Create file.

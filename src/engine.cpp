@@ -238,7 +238,7 @@ int main (int argc, char** argv) {
   glutCreateWindow("CG-first-phase");
 
   // Required callback registry
-  group = new Group();
+  group = new Group(argv[1]);
 
   glutDisplayFunc(renderScene);
   glutReshapeFunc(changeSize);
