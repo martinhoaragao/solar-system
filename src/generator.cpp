@@ -25,6 +25,11 @@ int torus(int, char **);
 void writeVerticesToFile(char **, int, FILE *);
 void renderBezierCurve(char *, char * );
 void bezierTangent(char * tessellation);
+deque<Point>* circunference(int, float, float);
+deque<Point>* circunferenceHorizontal(int, float, float);
+float sliceAngle(int, int);
+deque<Point>* triangulateLines(deque<Point>*, deque<Point>*, deque<Point>*);
+
 int main (int argc, char ** argv) {
   // Check for arguments.
   // Only 'plane', 'box', 'sphere', 'cone' and 'torus' are possible.
@@ -188,113 +193,55 @@ int sphere(int argc, char ** parameters) {
     float radius  = stof(parameters[0]);
     int slices    = stof(parameters[1]);
     int stacks    = stof(parameters[2]);
-    float beta    = 0.0;
-    float bInc    = M_PI / stacks;
-    float currY   = 1.0, yDec = 1.0f/stacks;
-    float angleA  = M_PI / 2;
-    float incA    = M_PI / stacks;
-    float angleB  = 0.0;
-    float incB    = (2 * M_PI)/ slices;
-    float r, h;
+    deque< deque<Point>* > sides;
+    deque<Point>* sphere = new deque<Point>();
 
     // Open/Create file and write number of vertices to the file.
     char filename[100];
     sprintf(filename, "%s.3d", parameters[3]);
     FILE * file = fopen(filename, "w+");
-    fprintf(file, "%d\n",(stacks)*(slices)*6 );
-    for (int stack = 0; stack < stacks; stack++, angleA += incA) {
-      r = radius * cos(angleA);
-      h = radius * sin(angleA);
-      angleB  = 0.0;
 
-      for (int slice = 0; slice < slices; slice++, angleB += incB) {
-        Point p = Point(r * sin(angleB), h, r * cos(angleB));
+    for (int stack = 0; stack < stacks; stack++) {
+      float angle = (sliceAngle(stack, stacks - 1) / 2) - (M_PI/2);
+      float stackHeight = radius * sin(angle);
+      float stackRadius = radius * cos(angle);
 
-        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
-        fprintf(file, "%f %f %f\n",
-            (radius * cos(angleA + incA)) * sin(angleB),
-            (radius * sin(angleA + incA)),
-            (radius * cos(angleA + incA)) * cos(angleB));
-        fprintf(file, "%f %f %f\n",
-            (radius * cos(angleA + incA)) * sin(angleB + incB),
-            (radius * sin(angleA + incA)),
-            (radius * cos(angleA + incA)) * cos(angleB + incB));
+      sides.push_back(circunferenceHorizontal(slices, stackRadius, stackHeight));
+    }
 
-        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
-        fprintf(file, "%f %f %f\n",
-            r * sin(angleB - incB),
-            h,
-            r * cos(angleB - incB));
-        fprintf(file, "%f %f %f\n",
-            (radius * cos(angleA + incA)) * sin(angleB),
-            (radius * sin(angleA + incA)),
-            (radius * cos(angleA + incA)) * cos(angleB));
-      }
+    /* Triangulate the sides of the sphere */
+    for(int stack = 0; stack < stacks; stack++) {
+      int nextLine = (stack +1) % stacks;
+      sphere = triangulateLines(sides.at(stack), sides.at(nextLine), sphere);
     }
 
     fprintf(file, "%d\n",(stacks)*(slices)*6 );
-    angleA  = M_PI / 2;
-    for (int stack = 0; stack < stacks; stack++, angleA += incA) {
-      r = cos(angleA);
-      h = sin(angleA);
-      angleB  = 0.0;
+    for (int i = 0; i < sphere->size(); i++) {
+      Point p = sphere->at(i);
 
-      for (int slice = 0; slice < slices; slice++, angleB += incB) {
-        Point p = Point(r * sin(angleB), h, r * cos(angleB));
-
-        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
-        fprintf(file, "%f %f %f\n",
-            cos(angleA + incA) * sin(angleB),
-            sin(angleA + incA),
-            cos(angleA + incA) * cos(angleB));
-        fprintf(file, "%f %f %f\n",
-            cos(angleA + incA) * sin(angleB + incB),
-            sin(angleA + incA),
-            cos(angleA + incA) * cos(angleB + incB));
-
-        fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
-        fprintf(file, "%f %f %f\n",
-            r * sin(angleB - incB),
-            h,
-            r * cos(angleB - incB));
-        fprintf(file, "%f %f %f\n",
-            cos(angleA + incA) * sin(angleB),
-            sin(angleA + incA),
-            cos(angleA + incA) * cos(angleB));
-      }
+      fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
     }
 
     fprintf(file, "%d\n",(stacks)*(slices)*6 );
-    angleA  = M_PI / 2;
-    for (int stack = 0; stack < stacks; stack++, angleA += incA) {
-      r = cos(angleA);
-      h = sin(angleA);
-      angleB  = 0.0;
+    for (int i = 0; i < sphere->size(); i++) {
+      Point p = sphere->at(i);
 
-      for (int slice = 0; slice < slices; slice++, angleB += incB) {
-        Point p = Point(r * sin(angleB), h, r * cos(angleB));
+      fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+    }
 
-        fprintf(file, "%f %f\n", (sin(angleB) +1)/2, (cos(angleB) +1)/2);
-        fprintf(file, "%f %f\n",
-            (cos(angleA + incA) * sin(angleB) +1)/2,
-            (sin(angleA + incA) +1)/2);
-        fprintf(file, "%f %f\n",
-            (cos(angleA + incA) * sin(angleB + incB) +1)/2,
-            (sin(angleA + incA) +1)/2);
+    fprintf(file, "%d\n",(stacks)*(slices)*6 );
+    for (int i = 0; i < sphere->size(); i++) {
+      Point p = sphere->at(i);
 
-        fprintf(file, "%f %f\n", (sin(angleB) +1)/2, (cos(angleB) +1)/2);
-        fprintf(file, "%f %f\n",
-            (r * sin(angleB - incB) +1)/2,
-            (h+1)/2 );
-        fprintf(file, "%f %f\n",
-            (cos(angleA + incA) * sin(angleB) +1)/2,
-            (sin(angleA + incA) +1)/2 );
-      }
+      float normalizedY = fmod((-asin(p.getY()/radius) + (M_PI /2)) / M_PI, 1.0);
+      float normalizedX = fmod((-atan2(p.getZ(), p.getX())  + M_PI) / (2*M_PI), 1.0);
+
+      fprintf(file, "%f %f\n", normalizedX, normalizedY);
     }
 
   }
-
   return 0;
+
 }
 
 /** Draw a cone centered in the origin. */
@@ -437,6 +384,22 @@ deque<Point>* circunference(int slices, float radius, float z) {
     angle = sliceAngle(i, slices);
     x = radius * sin(angle);
     y = radius * cos(angle);
+    Point point = Point(x, y, z);
+    circunference->push_back(point);
+  }
+
+  return circunference;
+}
+
+deque<Point>* circunferenceHorizontal(int slices, float radius, float y) {
+  deque<Point>* circunference = new deque<Point>();
+  float x, z, angle;
+  Point origin = Point(0, 0, 0);
+
+  for(int i = 0; i < slices; i++) {
+    angle = sliceAngle(i, slices);
+    x = radius * sin(angle);
+    z = radius * cos(angle);
     Point point = Point(x, y, z);
     circunference->push_back(point);
   }
