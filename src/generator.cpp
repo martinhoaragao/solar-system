@@ -73,8 +73,9 @@ int plane(int argc, char ** parameters) {
 
     // create/open output file.
     char filename[100];
+    char path[100] = "shapes/";
     sprintf(filename, "%s.3d", parameters[1]);
-    FILE * file     = fopen(filename, "w+");
+    FILE * file     = fopen(strcat(path,filename), "w+");
 
     // write to file.
     fprintf(file, "6\n");
@@ -138,9 +139,11 @@ int box(int argc, char ** parameters) {
 
     // Open/Create file and write number of vertices to the file.
     char filename[100];
+    char path[100] = "shapes/";
     sprintf(filename, "%s.3d", parameters[3]);
-    FILE * file = fopen(filename, "w+");
+    FILE * file     = fopen(strcat(path,filename), "w+");
     fprintf(file, "%d\n",36);
+
     // Write vertices to file.
     writeVerticesToFile(vertices, 36, file);
     fprintf(file, "36\n");
@@ -198,8 +201,9 @@ int sphere(int argc, char ** parameters) {
 
     // Open/Create file and write number of vertices to the file.
     char filename[100];
+    char path[100] = "shapes/";
     sprintf(filename, "%s.3d", parameters[3]);
-    FILE * file = fopen(filename, "w+");
+    FILE * file     = fopen(strcat(path,filename), "w+");
 
     for (int stack = 0; stack < stacks; stack++) {
       float angle = (sliceAngle(stack, stacks - 1) / 2) - (M_PI/2);
@@ -287,8 +291,9 @@ int cone(int argc, char ** parameters) {
 
     // Open/Create file.
     char filename[100];
+    char path[100] = "shapes/";
     sprintf(filename, "%s.3d", parameters[4]);
-    FILE * file = fopen(filename, "w+");
+    FILE * file     = fopen(strcat(path,filename), "w+");
 
     fprintf(file,"%d\n",slices*3+stacks*slices*6);
     // Draw base circunference.
@@ -372,7 +377,7 @@ int cone(int argc, char ** parameters) {
             (((height - (h - hInc)))/height) * cos(angle));
       }
     }
-    
+
 
 
   }
@@ -520,8 +525,9 @@ int torus(int argc, char ** parameters) {
 
   // Open/Create file.
   char filename[100];
+  char path[100] = "shapes/";
   sprintf(filename, "%s.3d", parameters[4]);
-  FILE * file = fopen(filename, "w+");
+  FILE * file     = fopen(strcat(path,filename), "w+");
   int size = torus->size();
   fprintf(file,"%d\n",size);
   for (int i = 0; i < torus->size(); i++) {
@@ -632,11 +638,12 @@ float getBezierPoint(float u, float v, float m[4][4] , float p[4][4]) {
 void renderBezierCurve(char * tessellation, char * newFile){
   int * patchIndice, aux;
   float * ma[16], mT[3][16], px[4][4], py[4][4], pz[4][4], res[3];
-  char filename[100];
   float u, v, level = (float)1/atoi(tessellation);
   //Create new file .3d
+  char filename[100];
+  char path[100] = "shapes/";
   sprintf(filename, "%s.3d", newFile);
-  FILE * file = fopen(filename, "w+");
+  FILE * file     = fopen(strcat(path,filename), "w+");
   float size = patchPoints.getNrPatches() * 6 * (1/level) * (1/level);
   fprintf(file, "%f\n",size );
   for (int patch = 0; patch < patchPoints.getNrPatches(); patch++) {

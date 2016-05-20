@@ -1,54 +1,42 @@
-CC=g++ -std=c++11 -I include
+CC=g++ -std=c++11 -Wno-deprecated -I include
 CFLAGS = `pkg-config --cflags opencv`
 LIBS = `pkg-config --libs opencv`
 
-all: generator engine
+OUT = lib/alib.a
+ODIR = build
+SDIR = src
+INC = -Iinc
 
-point: src/point.cpp
-	$(CC) -c src/point.cpp -o src/point.o
+all : $(OUT) generator engine
 
-light: src/light.cpp
-	$(CC) -c src/light.cpp -o src/light.o
+_OBJSG = patchpoints.o point.o generator.o
+_OBJS += $(_OBJSG)
 
-material: src/material.cpp
-	$(CC) -c src/material.cpp -o src/material.o
+_OBJSE = file.o group.o light.o material.o point.o rotation.o \
+				rotationanimation.o rotationstatic.o translation.o \
+				translationcatmull.o translationsimple.o xmlparser.o \
+				engine.o
+_OBJS += $(_OBJSE)
 
-rotation: src/rotation.cpp
-	$(CC) -c src/rotation.cpp -o src/rotation.o
+OBJSG = $(patsubst %,$(ODIR)/%,$(_OBJSG))
+OBJSE = $(patsubst %,$(ODIR)/%,$(_OBJSE))
+OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
-rotationanimation: src/rotationanimation.cpp
-	$(CC) -c src/rotationanimation.cpp -o src/rotationanimation.o -Wno-deprecated
+$(ODIR)/%.o: $(SDIR)/%.cpp
+	$(CC) -c $(INC) -o $@ $< $(CFLAGS)
 
-rotationstatic: src/rotationstatic.cpp
-	$(CC) -c src/rotationstatic.cpp -o src/rotationstatic.o -Wno-deprecated
+$(OUT): $(OBJS)
+	ar rvs $(OUT) $^
 
-translation: src/translation.cpp
-	$(CC) -c src/translation.cpp -o src/translation.o
+build/tinyxml2.o: lib/tinyxml2.cpp
+	$(CC) -c lib/tinyxml2.cpp -o build/tinyxml2.o
 
-translationcatmull: src/translationcatmull.cpp
-	$(CC) -c src/translationcatmull.cpp -o src/translationcatmull.o -Wno-deprecated
+generator: $(OBJSG)
+	$(CC) $(OBJSG) -o generator
 
-translationsimple: src/translationsimple.cpp
-	$(CC) -c src/translationsimple.cpp -o src/translationsimple.o -Wno-deprecated
-
-file: src/file.cpp
-	$(CC) -c src/file.cpp -o src/file.o
-
-xmlparser: src/xmlparser.cpp
-	$(CC) -c src/xmlparser.cpp -o src/xmlparser.o
-
-group: src/group.cpp
-	$(CC) -c src/group.cpp -o src/group.o
-
-patchpoints: src/patchpoints.cpp
-	$(CC) -c src/patchpoints.cpp -o src/patchpoints.o
-
-generator: src/generator.cpp src/point.o
-	$(CC) src/generator.cpp src/patchpoints.o src/point.o -o generator.out
-
-# Fix this...
-engine: src/engine.cpp
-	$(CC) -framework GLUT -framework OpenGL -framework Cocoa $(CFLAGS) $(LIBS) src/point.o src/material.o src/engine.cpp lib/tinyxml2.cpp src/file.o src/light.o src/xmlparser.o src/group.o src/rotation.o src/rotationstatic.o src/rotationanimation.o src/translation.o src/translationcatmull.o src/translationsimple.o -o engine.out -Wno-deprecated
+engine: $(OBJSE) build/tinyxml2.o
+	$(CC) -framework GLUT -framework OpenGL -framework Cocoa $(CFLAGS) $(LIBS) $(OBJSE) build/tinyxml2.o -o engine
 
 clean:
-	rm -f *.out
+	rm -f build/*
+	rm -f engine generator

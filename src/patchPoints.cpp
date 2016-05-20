@@ -1,4 +1,4 @@
-#include "patchPoints.h"
+#include "patchpoints.h"
 
 PatchPoints::PatchPoints(){
 	nextPatch = 0; nextCP = 0;
@@ -32,7 +32,7 @@ void PatchPoints::addPatch(int* points){
 }
 
 void PatchPoints::addCP(float* points){
-	//index to write the control points 
+	//index to write the control points
 	int cpIndex = getNextCP();
 	//next time it will write in +1 position
 	nextCP++;
@@ -40,4 +40,4 @@ void PatchPoints::addCP(float* points){
 	controlPoints[cpIndex][0] = points[0];
 	controlPoints[cpIndex][1] = points[1];
 	controlPoints[cpIndex][2] = points[2];
-} 
+}

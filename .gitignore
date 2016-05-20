@@ -26,6 +26,8 @@
 *.exe
 *.out
 *.app
+engine
+generator
 
 # Vim Swap Files.
 *.swp
