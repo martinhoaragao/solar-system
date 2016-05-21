@@ -9,7 +9,7 @@
       <light type="point" x="0" y="0" z="0"/>
     </lights>
     <models>
-      <model file="grandes.3d" texture="terra.jpg" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="0.5"/>
+      <model file="grandes.3d" texture="sun.jpg" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="0.5"/>
     </models>
   </group>
 
@@ -22,7 +22,7 @@
       <point x="-100.9" y="-20" z="-50.9" />
     </translate>
     <models>
-      <model file="teapot.3d" />
+      <model file="teapot.3d" diffX="0.2" diffY="0.5" diffZ="0.1"/>
     </models>
   </group>
 
@@ -39,7 +39,7 @@
     <group>
       <rotate time="4222.6" x="0" y="1" z="0" />
       <models>
-        <model file="grandes.3d" />
+        <model file="grandes.3d" texture="mercury.jpg"/>
       </models>
     </group>
   </group>
@@ -56,7 +56,7 @@
     <group>
       <rotate angle="177.4" x="1" y="0" z="0"/>
       <models>
-        <model file="pequenos.3d" />
+        <model file="pequenos.3d" texture="venus.jpg"/>
       </models>
     </group>
   </group>
@@ -75,7 +75,7 @@
       <group>
         <rotate angle="23.4" x="1" y="0" z="0"/>
         <models>
-          <model file="grandes.3d" />
+          <model file="grandes.3d" texture="earth.jpg"/>
         </models>
       </group>
     </group>
@@ -92,7 +92,7 @@
       <group>
         <rotate angle="6.7" x="1" y="0" z="0"/>
         <models>
-          <model file="pequenos.3d" />
+          <model file="pequenos.3d" texture="moon.jpg"/>
         </models>
       </group>
     </group>
@@ -112,7 +112,7 @@
       <group>
         <rotate angle="6.7" x="1" y="0" z="0"/>
         <models>
-          <model file="pequenos.3d" />
+          <model file="pequenos.3d" texture="mars.jpg"/>
         </models>
       </group>
     </group>
@@ -130,7 +130,6 @@
     </group>
     <group>
       <scale x="0.2" y="0.2" z="0.2" />
-      <!--<translate x="-2" y="-1" />-->
       <translate time="100">
         <point x="-2" y="1" z="2" />
         <point x="2" y="1" z="2" />
@@ -155,12 +154,11 @@
     <group>
       <rotate time="9.9" x="0" y="1" z="0" />
       <models>
-        <model file="grandes.3d" />
+        <model file="grandes.3d" texture="jupiter.jpg"/>
       </models>
     </group>
     <group>
       <scale x="0.0495" y="0.0495" z="0.0495" />
-      <!--<translate x="-1" z="-1" />-->
       <translate time="30">
         <point x="-1" y="-0.2" z="1" />
         <point x="1" y="1" z="1" />
@@ -173,7 +171,6 @@
     </group>
     <group>
       <scale x="0.0295" y="0.0295" z="0.0295" />
-      <!--<translate x="1" z="-1" />-->
       <translate time="35">
         <point x="-1" y="0" z="1" />
         <point x="1" y="0" z="1" />
@@ -186,7 +183,6 @@
     </group>
     <group>
       <scale x="0.0295" y="0.0295" z="0.0295" />
-      <!--<translate x="1" y="-1" z="-1" />-->
       <translate time="50">
         <point x="-1" y="-0.5" z="1" />
         <point x="1" y="1" z="1" />
@@ -211,7 +207,7 @@
     <group>
       <rotate time="10.7" x="0" y="1" z="0" />
       <models>
-        <model file="grandes.3d" />
+        <model file="grandes.3d" texture="saturn.jpg"/>
       </models>
     </group>
     <group>
@@ -235,7 +231,7 @@
     <group>
       <rotate time="17.2" x="0" y="1" z="0" />
       <models>
-        <model file="grandes.3d" />
+        <model file="grandes.3d" texture="uranus.jpg"/>
       </models>
     </group>
     <group>
@@ -288,7 +284,7 @@
     <group>
       <rotate time="16.1" x="0" y="1" z="0" />
       <models>
-        <model file="grandes.3d" />
+        <model file="grandes.3d" texture="neptune.jpg"/>
       </models>
     </group>
     <group>

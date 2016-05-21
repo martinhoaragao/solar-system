@@ -23,15 +23,26 @@ TranslationCatmull::TranslationCatmull( float _time
 }
 
 void TranslationCatmull::glTranslate() {
-  float res[3];
+  static float up[3]  = { 0.0, 1.0, 0.0 };
+  float res[3], dir[3], left[3], m[16];
   float now = glutGet(GLUT_ELAPSED_TIME);
   float timeMiliSeconds = time * 1000;
   float t = fmod(now, timeMiliSeconds) / timeMiliSeconds;
 
   getGlobalCatmullRomPoint(t, res);
+  getGlobalCatmullRomDirection(t, dir);
   drawCatmullRomCurve();
 
   glTranslatef(res[0], res[1], res[2]);
+
+  cross(up, dir, left);
+  cross(dir, left, up);
+  normalize(up);
+  normalize(left);
+  normalize(dir);
+  buildRotMatrix(left, up, dir, m);
+  glMultMatrixf(m);
+
 }
 
 /*-----------------------------------------------------------------------------------
