@@ -338,6 +338,7 @@ int cone(int argc, char ** parameters) {
     }
     //normals
     h = 0.0f;
+    r     = ((height - h)) / height;
     fprintf(file,"%d\n",slices*3+stacks*slices*6);
     for (int slice = 0; slice < slices; slice++, angle += inc) {
       Point p = Point(r * sin(angle), height/sqrtf((height * height) + (radius * radius)), r * cos(angle));
