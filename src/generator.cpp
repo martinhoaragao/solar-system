@@ -555,7 +555,7 @@ void writeVerticesToFile(char ** vertices, int num, FILE * file) {
 
 int bezier(int argc, char ** parameters){
   string aux, token;
-  char aux2[1000000], * tab;
+  char aux2[1000000], * tab, fileName[1000] = "shapes/";
   int nr, patch[16], * patches;
   float cp[3];
   float * cp2;
@@ -564,7 +564,7 @@ int bezier(int argc, char ** parameters){
   if (argc < 2) { return -1; }
 
   // Test if the file exists
-  ifstream file(parameters[0]);
+  ifstream file(strcat(fileName,parameters[0]));
   if(!file.good()) {return -1;}
   //Number of patches
   getline(file,aux);

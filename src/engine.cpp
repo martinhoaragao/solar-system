@@ -39,6 +39,7 @@ int xOri = -1;
 int yOri = -1;
 
 
+char configFileName[1000];
 Group *group;
 
 /*-----------------------------------------------------------------------------------
@@ -184,9 +185,9 @@ void keyboardNormal(unsigned char key, int x, int y) {
     // 'P'.
     case 'P': glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); break;
 
-    case 'q': group = new Group(); break;
+    case 'q': group = new Group(configFileName); break;
     // 'Q'.
-    case 'Q': group = new Group(); break;
+    case 'Q': group = new Group(configFileName); break;
     case 'w': {
         pz += rz*camSpeed;
         px += rx*camSpeed;
@@ -242,8 +243,12 @@ int main (int argc, char** argv) {
 
   glutCreateWindow("CG-first-phase");
 
-  // Required callback registry
-  group = new Group(argv[1]);
+  if (argc > 1)
+    strcpy(configFileName, argv[1]);
+  else
+    strcpy(configFileName, "config.xml");
+
+  group = new Group(configFileName);
 
   glutDisplayFunc(renderScene);
   glutReshapeFunc(changeSize);
