@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<scene>
+
+	<group>
+    <scale x="50" y="50" z="50" />
+    <rotate time="50" x="0" y="1" z="0" />
+    <lights>
+      <light type="point" x="0" y="0" z="0"/>
+    </lights>
+    <models>
+      <model file="grandes.3d" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="0.5"/>
+    </models>
+  </group>
+
+	<group>
+    <translate time="20">
+      <point x="100" y="-10" z="0" />
+    </translate>
+    <scale x="5" y="5" z="5" />
+    <models>
+      <model file="grandes.3d" />
+    </models>
+  </group> 
+
+  <group>
+    <translate time="20">
+      <point x="100" y="-10" z="50" />
+    </translate>
+    <scale x="5" y="5" z="5" />
+    <models>
+      <model file="pequenos.3d" />
+    </models>
+  </group> 
+
+</scene>
