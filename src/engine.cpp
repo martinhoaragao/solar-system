@@ -157,8 +157,8 @@ void mouseMotion(int x, int y) {
   if (xOri >= 0) {
     int xDiff = x - xOri;
     int yDiff = y - yOri;
-    alpha -= xDiff * 0.001f;
-    beta -= yDiff * 0.001f;
+    alpha -= xDiff * 0.004f;
+    beta -= yDiff * 0.004f;
     if (beta > (M_PI / 2) - 0.001) beta = (M_PI / 2) - 0.001;
     if (beta < -(M_PI / 2) + 0.001) beta = -(M_PI / 2) + 0.001;
     rx = cos(beta)*sin(alpha);
