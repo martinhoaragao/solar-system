@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+<scene>
+
+  <!-- Background -->
+  <group background="true">
+    <models>
+      <model file="background.3d" texture="snow.png" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="1"/>
+    </models>
+  </group>
+
+  <!-- LOWER BODY -->
+  <group>
+    <translate x="40" y="-10" z="0"/>
+    <scale x="5" y="5" z="5" />
+    <models>
+      <model file="pequenos.3d" />
+    </models>
+  </group>
+
+  <!-- UPPER BODY -->
+  <group>
+    <translate x="40" y="-7" z="0"/>
+    <scale x="5" y="5" z="5" />
+    <models>
+      <model file="pequenos.3d" />
+    </models>
+  </group>
+
+  <!-- HEAD -->
+  <group>
+    <translate x="40" y="-3.2" z="0"/>
+    <scale x="3" y="3" z="3" />
+    <models>
+      <model file="pequenos.3d" />
+    </models>
+    <group>
+      <scale x="0.15" y="0.15" z="0.15" />
+      <rotate angle="90" x="0" y="0" z="1"/>
+      <models>
+        <model file="cone.3d" diffX="1" diffY="0.5" diffZ="0.3"/>
+      </models>
+    </group>
+    <group>
+      <translate x="-0.4" y="0.2" z="0.2"/>
+      <scale x="0.2" y="0.2" z="0.2" />
+      <models>
+        <model file="pequenos.3d" diffX="0" diffY="0" diffZ="0"/>
+      </models>
+    </group>
+    <group>
+      <translate x="-0.4" y="0.2" z="-0.2"/>
+      <scale x="0.2" y="0.2" z="0.2" />
+      <models>
+        <model file="pequenos.3d" diffX="0" diffY="0" diffZ="0"/>
+      </models>
+    </group>
+  </group>
+
+  <!-- LIGHT -->
+  <group>
+    <translate x="-1000" y="0" z="0"/>
+    <scale x="50" y="50" z="50" />
+    <rotate time="50" x="0" y="1" z="0" />
+    <models>
+      <model file="grandes.3d" texture="sun.jpg" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="0.5"/>
+    </models>
+    <group>
+      <lights>
+        <light type="point" x="0" y="0" z="0"/>
+      </lights>
+    </group>
+  </group>
+</scene>
