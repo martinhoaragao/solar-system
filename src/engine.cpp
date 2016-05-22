@@ -281,12 +281,10 @@ int main (int argc, char** argv) {
 
   // Menu definition
   menuID = glutCreateMenu(newMenu);
+  glutAddMenuEntry("Reload file",'q');
   glutAddMenuEntry("Turn on GL_FILL polygon mode",'f');
   glutAddMenuEntry("Turn on GL_LINE polygon mode",'l');
   glutAddMenuEntry("Turn on GL_POINT polygon mode",'p');
-  glutAddMenuEntry("Change color to red",'r');
-  glutAddMenuEntry("Change color to green",'g');
-  glutAddMenuEntry("Change color to blue",'b');
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 
   // Keyboard callbacks.
