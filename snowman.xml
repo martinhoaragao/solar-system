@@ -58,9 +58,12 @@
 
   <!-- LIGHT -->
   <group>
-    <translate x="-1000" y="0" z="0"/>
-    <scale x="50" y="50" z="50" />
-    <rotate time="50" x="0" y="1" z="0" />
+    <translate time="20">
+      <point x="-50.6" y="10" z="50.6" />
+      <point x="50.6" y="0" z="50.6" />
+      <point x="50.6" y="-10" z="-50.6" />
+      <point x="-50.6" y="0" z="-50.6" />
+    </translate>
     <models>
       <model file="grandes.3d" texture="sun.jpg" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="0.5"/>
     </models>
