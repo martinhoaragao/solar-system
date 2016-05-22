@@ -390,16 +390,18 @@ float sliceAngle(int slice, int slices) {
   return slice * ((2 * M_PI) / slices);
 }
 
-deque<Point>* circunferenceNormals(int slices, float z){
+deque<Point>* circunferenceNormals(int slices, float stackRadius, float radius, float z){
   deque<Point>* circunference = new deque<Point>();
-  float x, y, angle;
-  Point origin = Point(0,0,0);
+  float x, y, xCenter, yCenter, angle;
 
   for(int i = 0; i < slices; i++){
     angle = sliceAngle(i, slices);
-    x = sin(angle);
-    y = cos(angle);
-    Point point = Point(x, y, z);
+    x = stackRadius * sin(angle);
+    y = stackRadius * cos(angle);
+    xCenter = radius * sin(angle);
+    yCenter = radius * cos(angle);
+
+    Point point = Point(x - xCenter, y - yCenter, z);
     circunference->push_back(point);
   }
 
@@ -409,7 +411,6 @@ deque<Point>* circunferenceNormals(int slices, float z){
 deque<Point>* circunference(int slices, float radius, float z) {
   deque<Point>* circunference = new deque<Point>();
   float x, y, angle;
-  Point origin = Point(0, 0, 0);
 
   for(int i = 0; i < slices; i++) {
     angle = sliceAngle(i, slices);
@@ -514,14 +515,14 @@ int torus(int argc, char ** parameters) {
     stackRadius = radius + radiusDeviation;
 
     borders.push_back(circunference(rings, stackRadius, sliceHeight));
-    normalsBorders.push_back(circunferenceNormals(rings,sliceHeight));
+    normalsBorders.push_back(circunferenceNormals(rings, stackRadius, radius, sliceHeight));
   }
 
   /* Triangulate the sides of the torus */
   for(int side = 0; side < sides; side++) {
     int nextLine = (side +1) % sides;
     torus = triangulateLines(borders.at(nextLine), borders.at(side), torus);
-    normals = triangulateLines(normalsBorders.at(nextLine), normalsBorders.at(side),normals);
+    normals = triangulateLines(normalsBorders.at(nextLine), normalsBorders.at(side), normals);
   }
 
   // Open/Create file.
