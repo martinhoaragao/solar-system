@@ -272,7 +272,6 @@ int main (int argc, char** argv) {
   // Light
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
-  glShadeModel(GL_SMOOTH);
   // Refresh normals after scale
   glEnable(GL_NORMALIZE);
 
