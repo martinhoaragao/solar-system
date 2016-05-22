@@ -40,21 +40,19 @@ void Group::init(XMLParser* parser) {
 void Group::draw(Point camera) {
   glPushMatrix();
 
-  for(int i = 0; i < lights.size(); i++) {
-    lights.at(i).draw();
-  }
-
   if (isBackground) {
     glDisable(GL_CULL_FACE);
     glTranslatef(camera.getX(), camera.getY(), camera.getZ());
   }
 
   translation->glTranslate();
-
   rotation->glRotate();
-
   glScalef(scale.getX(), scale.getY(), scale.getZ());
 
+  for(int i = 0; i < lights.size(); i++) {
+    lights.at(i).draw();
+  }
+  
   for(int i = 0; i < files.size(); i++) {
     files.at(i).draw();
   }
