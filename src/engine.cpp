@@ -100,7 +100,7 @@ void renderScene() {
               px + rx, py + ry, pz + rz,
               0.0f, 1.0f, 0.0f);
 
-  group->draw();
+  group->draw(Point(px, py, pz));
 
   displayFPS();
 
@@ -127,7 +127,7 @@ static void changeSize(int w, int h) {
 	glViewport(0, 0, w, h);
 
 	// Set perspective
-	gluPerspective(45.0f, ratio, 1.0f, 1000.0f);
+	gluPerspective(45.0f, ratio, 1.0f, 1700.0f);
 
 
 	// return to the model view matrix mode

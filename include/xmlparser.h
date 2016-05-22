@@ -37,6 +37,7 @@ class XMLParser {
     void NextSiblingGroup();
     vector<File> extractFiles();
     vector<Light> getLights();
+    bool isBackground();
     Point getScale();
     Rotation* getRotation();
     Translation* getTranslation();

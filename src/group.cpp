@@ -22,6 +22,7 @@ Group::Group(XMLParser* parser) {
 
 void Group::init(XMLParser* parser) {
 
+  isBackground = parser->isBackground();
   translation = parser->getTranslation();
   scale = parser->getScale();
   rotation = parser->getRotation();
@@ -36,11 +37,16 @@ void Group::init(XMLParser* parser) {
   }
 }
 
-void Group::draw() {
+void Group::draw(Point camera) {
   glPushMatrix();
 
   for(int i = 0; i < lights.size(); i++) {
     lights.at(i).draw();
+  }
+
+  if (isBackground) {
+    glDisable(GL_CULL_FACE);
+    glTranslatef(camera.getX(), camera.getY(), camera.getZ());
   }
 
   translation->glTranslate();
@@ -55,9 +61,12 @@ void Group::draw() {
 
   // Recursive draw other groups
   for(int i = 0; i < groups.size(); i++) {
-    groups.at(i)->draw();
+    groups.at(i)->draw(camera);
   }
 
+  if (isBackground) {
+    glEnable(GL_CULL_FACE);
+  }
 
   glPopMatrix();
 }

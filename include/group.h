@@ -8,6 +8,7 @@ using namespace std;
 
 class Group {
   private:
+    bool isBackground;
     Point scale;
     Rotation *rotation;
     Translation *translation;
@@ -22,7 +23,7 @@ class Group {
     Group(char*);
     Group(XMLParser*);
 
-    void draw();
+    void draw(Point);
 
 
 };

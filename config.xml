@@ -1,6 +1,13 @@
 <?xml version="1.0" ?>
 <scene>
 
+  <!-- Background -->
+  <group background="true">
+    <models>
+      <model file="background.3d" texture="stars.png" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="1"/>
+    </models>
+  </group>
+
   <!-- SUN -->
   <group>
     <scale x="50" y="50" z="50" />

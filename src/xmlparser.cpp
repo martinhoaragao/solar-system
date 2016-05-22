@@ -100,6 +100,12 @@ vector<Light> XMLParser::getLights() {
   return lights;
 }
 
+bool XMLParser::isBackground() {
+  bool isBackground = false;
+  elem->QueryBoolAttribute( "background", &isBackground);
+
+  return isBackground;
+}
 
 Point XMLParser::getScale() {
   tinyxml2::XMLElement *temp = elem->FirstChildElement("scale");
