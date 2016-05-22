@@ -3,6 +3,7 @@
 
   <!-- Background -->
   <group background="true">
+    <rotate time="24" x="-1" y="0" z="-1" />
     <models>
       <model file="background.3d" texture="snow.png" diffX="0" diffY="0" diffZ="0" emiX="1" emiY="1" emiZ="1"/>
     </models>
