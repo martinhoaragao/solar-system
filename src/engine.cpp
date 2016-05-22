@@ -246,7 +246,7 @@ int main (int argc, char** argv) {
   if (argc > 1)
     strcpy(configFileName, argv[1]);
   else
-    strcpy(configFileName, "config.xml");
+    strcpy(configFileName, "solar-system.xml");
 
   group = new Group(configFileName);
 

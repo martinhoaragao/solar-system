@@ -6,7 +6,7 @@
 -----------------------------------------------------------------------------------*/
 
 XMLParser::XMLParser() {
-  char configFileName[] = "config.xml";
+  char configFileName[] = "solar-system.xml";
   doc = new tinyxml2::XMLDocument();
   doc->LoadFile(configFileName);
 

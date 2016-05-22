@@ -220,7 +220,7 @@
       <scale x="0.1" y="0.1" z="0.1" />
       <rotate angle="70" x="1" y="0" z="0" />
       <models>
-        <model file="anel.3d" />
+        <model file="anel.3d" diffX="0" diffY="0.25" diffZ="0.2" />
       </models>
     </group>
   </group>
