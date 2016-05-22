@@ -34,15 +34,6 @@ void TranslationCatmull::glTranslate() {
   drawCatmullRomCurve();
 
   glTranslatef(res[0], res[1], res[2]);
-
-  cross(up, dir, left);
-  cross(dir, left, up);
-  normalize(up);
-  normalize(left);
-  normalize(dir);
-  buildRotMatrix(left, up, dir, m);
-  glMultMatrixf(m);
-
 }
 
 /*-----------------------------------------------------------------------------------
