@@ -80,6 +80,7 @@
     <group>
       <rotate time="24" x="0" y="1" z="0" />
       <group>
+        <rotate angle="23.0" x="1" y="0" z="0"/>
         <models>
           <model file="grandes.3d" texture="earth2.jpg"/>
         </models>
@@ -100,6 +101,17 @@
         <models>
           <model file="pequenos.3d" texture="moon2.jpg"/>
         </models>
+        <group>
+          <translate time="27.3">
+            <point x="-1" y="-0.5" z="1" />
+            <point x="1" y="0.2" z="1" />
+            <point x="1" y="-0.1" z="-1" />
+            <point x="-1" y="0.8" z="-1" />
+          </translate>
+          <models>
+            <model file="pequenos.3d" texture="moon2.jpg"/>
+          </models>
+        </group>
       </group>
     </group>
   </group>
