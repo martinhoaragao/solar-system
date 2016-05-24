@@ -219,8 +219,19 @@ Material XMLParser::getMaterial(tinyxml2::XMLElement *temp) {
   diff = getDiffuse(temp);
   spec = getSpecular(temp);
   emi = getEmission(temp);
+  float shini = getShini(temp);
 
-  return Material(amb, diff, spec, emi);
+  return Material(amb, diff, spec, emi, shini);
+}
+
+float XMLParser::getShini(tinyxml2::XMLElement *temp) {
+  float shini = 20.0;
+
+  if (temp != NULL) {
+    temp->QueryFloatAttribute( "shini", &shini );
+  }
+
+  return shini;
 }
 
 Point XMLParser::getAmbient(tinyxml2::XMLElement *temp) {

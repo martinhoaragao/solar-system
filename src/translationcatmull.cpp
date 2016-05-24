@@ -161,7 +161,7 @@ void TranslationCatmull::drawCatmullRomCurve() {
   float diff[4] = {0.0f, 0.0f, 0.0f, 1.0f};
   float red[4] = {0.2f, 0.2f, 0.2f, 1.0f};
 
-  Material orbit = Material(Point(0.2, 0.2, 0.2), Point(0, 0, 0), Point(0, 0, 0), Point(0.2, 0.2, 0.2));
+  Material orbit = Material(Point(0.2, 0.2, 0.2), Point(0, 0, 0), Point(0, 0, 0), Point(0.2, 0.2, 0.2), 128.0);
   orbit.draw();
 
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID);

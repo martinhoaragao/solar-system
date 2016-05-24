@@ -32,6 +32,9 @@ File::File(string fn, Material mat, string tn) {
 }
 
 void File::draw() {
+
+  material.draw();
+  
   glBindTexture(GL_TEXTURE_2D, textureID);
 
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID[0]);
@@ -42,8 +45,6 @@ void File::draw() {
 
   glBindBuffer(GL_ARRAY_BUFFER, coordinatesID[2]);
   glTexCoordPointer(2,GL_FLOAT,0,0);
-
-  material.draw();
 
   glDrawArrays(GL_TRIANGLES, 0, numberCoordinates[0]/3);
   glBindTexture(GL_TEXTURE_2D, 0);

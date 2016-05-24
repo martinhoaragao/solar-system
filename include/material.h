@@ -16,10 +16,11 @@ class Material {
     float diffuse[4] = {0.8, 0.8, 0.8, 1};
     float specular[4] = {0, 0, 0, 1};
     float emission[4] = {0, 0, 0, 1};
+    float shininess[1] = {0};
 
   public:
     Material();
-    Material(Point, Point, Point, Point);
+    Material(Point, Point, Point, Point, float);
     void draw();
 };
 

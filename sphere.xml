@@ -13,23 +13,19 @@
   </group>
 
 	<group>
-    <translate time="20">
-      <point x="100" y="-10" z="0" />
-    </translate>
+    <translate x="100" y="-10" z="0"/>
     <scale x="5" y="5" z="5" />
     <models>
-      <model file="grandes.3d" />
+      <model file="grandes.3d" specX="1" specY="1" specZ="1" shini="100"/>
     </models>
-  </group> 
+  </group>
 
   <group>
-    <translate time="20">
-      <point x="100" y="-10" z="50" />
-    </translate>
+    <translate x="100" y="-10" z="50" />
     <scale x="5" y="5" z="5" />
     <models>
-      <model file="pequenos.3d" />
+      <model file="pequenos.3d" specX="1" shini="5"/>
     </models>
-  </group> 
+  </group>
 
 </scene>

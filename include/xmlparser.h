@@ -21,6 +21,7 @@ class XMLParser {
     TranslationCatmull* getTranslationCatmull( tinyxml2::XMLElement*, float);
     Point getPoint(tinyxml2::XMLElement*);
     Material getMaterial(tinyxml2::XMLElement*);
+    float getShini(tinyxml2::XMLElement*);
     Point getAmbient(tinyxml2::XMLElement*);
     Point getDiffuse(tinyxml2::XMLElement*);
     Point getSpecular(tinyxml2::XMLElement*);

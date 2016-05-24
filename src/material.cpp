@@ -6,7 +6,7 @@
 
 Material::Material() {}
 
-Material::Material(Point amb, Point diff, Point spec, Point emi) {
+Material::Material(Point amb, Point diff, Point spec, Point emi, float shini) {
   ambient[0] = amb.x;
   ambient[1] = amb.y;
   ambient[2] = amb.z;
@@ -23,9 +23,11 @@ Material::Material(Point amb, Point diff, Point spec, Point emi) {
   emission[1] = emi.y;
   emission[2] = emi.z;
 
+  shininess[0] = shini;
 }
 
 void Material::draw() {
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
