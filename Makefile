@@ -7,7 +7,7 @@ ODIR = build
 SDIR = src
 INC = -Iinc
 
-all : $(OUT) generator engine
+all : generator engine
 
 _OBJSG = patchpoints.o point.o generator.o
 _OBJS += $(_OBJSG)
@@ -24,9 +24,6 @@ OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
 $(ODIR)/%.o: $(SDIR)/%.cpp
 	$(CC) -c $(INC) -o $@ $< $(CFLAGS)
-
-$(OUT): $(OBJS)
-	ar rvs $(OUT) $^
 
 build/tinyxml2.o: lib/tinyxml2.cpp
 	$(CC) -c lib/tinyxml2.cpp -o build/tinyxml2.o
